@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs_ex1_code_framework\Exercise.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs_ex1_code_framework\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs_ex1_code_framework\Primitives.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs_ex1_code_framework\Scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs_ex1_code_framework\Primitives.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs_ex1_code_framework\Scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs_ex1_code_framework\Utilities\Matrix2x2T.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs_ex1_code_framework\Utilities\Vector2T.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs_ex1_code_framework\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{D495D9B1-483D-3164-A359-C3ED9301EFBD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{E989B53E-96C4-36DE-B216-B96E70D8A3FC}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

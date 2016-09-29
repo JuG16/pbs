@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs_ex1_code_framework\build\CMakeFiles\549c727cf283db10d41c020bbea586fa\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{8E52CAD0-6BC9-3C0F-8240-6B3ABFF9BF0B}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
