@@ -12,6 +12,7 @@
 #include <stdio.h>
 
 #include <iostream>
+#include <iomanip>
 using namespace std;
 
 double Scene::step = 0.01f;
@@ -219,9 +220,9 @@ void Scene::timeStepReductionLoop(double stiffness, double mass, double damping,
 	double currstep = step;
 
 	cout << "velocity change table:" << endl;
-	cout << "step ";
+	cout <<setw(15)<< "step ";
 	for (int m = 1; m <= 5; m++)
-		cout << methodNames[m] << " ";
+		cout<<setw(25) << methodNames[m] << " ";
 	cout << endl;
 
 	// Start from t = 0.1 with corresponding position/velocity
@@ -231,7 +232,8 @@ void Scene::timeStepReductionLoop(double stiffness, double mass, double damping,
 	
 	for (int i = 0; i < numofIterations; i++)
 	{
-		printf("%.5lf ", currstep);
+		//printf("%.5lf ", currstep);
+		cout << setw(15) << currstep;
 		for (int m = 1; m <= 5; m++)
 		{
 			double p2y = startPos, v2y = startV;
@@ -239,20 +241,22 @@ void Scene::timeStepReductionLoop(double stiffness, double mass, double damping,
 				AdvanceTimeStep1(stiffness, mass, damping, L, currstep, m, 0, 0, p2y, v2y);
 			else
 				AdvanceTimeStep1(stiffness, mass, damping, L, startT + currstep, m, 0, 0, p2y, v2y);
-			printf("%.5e ", v2y - startV);
+			//printf("%.5e ", v2y - startV);
+			cout << setw(25) << v2y - startV;
 		}
 		cout << endl;
 		currstep /= 2.0;
 	}
 	cout << "displacement table:" << endl;
-	cout << "step ";
+	cout <<setw(15)<< "step ";
 	for (int m = 1; m <= 5; m++)
-		cout << methodNames[m] << " ";
+		cout <<setw(25)<< methodNames[m] << " ";
 	currstep = step;
 	cout << endl;
 	for (int i = 0; i < numofIterations; i++)
 	{
-		printf("%.5lf ", currstep);
+		//printf("%.5lf ", currstep);
+		cout << setw(15) << currstep;
 		for (int m = 1; m <= 5; m++)
 		{
 			double p2y = startPos, v2y = startV;
@@ -260,7 +264,8 @@ void Scene::timeStepReductionLoop(double stiffness, double mass, double damping,
 				AdvanceTimeStep1(stiffness, mass, damping, L, currstep, m, 0, 0, p2y, v2y);
 			else
 				AdvanceTimeStep1(stiffness, mass, damping, L, startT + currstep, m, 0, 0, p2y, v2y);
-			printf("%.5e ", p2y - startPos);
+			//printf("%.5e ", p2y - startPos);
+			cout << setw(25) << v2y - startV;
 		}
 		cout << endl;
 		currstep /= 2.0;
@@ -272,14 +277,14 @@ void Scene::stabilityLoop(double stiffness, double mass, double damping, double 
 	double currstep = step;
 	// damping = 0;
 	cout << "Max amplitude table:" << endl;
-	cout << "step ";
+	cout <<setw(15)<< "step ";
 	for (int m = 1; m <= 5; m++)
-		cout << methodNames[m] << " ";
+		cout <<setw(25)<< methodNames[m] << " ";
 	cout << endl;
 	for (int i = 0; i < numofIterations; i++)
 	{
 		int numofSteps = (int)(endTime / step);
-		cout << currstep << " ";
+		cout <<setw(15)<< currstep;
 		for (int m = 1; m <= 5; m++)
 		{
 			double p2y = -L, v2y = 0;
@@ -290,7 +295,7 @@ void Scene::stabilityLoop(double stiffness, double mass, double damping, double 
 				if (fabs(p2y - L) > maxAmp)
 					maxAmp = fabs(p2y - L);
 			}
-			cout << maxAmp << " ";
+			cout << setw(25) << maxAmp;
 		}
 		cout << endl;
 		currstep *= 2.0;
