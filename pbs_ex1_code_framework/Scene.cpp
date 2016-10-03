@@ -28,7 +28,7 @@ double Scene::ySize = 1.0;
 double Scene::zSize = 1.0;
 
 extern void AdvanceTimeStep1(double k, double m, double d, double L, double dt, int method, double p1, double v1, double& p2, double& v2);
-extern void AdvanceTimeStep3(double k, double m, double d, double L, double dt, Vec2& p1, Vec2& v1, Vec2& p2, Vec2& v2, Vec2& p3, Vec2& v3);
+extern void AdvanceTimeStep3(double k, double m, double d, double L, double dt, Vec2& p1, Vec2& v1, Vec2& p2, Vec2& v2, Vec2& p3, Vec2& v3, Vec2& p4, Vec2& p5);
 
 #define METHODS_NUM 6
 #define TESTCASES_NUM 5
@@ -171,10 +171,14 @@ void Scene::Init(void)
 	pause = false;
 
 	// Create points & springs
-	nPoints = 3; nSprings = 3;
+
 	if ((testcase == SPRING1D) || (testcase == ERROR_MEASUREMENT) || testcase == STABILITY_MEASUREMENT)
 	{
 		nPoints = 2; nSprings = 1;
+	}
+	else
+	{
+		nPoints = 5; nSprings = 4;
 	}
 
 	// Allocate vector
@@ -183,23 +187,34 @@ void Scene::Init(void)
 
 	Vec2 c(0.0, 0.0);
 	Vec2 zero(0.0, 0.0);
-	p1 = c + Vec2(0, 1);
-	p2 = c + Vec2(cos(210.0 / 180.0 * M_PI), sin(210.0 / 180.0 * M_PI));
-	p3 = c + Vec2(cos(330.0 / 180.0 * M_PI), sin(330.0 / 180.0 * M_PI));
-	v1 = v2 = v3 = zero;
-	L = (p1 - p2).length();
 	if (testcase == SPRING1D || testcase == ERROR_MEASUREMENT || testcase == STABILITY_MEASUREMENT)
 	{
 		p1 = 0.0*c;
 		p2 = p1 + Vec2(0, -1);
 		L = (p1 - p2).length();
 	}
+	else
+	{
+		p1 = c + Vec2(0, 1);
+		p2 = c + Vec2(cos(210.0 / 180.0 * M_PI), sin(210.0 / 180.0 * M_PI));
+		p3 = c + Vec2(cos(330.0 / 180.0 * M_PI), sin(330.0 / 180.0 * M_PI));
+		p4 = Vec2(-1, -1);
+		p5 = Vec2(1, -1);
+	}
+	v1 = v2 = v3 = zero;
+	L = (p1 - p2).length();
 
 	points[0].pos = p1;
 	points[0].fixed = true;
 	points[1].pos = p2;
 	if (nPoints > 2)
+	{
 		points[2].pos = p3;
+		points[3].pos = p4;
+		points[3].fixed = false;
+		points[4].pos = p5;
+		points[4].fixed = false;
+	}
 	if (testcase == FALLING)
 		points[0].fixed = false;
 
@@ -212,6 +227,7 @@ void Scene::Init(void)
 	{
 		springs[1].set(&points[1], &points[2]);
 		springs[2].set(&points[2], &points[0]);
+		springs[3].set(&points[3], &points[4]);
 	}
 }
 
@@ -322,7 +338,7 @@ void Scene::Update(void)
 			AdvanceTimeStep1(stiffness, mass, damping, L, step, method, p1.y(), v1.y(), p2.y(), v2.y());
 		break;
 	case FALLING:
-		AdvanceTimeStep3(stiffness, mass, damping, L, step, p1, v1, p2, v2, p3, v3);
+		AdvanceTimeStep3(stiffness, mass, damping, L, step, p1, v1, p2, v2, p3, v3, p4, p5);
 		break;
 	case ERROR_MEASUREMENT:
 		timeStepReductionLoop(stiffness, mass, damping, L, step, numofIterations);
@@ -338,6 +354,8 @@ void Scene::Update(void)
 	if (nPoints > 2)
 	{
 		points[2].pos = p3;
+		points[3].pos = p4;
+		points[4].pos = p5;
 	}
 }
 

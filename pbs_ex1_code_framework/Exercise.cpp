@@ -57,7 +57,7 @@ void AdvanceTimeStep1(double k, double m, double d, double L, double dt, int met
 // Exercise 3
 // Falling triangle
 void AdvanceTimeStep3(double k, double m, double d, double L, double dt,
-                      Vec2& p1, Vec2& v1, Vec2& p2, Vec2& v2, Vec2& p3, Vec2& v3)
+                      Vec2& p1, Vec2& v1, Vec2& p2, Vec2& v2, Vec2& p3, Vec2& v3, Vec2& p4, Vec2& p5)
 {
 	const Vec2 gvec = Vec2(0, -9.81);
 	const Vec2 kresp = Vec2(0, 100);
@@ -67,4 +67,6 @@ void AdvanceTimeStep3(double k, double m, double d, double L, double dt,
 	p1 = p1 + dt*v1;
 	p2 = p2 + dt*v2;
 	p3 = p3 + dt*v3;
+	p4 = Vec2(-100, std::min(std::min(-1., p1.y()), std::min(p2.y(), p3.y())));
+	p5 = Vec2(100, std::min(std::min(-1., p1.y()), std::min(p2.y(), p3.y())));
 }
