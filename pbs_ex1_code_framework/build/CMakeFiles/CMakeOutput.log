@@ -1,0 +1,341 @@
+The system is: Windows - 10.0.14393 - AMD64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler:  
+Build flags: 
+Id flags: 
+
+The output was:
+0
+Microsoft (R)-Buildmodul, Version 14.0.25123.0
+Copyright (C) Microsoft Corporation. Alle Rechte vorbehalten.
+
+Der Buildvorgang wurde am 29.09.2016 16:31:13 gestartet.
+Projekt "C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\3.5.0\CompilerIdC\CompilerIdC.vcxproj" auf Knoten "1" (Standardziele).
+PrepareForBuild:
+  Das Verzeichnis "Debug\" wird erstellt.
+  Das Verzeichnis "Debug\CompilerIdC.tlog\" wird erstellt.
+InitializeBuildStatus:
+  "Debug\CompilerIdC.tlog\unsuccessfulbuild" wird erstellt, da "AlwaysCreate" angegeben wurde.
+ClCompile:
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /nologo /W0 /WX- /Od /Oy- /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TC /analyze- /errorReport:queue CMakeCCompilerId.c
+  CMakeCCompilerId.c
+Link:
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:QUEUE /OUT:".\CompilerIdC.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\CompilerIdC.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\CompilerIdC.lib" /MACHINE:X86 /SAFESEH Debug\CMakeCCompilerId.obj
+  CompilerIdC.vcxproj -> C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\3.5.0\CompilerIdC\.\CompilerIdC.exe
+PostBuildEvent:
+  for %%i in (cl.exe) do @echo CMAKE_C_COMPILER=%%~$PATH:i
+  :VCEnd
+  CMAKE_C_COMPILER=C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\cl.exe
+FinalizeBuildStatus:
+  Die Datei "Debug\CompilerIdC.tlog\unsuccessfulbuild" wird gelîscht.
+  Aktualisieren des Timestamps von "Debug\CompilerIdC.tlog\CompilerIdC.lastbuildstate".
+Die Erstellung von Projekt "C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\3.5.0\CompilerIdC\CompilerIdC.vcxproj" ist abgeschlossen (Standardziele).
+
+Der Buildvorgang wurde erfolgreich ausgefÅhrt.
+    0 Warnung(en)
+    0 Fehler
+
+Verstrichene Zeit 00:00:00.64
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.vcxproj"
+
+The C compiler identification is MSVC, found in "C:/Users/Julia/ETH/7. Semester/physically-based simulations/projects/pbs/pbs_ex1_code_framework/build/CMakeFiles/3.5.0/CompilerIdC/CompilerIdC.exe"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler:  
+Build flags: 
+Id flags: 
+
+The output was:
+0
+Microsoft (R)-Buildmodul, Version 14.0.25123.0
+Copyright (C) Microsoft Corporation. Alle Rechte vorbehalten.
+
+Der Buildvorgang wurde am 29.09.2016 16:31:13 gestartet.
+Projekt "C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\3.5.0\CompilerIdCXX\CompilerIdCXX.vcxproj" auf Knoten "1" (Standardziele).
+PrepareForBuild:
+  Das Verzeichnis "Debug\" wird erstellt.
+  Das Verzeichnis "Debug\CompilerIdCXX.tlog\" wird erstellt.
+InitializeBuildStatus:
+  "Debug\CompilerIdCXX.tlog\unsuccessfulbuild" wird erstellt, da "AlwaysCreate" angegeben wurde.
+ClCompile:
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /nologo /W0 /WX- /Od /Oy- /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:queue CMakeCXXCompilerId.cpp
+  CMakeCXXCompilerId.cpp
+Link:
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:QUEUE /OUT:".\CompilerIdCXX.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\CompilerIdCXX.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\CompilerIdCXX.lib" /MACHINE:X86 /SAFESEH Debug\CMakeCXXCompilerId.obj
+  CompilerIdCXX.vcxproj -> C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\3.5.0\CompilerIdCXX\.\CompilerIdCXX.exe
+PostBuildEvent:
+  for %%i in (cl.exe) do @echo CMAKE_CXX_COMPILER=%%~$PATH:i
+  :VCEnd
+  CMAKE_CXX_COMPILER=C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\cl.exe
+FinalizeBuildStatus:
+  Die Datei "Debug\CompilerIdCXX.tlog\unsuccessfulbuild" wird gelîscht.
+  Aktualisieren des Timestamps von "Debug\CompilerIdCXX.tlog\CompilerIdCXX.lastbuildstate".
+Die Erstellung von Projekt "C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\3.5.0\CompilerIdCXX\CompilerIdCXX.vcxproj" ist abgeschlossen (Standardziele).
+
+Der Buildvorgang wurde erfolgreich ausgefÅhrt.
+    0 Warnung(en)
+    0 Fehler
+
+Verstrichene Zeit 00:00:00.56
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.vcxproj"
+
+The CXX compiler identification is MSVC, found in "C:/Users/Julia/ETH/7. Semester/physically-based simulations/projects/pbs/pbs_ex1_code_framework/build/CMakeFiles/3.5.0/CompilerIdCXX/CompilerIdCXX.exe"
+
+Determining if the C compiler works passed with the following output:
+Change Dir: C:/Users/Julia/ETH/7. Semester/physically-based simulations/projects/pbs/pbs_ex1_code_framework/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"C:/Program Files (x86)/MSBuild/14.0/bin/MSBuild.exe" "cmTC_34608.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=14.0"
+Microsoft (R)-Buildmodul, Version 14.0.25123.0
+Copyright (C) Microsoft Corporation. Alle Rechte vorbehalten.
+
+Der Buildvorgang wurde am 29.09.2016 16:31:14 gestartet.
+Projekt "C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\CMakeTmp\cmTC_34608.vcxproj" auf Knoten "1" (Standardziele).
+PrepareForBuild:
+  Das Verzeichnis "cmTC_34608.dir\Debug\" wird erstellt.
+  Das Verzeichnis "C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\CMakeTmp\Debug\" wird erstellt.
+  Das Verzeichnis "cmTC_34608.dir\Debug\cmTC_34608.tlog\" wird erstellt.
+InitializeBuildStatus:
+  "cmTC_34608.dir\Debug\cmTC_34608.tlog\unsuccessfulbuild" wird erstellt, da "AlwaysCreate" angegeben wurde.
+ClCompile:
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_34608.dir\Debug\\" /Fd"cmTC_34608.dir\Debug\vc140.pdb" /Gd /TC /analyze- /errorReport:queue "C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\CMakeTmp\testCCompiler.c"
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.00.23918 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_34608.dir\Debug\\" /Fd"cmTC_34608.dir\Debug\vc140.pdb" /Gd /TC /analyze- /errorReport:queue "C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\CMakeTmp\testCCompiler.c"
+  
+  testCCompiler.c
+Link:
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\CMakeTmp\Debug\cmTC_34608.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/Julia/ETH/7. Semester/physically-based simulations/projects/pbs/pbs_ex1_code_framework/build/CMakeFiles/CMakeTmp/Debug/cmTC_34608.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/Julia/ETH/7. Semester/physically-based simulations/projects/pbs/pbs_ex1_code_framework/build/CMakeFiles/CMakeTmp/Debug/cmTC_34608.lib" /MACHINE:X86 /SAFESEH  /machine:X86 cmTC_34608.dir\Debug\testCCompiler.obj
+  cmTC_34608.vcxproj -> C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\CMakeTmp\Debug\cmTC_34608.exe
+  cmTC_34608.vcxproj -> C:/Users/Julia/ETH/7. Semester/physically-based simulations/projects/pbs/pbs_ex1_code_framework/build/CMakeFiles/CMakeTmp/Debug/cmTC_34608.pdb (Full PDB)
+FinalizeBuildStatus:
+  Die Datei "cmTC_34608.dir\Debug\cmTC_34608.tlog\unsuccessfulbuild" wird gelîscht.
+  Aktualisieren des Timestamps von "cmTC_34608.dir\Debug\cmTC_34608.tlog\cmTC_34608.lastbuildstate".
+Die Erstellung von Projekt "C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\CMakeTmp\cmTC_34608.vcxproj" ist abgeschlossen (Standardziele).
+
+Der Buildvorgang wurde erfolgreich ausgefÅhrt.
+    0 Warnung(en)
+    0 Fehler
+
+Verstrichene Zeit 00:00:00.95
+
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: C:/Users/Julia/ETH/7. Semester/physically-based simulations/projects/pbs/pbs_ex1_code_framework/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"C:/Program Files (x86)/MSBuild/14.0/bin/MSBuild.exe" "cmTC_3569a.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=14.0"
+Microsoft (R)-Buildmodul, Version 14.0.25123.0
+Copyright (C) Microsoft Corporation. Alle Rechte vorbehalten.
+
+Der Buildvorgang wurde am 29.09.2016 16:31:15 gestartet.
+Projekt "C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\CMakeTmp\cmTC_3569a.vcxproj" auf Knoten "1" (Standardziele).
+PrepareForBuild:
+  Das Verzeichnis "cmTC_3569a.dir\Debug\" wird erstellt.
+  Das Verzeichnis "C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\CMakeTmp\Debug\" wird erstellt.
+  Das Verzeichnis "cmTC_3569a.dir\Debug\cmTC_3569a.tlog\" wird erstellt.
+InitializeBuildStatus:
+  "cmTC_3569a.dir\Debug\cmTC_3569a.tlog\unsuccessfulbuild" wird erstellt, da "AlwaysCreate" angegeben wurde.
+ClCompile:
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_3569a.dir\Debug\\" /Fd"cmTC_3569a.dir\Debug\vc140.pdb" /Gd /TC /analyze- /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.5\Modules\CMakeCCompilerABI.c"
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.00.23918 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_3569a.dir\Debug\\" /Fd"cmTC_3569a.dir\Debug\vc140.pdb" /Gd /TC /analyze- /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.5\Modules\CMakeCCompilerABI.c"
+  
+  CMakeCCompilerABI.c
+Link:
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\CMakeTmp\Debug\cmTC_3569a.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/Julia/ETH/7. Semester/physically-based simulations/projects/pbs/pbs_ex1_code_framework/build/CMakeFiles/CMakeTmp/Debug/cmTC_3569a.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/Julia/ETH/7. Semester/physically-based simulations/projects/pbs/pbs_ex1_code_framework/build/CMakeFiles/CMakeTmp/Debug/cmTC_3569a.lib" /MACHINE:X86 /SAFESEH  /machine:X86 cmTC_3569a.dir\Debug\CMakeCCompilerABI.obj
+  cmTC_3569a.vcxproj -> C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\CMakeTmp\Debug\cmTC_3569a.exe
+  cmTC_3569a.vcxproj -> C:/Users/Julia/ETH/7. Semester/physically-based simulations/projects/pbs/pbs_ex1_code_framework/build/CMakeFiles/CMakeTmp/Debug/cmTC_3569a.pdb (Full PDB)
+FinalizeBuildStatus:
+  Die Datei "cmTC_3569a.dir\Debug\cmTC_3569a.tlog\unsuccessfulbuild" wird gelîscht.
+  Aktualisieren des Timestamps von "cmTC_3569a.dir\Debug\cmTC_3569a.tlog\cmTC_3569a.lastbuildstate".
+Die Erstellung von Projekt "C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\CMakeTmp\cmTC_3569a.vcxproj" ist abgeschlossen (Standardziele).
+
+Der Buildvorgang wurde erfolgreich ausgefÅhrt.
+    0 Warnung(en)
+    0 Fehler
+
+Verstrichene Zeit 00:00:00.67
+
+
+Determining if the CXX compiler works passed with the following output:
+Change Dir: C:/Users/Julia/ETH/7. Semester/physically-based simulations/projects/pbs/pbs_ex1_code_framework/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"C:/Program Files (x86)/MSBuild/14.0/bin/MSBuild.exe" "cmTC_179c9.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=14.0"
+Microsoft (R)-Buildmodul, Version 14.0.25123.0
+Copyright (C) Microsoft Corporation. Alle Rechte vorbehalten.
+
+Der Buildvorgang wurde am 29.09.2016 16:31:16 gestartet.
+Projekt "C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\CMakeTmp\cmTC_179c9.vcxproj" auf Knoten "1" (Standardziele).
+PrepareForBuild:
+  Das Verzeichnis "cmTC_179c9.dir\Debug\" wird erstellt.
+  Das Verzeichnis "C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\CMakeTmp\Debug\" wird erstellt.
+  Das Verzeichnis "cmTC_179c9.dir\Debug\cmTC_179c9.tlog\" wird erstellt.
+InitializeBuildStatus:
+  "cmTC_179c9.dir\Debug\cmTC_179c9.tlog\unsuccessfulbuild" wird erstellt, da "AlwaysCreate" angegeben wurde.
+ClCompile:
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_179c9.dir\Debug\\" /Fd"cmTC_179c9.dir\Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:queue "C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\CMakeTmp\testCXXCompiler.cxx"
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.00.23918 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_179c9.dir\Debug\\" /Fd"cmTC_179c9.dir\Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:queue "C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\CMakeTmp\testCXXCompiler.cxx"
+  
+  testCXXCompiler.cxx
+Link:
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\CMakeTmp\Debug\cmTC_179c9.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/Julia/ETH/7. Semester/physically-based simulations/projects/pbs/pbs_ex1_code_framework/build/CMakeFiles/CMakeTmp/Debug/cmTC_179c9.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/Julia/ETH/7. Semester/physically-based simulations/projects/pbs/pbs_ex1_code_framework/build/CMakeFiles/CMakeTmp/Debug/cmTC_179c9.lib" /MACHINE:X86 /SAFESEH  /machine:X86 cmTC_179c9.dir\Debug\testCXXCompiler.obj
+  cmTC_179c9.vcxproj -> C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\CMakeTmp\Debug\cmTC_179c9.exe
+  cmTC_179c9.vcxproj -> C:/Users/Julia/ETH/7. Semester/physically-based simulations/projects/pbs/pbs_ex1_code_framework/build/CMakeFiles/CMakeTmp/Debug/cmTC_179c9.pdb (Full PDB)
+FinalizeBuildStatus:
+  Die Datei "cmTC_179c9.dir\Debug\cmTC_179c9.tlog\unsuccessfulbuild" wird gelîscht.
+  Aktualisieren des Timestamps von "cmTC_179c9.dir\Debug\cmTC_179c9.tlog\cmTC_179c9.lastbuildstate".
+Die Erstellung von Projekt "C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\CMakeTmp\cmTC_179c9.vcxproj" ist abgeschlossen (Standardziele).
+
+Der Buildvorgang wurde erfolgreich ausgefÅhrt.
+    0 Warnung(en)
+    0 Fehler
+
+Verstrichene Zeit 00:00:00.67
+
+
+Detecting CXX compiler ABI info compiled with the following output:
+Change Dir: C:/Users/Julia/ETH/7. Semester/physically-based simulations/projects/pbs/pbs_ex1_code_framework/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"C:/Program Files (x86)/MSBuild/14.0/bin/MSBuild.exe" "cmTC_b482d.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=14.0"
+Microsoft (R)-Buildmodul, Version 14.0.25123.0
+Copyright (C) Microsoft Corporation. Alle Rechte vorbehalten.
+
+Der Buildvorgang wurde am 29.09.2016 16:31:17 gestartet.
+Projekt "C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\CMakeTmp\cmTC_b482d.vcxproj" auf Knoten "1" (Standardziele).
+PrepareForBuild:
+  Das Verzeichnis "cmTC_b482d.dir\Debug\" wird erstellt.
+  Das Verzeichnis "C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\CMakeTmp\Debug\" wird erstellt.
+  Das Verzeichnis "cmTC_b482d.dir\Debug\cmTC_b482d.tlog\" wird erstellt.
+InitializeBuildStatus:
+  "cmTC_b482d.dir\Debug\cmTC_b482d.tlog\unsuccessfulbuild" wird erstellt, da "AlwaysCreate" angegeben wurde.
+ClCompile:
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_b482d.dir\Debug\\" /Fd"cmTC_b482d.dir\Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.5\Modules\CMakeCXXCompilerABI.cpp"
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.00.23918 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_b482d.dir\Debug\\" /Fd"cmTC_b482d.dir\Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.5\Modules\CMakeCXXCompilerABI.cpp"
+  
+  CMakeCXXCompilerABI.cpp
+Link:
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\CMakeTmp\Debug\cmTC_b482d.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/Julia/ETH/7. Semester/physically-based simulations/projects/pbs/pbs_ex1_code_framework/build/CMakeFiles/CMakeTmp/Debug/cmTC_b482d.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/Julia/ETH/7. Semester/physically-based simulations/projects/pbs/pbs_ex1_code_framework/build/CMakeFiles/CMakeTmp/Debug/cmTC_b482d.lib" /MACHINE:X86 /SAFESEH  /machine:X86 cmTC_b482d.dir\Debug\CMakeCXXCompilerABI.obj
+  cmTC_b482d.vcxproj -> C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\CMakeTmp\Debug\cmTC_b482d.exe
+  cmTC_b482d.vcxproj -> C:/Users/Julia/ETH/7. Semester/physically-based simulations/projects/pbs/pbs_ex1_code_framework/build/CMakeFiles/CMakeTmp/Debug/cmTC_b482d.pdb (Full PDB)
+FinalizeBuildStatus:
+  Die Datei "cmTC_b482d.dir\Debug\cmTC_b482d.tlog\unsuccessfulbuild" wird gelîscht.
+  Aktualisieren des Timestamps von "cmTC_b482d.dir\Debug\cmTC_b482d.tlog\cmTC_b482d.lastbuildstate".
+Die Erstellung von Projekt "C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\CMakeTmp\cmTC_b482d.vcxproj" ist abgeschlossen (Standardziele).
+
+Der Buildvorgang wurde erfolgreich ausgefÅhrt.
+    0 Warnung(en)
+    0 Fehler
+
+Verstrichene Zeit 00:00:00.68
+
+
+
+
+Detecting CXX [] compiler features compiled with the following output:
+Change Dir: C:/Users/Julia/ETH/7. Semester/physically-based simulations/projects/pbs/pbs_ex1_code_framework/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"C:/Program Files (x86)/MSBuild/14.0/bin/MSBuild.exe" "cmTC_31268.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=14.0"
+Microsoft (R)-Buildmodul, Version 14.0.25123.0
+Copyright (C) Microsoft Corporation. Alle Rechte vorbehalten.
+
+Der Buildvorgang wurde am 29.09.2016 16:31:18 gestartet.
+Projekt "C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\CMakeTmp\cmTC_31268.vcxproj" auf Knoten "1" (Standardziele).
+PrepareForBuild:
+  Das Verzeichnis "cmTC_31268.dir\Debug\" wird erstellt.
+  Das Verzeichnis "C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\CMakeTmp\Debug\" wird erstellt.
+  Das Verzeichnis "cmTC_31268.dir\Debug\cmTC_31268.tlog\" wird erstellt.
+InitializeBuildStatus:
+  "cmTC_31268.dir\Debug\cmTC_31268.tlog\unsuccessfulbuild" wird erstellt, da "AlwaysCreate" angegeben wurde.
+ClCompile:
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_31268.dir\Debug\\" /Fd"cmTC_31268.dir\Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:queue "C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\feature_tests.cxx"
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.00.23918 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_31268.dir\Debug\\" /Fd"cmTC_31268.dir\Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:queue "C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\feature_tests.cxx"
+  
+  feature_tests.cxx
+Link:
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\CMakeTmp\Debug\cmTC_31268.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/Julia/ETH/7. Semester/physically-based simulations/projects/pbs/pbs_ex1_code_framework/build/CMakeFiles/CMakeTmp/Debug/cmTC_31268.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/Julia/ETH/7. Semester/physically-based simulations/projects/pbs/pbs_ex1_code_framework/build/CMakeFiles/CMakeTmp/Debug/cmTC_31268.lib" /MACHINE:X86 /SAFESEH  /machine:X86 cmTC_31268.dir\Debug\feature_tests.obj
+  cmTC_31268.vcxproj -> C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\CMakeTmp\Debug\cmTC_31268.exe
+  cmTC_31268.vcxproj -> C:/Users/Julia/ETH/7. Semester/physically-based simulations/projects/pbs/pbs_ex1_code_framework/build/CMakeFiles/CMakeTmp/Debug/cmTC_31268.pdb (Full PDB)
+FinalizeBuildStatus:
+  Die Datei "cmTC_31268.dir\Debug\cmTC_31268.tlog\unsuccessfulbuild" wird gelîscht.
+  Aktualisieren des Timestamps von "cmTC_31268.dir\Debug\cmTC_31268.tlog\cmTC_31268.lastbuildstate".
+Die Erstellung von Projekt "C:\Users\Julia\ETH\7. Semester\physically-based simulations\projects\pbs\pbs_ex1_code_framework\build\CMakeFiles\CMakeTmp\cmTC_31268.vcxproj" ist abgeschlossen (Standardziele).
+
+Der Buildvorgang wurde erfolgreich ausgefÅhrt.
+    0 Warnung(en)
+    0 Fehler
+
+Verstrichene Zeit 00:00:00.75
+
+
+    Feature record: CXX_FEATURE:1cxx_alias_templates
+    Feature record: CXX_FEATURE:1cxx_alignas
+    Feature record: CXX_FEATURE:1cxx_alignof
+    Feature record: CXX_FEATURE:1cxx_attributes
+    Feature record: CXX_FEATURE:1cxx_attribute_deprecated
+    Feature record: CXX_FEATURE:1cxx_auto_type
+    Feature record: CXX_FEATURE:1cxx_binary_literals
+    Feature record: CXX_FEATURE:1cxx_constexpr
+    Feature record: CXX_FEATURE:1cxx_contextual_conversions
+    Feature record: CXX_FEATURE:1cxx_decltype
+    Feature record: CXX_FEATURE:1cxx_decltype_auto
+    Feature record: CXX_FEATURE:1cxx_default_function_template_args
+    Feature record: CXX_FEATURE:1cxx_defaulted_functions
+    Feature record: CXX_FEATURE:1cxx_defaulted_move_initializers
+    Feature record: CXX_FEATURE:1cxx_delegating_constructors
+    Feature record: CXX_FEATURE:1cxx_deleted_functions
+    Feature record: CXX_FEATURE:1cxx_digit_separators
+    Feature record: CXX_FEATURE:1cxx_enum_forward_declarations
+    Feature record: CXX_FEATURE:1cxx_explicit_conversions
+    Feature record: CXX_FEATURE:1cxx_extended_friend_declarations
+    Feature record: CXX_FEATURE:1cxx_extern_templates
+    Feature record: CXX_FEATURE:1cxx_final
+    Feature record: CXX_FEATURE:1cxx_func_identifier
+    Feature record: CXX_FEATURE:1cxx_generalized_initializers
+    Feature record: CXX_FEATURE:1cxx_generic_lambdas
+    Feature record: CXX_FEATURE:1cxx_inheriting_constructors
+    Feature record: CXX_FEATURE:1cxx_inline_namespaces
+    Feature record: CXX_FEATURE:1cxx_lambdas
+    Feature record: CXX_FEATURE:1cxx_lambda_init_captures
+    Feature record: CXX_FEATURE:1cxx_local_type_template_args
+    Feature record: CXX_FEATURE:1cxx_long_long_type
+    Feature record: CXX_FEATURE:1cxx_noexcept
+    Feature record: CXX_FEATURE:1cxx_nonstatic_member_init
+    Feature record: CXX_FEATURE:1cxx_nullptr
+    Feature record: CXX_FEATURE:1cxx_override
+    Feature record: CXX_FEATURE:1cxx_range_for
+    Feature record: CXX_FEATURE:1cxx_raw_string_literals
+    Feature record: CXX_FEATURE:1cxx_reference_qualified_functions
+    Feature record: CXX_FEATURE:1cxx_return_type_deduction
+    Feature record: CXX_FEATURE:1cxx_right_angle_brackets
+    Feature record: CXX_FEATURE:1cxx_rvalue_references
+    Feature record: CXX_FEATURE:1cxx_sizeof_member
+    Feature record: CXX_FEATURE:1cxx_static_assert
+    Feature record: CXX_FEATURE:1cxx_strong_enums
+    Feature record: CXX_FEATURE:1cxx_template_template_parameters
+    Feature record: CXX_FEATURE:1cxx_thread_local
+    Feature record: CXX_FEATURE:1cxx_trailing_return_types
+    Feature record: CXX_FEATURE:1cxx_unicode_literals
+    Feature record: CXX_FEATURE:1cxx_uniform_initialization
+    Feature record: CXX_FEATURE:1cxx_unrestricted_unions
+    Feature record: CXX_FEATURE:1cxx_user_literals
+    Feature record: CXX_FEATURE:1cxx_variadic_macros
+    Feature record: CXX_FEATURE:1cxx_variadic_templates
