@@ -245,7 +245,7 @@ void Scene::timeStepReductionLoop(double stiffness, double mass, double damping,
 	double startT = 0.1;
 	double startPos = -1.0450963438512906;
 	double startV = -0.82548303829779446;
-	
+	AdvanceTimeStep1(stiffness, mass, damping, L, startT, 5, 0, 0,startPos, startV);
 	for (int i = 0; i < numofIterations; i++)
 	{
 		//printf("%.5lf ", currstep);
@@ -271,7 +271,6 @@ void Scene::timeStepReductionLoop(double stiffness, double mass, double damping,
 	cout << endl;
 	for (int i = 0; i < numofIterations; i++)
 	{
-		//printf("%.5lf ", currstep);
 		cout << setw(15) << currstep;
 		for (int m = 1; m <= 5; m++)
 		{
@@ -280,12 +279,65 @@ void Scene::timeStepReductionLoop(double stiffness, double mass, double damping,
 				AdvanceTimeStep1(stiffness, mass, damping, L, currstep, m, 0, 0, p2y, v2y);
 			else
 				AdvanceTimeStep1(stiffness, mass, damping, L, startT + currstep, m, 0, 0, p2y, v2y);
-			//printf("%.5e ", p2y - startPos);
-			cout << setw(25) << v2y - startV;
+			cout << setw(25) << p2y - startPos;
 		}
 		cout << endl;
 		currstep /= 2.0;
 	}
+	cout << "error measurement:" << endl;
+	cout << setw(15) << "step";
+	double errors[5][10];
+	
+	for (int m = 1; m <= 4; m++)
+	{
+		cout << setw(25) << methodNames[m];
+	}
+	cout << endl;
+	currstep = step;
+	for (int i = 0; i < numofIterations; i++)
+	{
+		cout << setw(15) << currstep;
+		double p2y = startPos, v2y = startV;
+		AdvanceTimeStep1(stiffness, mass, damping, L, startT + currstep, 5, 0, 0, p2y, v2y);
+		errors[4][i] = p2y;
+		for (int m = 1; m <= 4; m++)
+		{
+			double p2y = startPos, v2y = startV;
+			if (m != ANALYTIC)
+				AdvanceTimeStep1(stiffness, mass, damping, L, currstep, m, 0, 0, p2y, v2y);
+			errors[m-1][i] = std::abs(p2y - errors[4][i]);
+			cout << setw(25) << std::abs(p2y - errors[4][i]);
+		}
+		cout << endl;
+		currstep /= 2;
+	}
+	double convergence[4];
+	for (int m = 0; m < 4; m++)
+	{
+		convergence[m] = 0;
+	}
+	for (int i = 1; i < numofIterations; i++)
+	{
+		for (int m = 0; m < 4; m++)
+		{
+			convergence[m] += 1.*errors[m][i - 1] / errors[m][i];//rate of convergence not like this??
+			cout<<setw(15)<< 1.*errors[m][i - 1] / errors[m][i]; 
+			//convergence[m] += (std::log(errors[m][i]) - std::log(errors[m][i - 1])) / (std::log(errors[m][i - 1]) - std::log(errors[m][i - 2]));
+		}
+		cout << endl;
+	}
+	cout << "rate of (algebraic) convergence" << endl;
+	for (int m = 1; m <= 4; m++)
+	{
+		cout << setw(25) << methodNames[m];
+	}
+	cout << endl;
+	for (int m = 0; m < 4; m++)
+	{
+		cout << setw(25) << convergence[m]/ (numofIterations - 1.);
+	}
+	cout << endl;
+
 }
 
 void Scene::stabilityLoop(double stiffness, double mass, double damping, double L, double step, double endTime, int numofIterations)
