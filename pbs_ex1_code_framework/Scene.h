@@ -26,7 +26,7 @@ public:
 	static double stiffness;
 	static double damping;
 	double L;
-	Vec2 p1, p2, p3, p4, p5;
+	Vec2 p1, p2, p3;
 	Vec2 v1, v2, v3;
 
 	enum Method { INVALID_METHOD = 0, EULER = 1, LEAP_FROG = 2, MIDPOINT = 3, BACK_EULER = 4, ANALYTIC = 5 };

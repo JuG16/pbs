@@ -28,7 +28,7 @@ double Scene::ySize = 1.0;
 double Scene::zSize = 1.0;
 
 extern void AdvanceTimeStep1(double k, double m, double d, double L, double dt, int method, double p1, double v1, double& p2, double& v2);
-extern void AdvanceTimeStep3(double k, double m, double d, double L, double dt, Vec2& p1, Vec2& v1, Vec2& p2, Vec2& v2, Vec2& p3, Vec2& v3, Vec2& p4, Vec2& p5);
+extern void AdvanceTimeStep3(double k, double m, double d, double L, double dt, Vec2& p1, Vec2& v1, Vec2& p2, Vec2& v2, Vec2& p3, Vec2& v3);
 
 #define METHODS_NUM 6
 #define TESTCASES_NUM 5
@@ -178,7 +178,7 @@ void Scene::Init(void)
 	}
 	else
 	{
-		nPoints = 5; nSprings = 4;
+		nPoints = 3; nSprings = 3;
 	}
 
 	// Allocate vector
@@ -198,8 +198,6 @@ void Scene::Init(void)
 		p1 = c + Vec2(0, 1);
 		p2 = c + Vec2(cos(210.0 / 180.0 * M_PI), sin(210.0 / 180.0 * M_PI));
 		p3 = c + Vec2(cos(330.0 / 180.0 * M_PI), sin(330.0 / 180.0 * M_PI));
-		p4 = Vec2(-1, -1);
-		p5 = Vec2(1, -1);
 	}
 	v1 = v2 = v3 = zero;
 	L = (p1 - p2).length();
@@ -210,10 +208,6 @@ void Scene::Init(void)
 	if (nPoints > 2)
 	{
 		points[2].pos = p3;
-		points[3].pos = p4;
-		points[3].fixed = false;
-		points[4].pos = p5;
-		points[4].fixed = false;
 	}
 	if (testcase == FALLING)
 		points[0].fixed = false;
@@ -227,7 +221,6 @@ void Scene::Init(void)
 	{
 		springs[1].set(&points[1], &points[2]);
 		springs[2].set(&points[2], &points[0]);
-		springs[3].set(&points[3], &points[4]);
 	}
 }
 
@@ -320,9 +313,8 @@ void Scene::timeStepReductionLoop(double stiffness, double mass, double damping,
 	{
 		for (int m = 0; m < 4; m++)
 		{
-			convergence[m] += 1.*errors[m][i - 1] / errors[m][i];//rate of convergence not like this??
+			convergence[m] += 1.*errors[m][i - 1] / errors[m][i];
 			cout<<setw(15)<< 1.*errors[m][i - 1] / errors[m][i]; 
-			//convergence[m] += (std::log(errors[m][i]) - std::log(errors[m][i - 1])) / (std::log(errors[m][i - 1]) - std::log(errors[m][i - 2]));
 		}
 		cout << endl;
 	}
@@ -390,7 +382,7 @@ void Scene::Update(void)
 			AdvanceTimeStep1(stiffness, mass, damping, L, step, method, p1.y(), v1.y(), p2.y(), v2.y());
 		break;
 	case FALLING:
-		AdvanceTimeStep3(stiffness, mass, damping, L, step, p1, v1, p2, v2, p3, v3, p4, p5);
+		AdvanceTimeStep3(stiffness, mass, damping, L, step, p1, v1, p2, v2, p3, v3);
 		break;
 	case ERROR_MEASUREMENT:
 		timeStepReductionLoop(stiffness, mass, damping, L, step, numofIterations);
@@ -406,8 +398,6 @@ void Scene::Update(void)
 	if (nPoints > 2)
 	{
 		points[2].pos = p3;
-		points[3].pos = p4;
-		points[4].pos = p5;
 	}
 }
 

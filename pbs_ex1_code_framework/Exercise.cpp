@@ -34,7 +34,7 @@ void AdvanceTimeStep1(double k, double m, double d, double L, double dt, int met
 		break;
 	case 3:
 	{
-		//explicit midpoint:
+		//explicit midpoint 
 		const double v_temp = v2;
 		const double p_temp = p2;
 		v3 = v_temp + (dt / 2)*((-k*(p_temp + L) - m*g - d*v_temp) / m);
@@ -67,16 +67,26 @@ void AdvanceTimeStep1(double k, double m, double d, double L, double dt, int met
 // Exercise 3
 // Falling triangle
 void AdvanceTimeStep3(double k, double m, double d, double L, double dt,
-                      Vec2& p1, Vec2& v1, Vec2& p2, Vec2& v2, Vec2& p3, Vec2& v3, Vec2& p4, Vec2& p5)
+                      Vec2& p1, Vec2& v1, Vec2& p2, Vec2& v2, Vec2& p3, Vec2& v3)
 {
 	const Vec2 gvec = Vec2(0, -9.81);
 	const Vec2 kresp = Vec2(0, 100);
-	v1 = v1 + dt*((1. / 2 * k*(((p1 - p2).norm() - L)*(p2 - p1).normalized() + ((p1 - p3).norm() - L)*(p3 - p1).normalized()) + m*gvec - d*v1+kresp*std::max(0.,-1-p1.y())) / m);
-	v2 = v2 + dt*((1. / 2 * k*(((p2 - p1).norm() - L)*(p1 - p2).normalized() + ((p2 - p3).norm() - L)*(p3 - p2).normalized()) + m*gvec - d*v2+kresp*std::max(0., -1 - p2.y())) / m);
-	v3 = v3 + dt*((1. / 2 * k*(((p3 - p1).norm() - L)*(p1 - p3).normalized() + ((p3 - p2).norm() - L)*(p2 - p3).normalized()) + m*gvec - d*v3+kresp*std::max(0., -1 - p3.y())) / m);
+	v1 = v1 + dt*((1. / 2 * k*(((p1 - p2).norm() - L)*(p2 - p1).normalized() + ((p1 - p3).norm() - L)*(p3 - p1).normalized()) + m*gvec - d*v1/*)/m);*/+kresp*std::max(0.,-1-p1.y())) / m);
+	v2 = v2 + dt*((1. / 2 * k*(((p2 - p1).norm() - L)*(p1 - p2).normalized() + ((p2 - p3).norm() - L)*(p3 - p2).normalized()) + m*gvec - d*v2/*)/m);*/+kresp*std::max(0., -1 - p2.y())) / m);
+	v3 = v3 + dt*((1. / 2 * k*(((p3 - p1).norm() - L)*(p1 - p3).normalized() + ((p3 - p2).norm() - L)*(p2 - p3).normalized()) + m*gvec - d*v3/*) / m);*/+kresp*std::max(0., -1 - p3.y())) / m);
+	/*if (p1.y() <= -1)
+	{
+		v1 = Vec2(v1.x(), std::max(0.,v1.y()));
+	}
+	if (p2.y() <= -1)
+	{
+		v2 = Vec2(v2.x(), std::max(0.,v2.y()));
+	}
+	if (p3.y() <= -1)
+	{
+		v3 = Vec2(v3.x(), std::max(0., v3.y()));
+	}*/
 	p1 = p1 + dt*v1;
 	p2 = p2 + dt*v2;
 	p3 = p3 + dt*v3;
-	p4 = Vec2(-100, std::min(std::min(-1., p1.y()), std::min(p2.y(), p3.y())));
-	p5 = Vec2(100, std::min(std::min(-1., p1.y()), std::min(p2.y(), p3.y())));
 }
