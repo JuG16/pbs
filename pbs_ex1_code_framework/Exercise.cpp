@@ -44,8 +44,9 @@ void AdvanceTimeStep1(double k, double m, double d, double L, double dt, int met
 		break;
 	}
 	case 4:
-		//implicit Euler
-		v2 = (v2*m/dt -k*(p2 + L) - m*g)/(m/dt+d);
+		//semi-implicit Euler
+		//v2 = (v2*m/dt -k*(p2 + L) - m*g)/(m/dt+d);
+		v2 = (1. / (m + dt*d + dt*dt*k))*((m + dt*d)*v2 + dt*((-k*(p2 + L) - m*g - d*v2)));
 		p2 = p2 + dt*v2;
 		break;
 	case 5:
