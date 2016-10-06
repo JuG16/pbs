@@ -45,7 +45,6 @@ void AdvanceTimeStep1(double k, double m, double d, double L, double dt, int met
 	}
 	case 4:
 		//semi-implicit Euler
-		//v2 = (v2*m/dt -k*(p2 + L) - m*g)/(m/dt+d);
 		v2 = (1. / (m + dt*d + dt*dt*k))*((m + dt*d)*v2 + dt*((-k*(p2 + L) - m*g - d*v2)));
 		p2 = p2 + dt*v2;
 		break;
@@ -72,21 +71,9 @@ void AdvanceTimeStep3(double k, double m, double d, double L, double dt,
 {
 	const Vec2 gvec = Vec2(0, -9.81);
 	const Vec2 kresp = Vec2(0, 100);
-	v1 = v1 + dt*((1. / 2 * k*(((p1 - p2).norm() - L)*(p2 - p1).normalized() + ((p1 - p3).norm() - L)*(p3 - p1).normalized()) + m*gvec - d*v1/*)/m);*/+kresp*std::max(0.,-1-p1.y())) / m);
-	v2 = v2 + dt*((1. / 2 * k*(((p2 - p1).norm() - L)*(p1 - p2).normalized() + ((p2 - p3).norm() - L)*(p3 - p2).normalized()) + m*gvec - d*v2/*)/m);*/+kresp*std::max(0., -1 - p2.y())) / m);
-	v3 = v3 + dt*((1. / 2 * k*(((p3 - p1).norm() - L)*(p1 - p3).normalized() + ((p3 - p2).norm() - L)*(p2 - p3).normalized()) + m*gvec - d*v3/*) / m);*/+kresp*std::max(0., -1 - p3.y())) / m);
-	/*if (p1.y() <= -1)
-	{
-		v1 = Vec2(v1.x(), std::max(0.,v1.y()));
-	}
-	if (p2.y() <= -1)
-	{
-		v2 = Vec2(v2.x(), std::max(0.,v2.y()));
-	}
-	if (p3.y() <= -1)
-	{
-		v3 = Vec2(v3.x(), std::max(0., v3.y()));
-	}*/
+	v1 = v1 + dt*((1. / 2 * k*(((p1 - p2).norm() - L)*(p2 - p1).normalized() + ((p1 - p3).norm() - L)*(p3 - p1).normalized()) + m*gvec - d*v1+kresp*std::max(0.,-1-p1.y())) / m);
+	v2 = v2 + dt*((1. / 2 * k*(((p2 - p1).norm() - L)*(p1 - p2).normalized() + ((p2 - p3).norm() - L)*(p3 - p2).normalized()) + m*gvec - d*v2+kresp*std::max(0., -1 - p2.y())) / m);
+	v3 = v3 + dt*((1. / 2 * k*(((p3 - p1).norm() - L)*(p1 - p3).normalized() + ((p3 - p2).norm() - L)*(p2 - p3).normalized()) + m*gvec - d*v3+kresp*std::max(0., -1 - p3.y())) / m);
 	p1 = p1 + dt*v1;
 	p2 = p2 + dt*v2;
 	p3 = p3 + dt*v3;

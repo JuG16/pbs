@@ -314,9 +314,9 @@ void Scene::timeStepReductionLoop(double stiffness, double mass, double damping,
 		for (int m = 0; m < 4; m++)
 		{
 			convergence[m] += 1.*errors[m][i - 1] / errors[m][i];
-			cout<<setw(15)<< 1.*errors[m][i - 1] / errors[m][i]; 
+			//cout<<setw(15)<< 1.*errors[m][i - 1] / errors[m][i]; 
 		}
-		cout << endl;
+		//cout << endl;
 	}
 	cout << "rate of (algebraic) convergence" << endl;
 	for (int m = 1; m <= 4; m++)

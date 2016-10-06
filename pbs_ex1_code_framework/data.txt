@@ -1,0 +1,98 @@
+Problem 2.2
+
+Current Settings:
+        -testcase error_measurement
+        -method symplectic_euler
+        -mass 0.1
+        -step 0.5
+        -stiff 10
+        -damp 0
+
+error measurement:
+           step                    euler         symplectic_euler                 midpoint          backwards_euler
+            0.5                 0.453931                  1.77902                  1.11648                 0.108029
+           0.25                0.0615007                 0.392774                 0.227137                0.0707123
+          0.125                0.0114421                0.0713761                 0.029967                0.0420407
+         0.0625               0.00672574                0.0139788               0.00362653                0.0063294
+        0.03125               0.00214926               0.00302688               0.00043881              0.000271321
+       0.015625              0.000593283              0.000700751              5.37341e-05               0.00036252
+      0.0078125              0.000155114              0.000168395               6.6406e-06              0.000127309
+     0.00390625              3.96135e-05              4.12637e-05              8.25123e-07              3.62277e-05
+     0.00195313              1.00068e-05              1.02125e-05              1.02825e-07              9.58996e-06
+    0.000976563              2.51458e-06              2.54024e-06              1.28332e-08              2.46289e-06
+rate of (algebraic) convergence
+                    euler         symplectic_euler                 midpoint          backwards_euler
+                  4.09864                  4.48656                  7.70731                  5.32906
+
+
+
+
+Current Settings:
+        -testcase error_measurement
+        -method symplectic_euler
+        -mass 0.1
+        -step 0.5
+        -stiff 10
+        -damp 0.5
+
+error measurement:
+           step                    euler         symplectic_euler                 midpoint          backwards_euler
+            0.5                 0.282399                 0.958575                 0.620487                0.0209923
+           0.25                0.0607383                 0.229782                  0.14526                0.0388779
+          0.125               0.00164035                0.0439014                0.0227709                0.0249359
+         0.0625               0.00221801               0.00834724               0.00306461               0.00533366
+        0.03125              0.000927804               0.00171351              0.000392853               0.00040355
+       0.015625              0.000280593              0.000379736              4.95716e-05               9.3394e-05
+      0.0078125              7.63205e-05              8.87617e-05              6.22058e-06              5.19682e-05
+     0.00390625              1.98563e-05              2.14142e-05              7.78921e-07              1.67681e-05
+     0.00195313              5.06137e-06              5.25626e-06              9.74443e-08              4.67312e-06
+    0.000976563              1.27752e-06              1.30189e-06              1.21853e-08              1.22887e-06
+rate of (algebraic) convergence
+                    euler         symplectic_euler                 midpoint          backwards_euler
+                  7.05767                  4.50928                  7.30582                   4.0666
+
+Problem 2.3
+
+Current Settings:
+        -testcase stability_measurement
+        -method symplectic_euler
+        -mass 0.1
+        -step 0.001
+        -stiff 10
+        -damp 0
+
+Max amplitude table:
+          step                     euler          symplectic_euler                  midpoint           backwards_euler                  analytic
+          0.001                  2.25774                   2.1962                   2.1962                  2.19467                        2
+          0.002                  2.80799                   2.1962                  2.19622                  2.19317                  2.00002
+          0.004                  288.054                  2.19622                  2.19651                  2.19025                  2.00008
+          0.008              6.90578e+12                  2.19628                  2.20129                  2.18469                  2.00031
+          0.016              7.60715e+53                  2.19652                   2.3204                  2.17463                  2.00125
+          0.032             4.07258e+210                  2.19748                  47226.9                  2.15829                  2.00498
+          0.064                      inf                  2.20164              1.51951e+88                  2.13789                  2.01941
+          0.128                      inf                  2.22577                      inf                  2.11901                  2.06997
+          0.256                      inf                      inf             6.88232e+306                  2.10765                  2.18007
+          0.512                      inf                      inf                      inf                  2.10144                  2.05921
+
+
+
+Current Settings:
+        -testcase stability_measurement
+        -method symplectic_euler
+        -mass 0.1
+        -step 0.001
+        -stiff 10
+        -damp 0.5
+
+Max amplitude table:
+          step                     euler          symplectic_euler                  midpoint           backwards_euler                  analytic
+          0.001                   2.1424                  2.14164                  2.14169                  2.14099                        2
+          0.002                  2.14313                   2.1416                  2.14169                   2.1403                  2.00002
+          0.004                  2.14463                  2.14151                  2.14167                  2.13896                  2.00008
+          0.008                  2.14779                  2.14134                  2.14159                  2.13645                  2.00031
+          0.016                  2.15492                  2.14102                  2.14143                  2.13195                  2.00122
+          0.032                  2.17261                  2.14075                    2.141                  2.12479                  2.00473
+          0.064             2.14875e+185                  2.14172                   2.1407                  2.11573                  2.01751
+          0.128                      inf                  2.16073                  2.16921                  2.10686                  2.05753
+          0.256                      inf                      inf              5.4651e+306                   2.1016                  2.13065
+          0.512                      inf                      inf                      inf                   2.0996                  2.09832
