@@ -1,4 +1,23 @@
-Problem 2.2
+Problem 2:
+--------------------------------------------------------------------------------------------------------------------------------------
+
+
+The following solver were used:
+- Explicit Euler (1st Order ODE solver) -> (not inherently stable, 2nd order accuracy)
+- Symplectic Euler (Higher Order solver) -> 1st Order accurate (but good for oscillators)
+- Explicit Midpoint Method (1st Order ODE solver) -> 2nd order accuracy
+- Backwards Euler (implicit, 1st Order ODE solver) -> (stable, 2nd order accuracy)
+
+
+2.2 Error Convergence Analysis
+--------------------------------------------------------------------------------------------------------------------------------------
+
+The obvious and most important result is, that the local error depends heavily on the step size, which is shown by the rate of algebraic convergence. Except from the Symplectic Euler Method, which has a 1st order accuracy, all solver have a 2nd order accuracy, which is reflected properly in the measurements since all rate of convergences are bigger then the squared step size ((1/2)^2 > max[4.09864,4.48656,7.70731, 5.32906]). Of further importance is the result for the Symplectic Euler, which has achieved a "2nd order accuracy" even though it's a first order solver due to its suitability for oscillatory or energy conserving motions.
+
+The measurements for the system with damping also show, that all solver achieve 2nd order accuracy. The same arguments as before hold for the Symplectic Euler. Interesting is the rate of convergence for the midpoint method, approaches 3rd Order accuracy in both measurements, which could be due to the "halved step size" during the method itself which could favor good accuracy for certain problems. Not directly explicable is the improvement for the explicit Euler whereas the implicit Euler increases in accuracy.
+
+
+--------------------------------------------------------------------------------------------------------------------------------------
 
 Current Settings:
         -testcase error_measurement
@@ -20,11 +39,14 @@ error measurement:
      0.00390625              3.96135e-05              4.12637e-05              8.25123e-07              3.62277e-05
      0.00195313              1.00068e-05              1.02125e-05              1.02825e-07              9.58996e-06
     0.000976563              2.51458e-06              2.54024e-06              1.28332e-08              2.46289e-06
+
+
 rate of (algebraic) convergence
-                    euler         symplectic_euler                 midpoint          backwards_euler
-                  4.09864                  4.48656                  7.70731                  5.32906
 
+                                   euler         symplectic_euler                 midpoint          backwards_euler
+                                 4.09864                  4.48656                  7.70731                  5.32906
 
+--------------------------------------------------------------------------------------------------------------------------------------
 
 
 Current Settings:
@@ -47,11 +69,26 @@ error measurement:
      0.00390625              1.98563e-05              2.14142e-05              7.78921e-07              1.67681e-05
      0.00195313              5.06137e-06              5.25626e-06              9.74443e-08              4.67312e-06
     0.000976563              1.27752e-06              1.30189e-06              1.21853e-08              1.22887e-06
+
+
 rate of (algebraic) convergence
                     euler         symplectic_euler                 midpoint          backwards_euler
                   7.05767                  4.50928                  7.30582                   4.0666
 
-Problem 2.3
+
+
+--------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------
+
+2.3 Stability Analysis
+--------------------------------------------------------------------------------------------------------------------------------------
+
+For the both measurements one thing becomes clearly visible. Only one of the applied solver is stable. All the explicit methods which we used become unstable for an increasing step size. The only stable solver is the backwards Euler which is an implicit method (and stable by proof-> see slides).
+The measurements for with and without damping are rather similar. One could argue, that by introducing damping into the system, the rate of instability for the unstable solver slows down, which does make sense due to the nature of damping itself.
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------
 
 Current Settings:
         -testcase stability_measurement
@@ -74,7 +111,7 @@ Max amplitude table:
           0.256                      inf                      inf             6.88232e+306                  2.10765                  2.18007
           0.512                      inf                      inf                      inf                  2.10144                  2.05921
 
-
+--------------------------------------------------------------------------------------------------------------------------------------
 
 Current Settings:
         -testcase stability_measurement
@@ -96,3 +133,8 @@ Max amplitude table:
           0.128                      inf                  2.16073                  2.16921                  2.10686                  2.05753
           0.256                      inf                      inf              5.4651e+306                   2.1016                  2.13065
           0.512                      inf                      inf                      inf                   2.0996                  2.09832
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------
