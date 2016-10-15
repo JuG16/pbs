@@ -28,7 +28,7 @@ public:
 	// Returns the global ID of the element node el
 	int GetGlobalNodeForElementNode(int el) const { return m_nodes[el]; }
 
-//private:
+//private: why????
 
 	// Computes for a basis function its x/y derivatives geometrically
 	void computeSingleBasisDerivGlobalGeom(int nodeId, Vector2 &basisDerivGlobal, const FEMMesh *pMesh) const;

@@ -14,9 +14,9 @@ static const int gridSize = 20;
 // use a graded mesh, or a regular mesh
 static const bool gradedMesh = false;
 // laplace or poisson problem?
-static const bool laplaceProblem = false;
+static const bool laplaceProblem = true;
 // display debug information?
-static const bool debugOut = false;
+static const bool debugOut = true;
 
 
 double eval_u(double x, double y)
@@ -147,14 +147,16 @@ int main(int argc, char *argv[])
 	FEMMesh mesh = SimpleFEM::CreateUniformGridMesh(gridSize, gridSize);
 	int nNodes = mesh.GetNumNodes();
 
+
 	// Build its stiffness matrix:
 	// loop over all elements, and compute their contributions
 	// for the equations of their respective nodes
+
 	mesh.getMat().ClearResize(mesh.GetNumNodes());
 	for (int i = 0; i < mesh.GetNumElements(); i++)
 	{
 		if (debugOut)
-			std::cout << "Assembling " << i << "\n";
+			//std::cout << "Assembling " << i << "\n";
 		mesh.GetElement(i).Assemble(&mesh);
 	}
 
