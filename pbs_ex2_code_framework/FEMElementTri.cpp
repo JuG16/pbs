@@ -70,3 +70,31 @@ void FEMElementTri::computeSingleBasisDerivGlobalLES(int nodeId, Vector2 &basisD
 	basisDerivGlobal.x() = params.x();
 	basisDerivGlobal.y() = params.y();
 }
+
+
+//TASK 4
+double FEMElementTri::evalSingleBasisGlobalLES(int nodeId, const FEMMesh *pMesh, double x, double y) const
+{
+	//does nodeId refere to local or global numbering (assuming local for now)
+	Matrix3x3 paramMatrix;
+
+	paramMatrix(0, 0) = (*pMesh).GetNodePosition(this->GetGlobalNodeForElementNode(0)).x();
+	paramMatrix(0, 1) = (*pMesh).GetNodePosition(this->GetGlobalNodeForElementNode(0)).y();
+	paramMatrix(0, 2) = 1;
+	paramMatrix(1, 0) = (*pMesh).GetNodePosition(this->GetGlobalNodeForElementNode(1)).x();
+	paramMatrix(1, 1) = (*pMesh).GetNodePosition(this->GetGlobalNodeForElementNode(1)).y();
+	paramMatrix(1, 2) = 1;
+	paramMatrix(2, 0) = (*pMesh).GetNodePosition(this->GetGlobalNodeForElementNode(2)).x();
+	paramMatrix(2, 1) = (*pMesh).GetNodePosition(this->GetGlobalNodeForElementNode(2)).y();
+	paramMatrix(2, 2) = 1;
+
+	Vector3 rhs;
+	rhs.setX(0 == nodeId ? 1 : 0);
+	rhs.setY(1 == nodeId ? 1 : 0);
+	rhs.setZ(2 == nodeId ? 1 : 0);
+
+
+	Vector3 params = paramMatrix.inverse()*rhs;
+
+	return params.x()*x + params.y()*y + params.z();
+}

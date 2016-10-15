@@ -10,13 +10,13 @@
 #include "MeshViewer.h"
 
 // size of grid
-static const int gridSize = 20;
+static const int gridSize = 5;
 // use a graded mesh, or a regular mesh
 static const bool gradedMesh = false;
 // laplace or poisson problem?
-static const bool laplaceProblem = true;
+static const bool laplaceProblem = false;
 // display debug information?
-static const bool debugOut = true;
+static const bool debugOut = false;
 
 
 double eval_u(double x, double y)
@@ -128,16 +128,46 @@ void SimpleFEM::ComputeRHS(const FEMMesh &mesh, std::vector<double> &rhs)
 		const FEMElementTri& elem = mesh.GetElement(ie);
 
 		//Task4 starts here
-		
+		//looks wrong
+		double area;
+		elem.computeElementArea(&mesh, area);
+		Vec2 barycenter = mesh.GetNodePosition(elem.GetGlobalNodeForElementNode(0)) + mesh.GetNodePosition(elem.GetGlobalNodeForElementNode(1)) + mesh.GetNodePosition(elem.GetGlobalNodeForElementNode(2)) / 3.;
+		for (int j = 0; j < 3; ++j)
+		{
+			rhs.at(elem.GetGlobalNodeForElementNode(j)) += area*eval_f(barycenter.x(), barycenter.y())*elem.evalSingleBasisGlobalLES(j, &mesh, barycenter.x(), barycenter.y());
+		}
 		//Task4 ends here
 	}
+
 }
 
 // TASK 5
 void SimpleFEM::computeError(FEMMesh &mesh, const std::vector<double> &sol_num, std::vector<double> &verror, double &err_nrm)
 {
 	//Task 5 starts here
-	
+	for (unsigned i = 0; i < sol_num.size(); ++i)
+	{
+		verror.at(i) = std::abs(sol_num.at(i) - eval_u(mesh.GetNodePosition(i).x(), mesh.GetNodePosition(i).y()));
+	}
+	err_nrm = 0;
+	for (unsigned i = 0; i < verror.size(); ++i)
+	{
+		double temp = 0;
+		for (unsigned j = 0; j < verror.size(); ++j)
+		{
+			if (i >= j)
+			{
+				temp += verror.at(j)*mesh.getMat().GetAt(i, j);
+			}
+			else
+			{
+				temp += verror.at(j)*mesh.getMat().GetAt(j,i);
+			}
+		}
+		err_nrm += temp*verror.at(i);
+	}
+
+	err_nrm = std::sqrt(err_nrm);
 	//Task 5 ends here
 }
 
@@ -156,7 +186,7 @@ int main(int argc, char *argv[])
 	for (int i = 0; i < mesh.GetNumElements(); i++)
 	{
 		if (debugOut)
-			//std::cout << "Assembling " << i << "\n";
+			std::cout << "Assembling " << i << "\n";
 		mesh.GetElement(i).Assemble(&mesh);
 	}
 
