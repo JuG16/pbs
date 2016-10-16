@@ -10,11 +10,11 @@
 #include "MeshViewer.h"
 
 // size of grid
-static const int gridSize = 5;
+static const int gridSize = 20;
 // use a graded mesh, or a regular mesh
 static const bool gradedMesh = false;
 // laplace or poisson problem?
-static const bool laplaceProblem = false;
+static const bool laplaceProblem = true;
 // display debug information?
 static const bool debugOut = false;
 
@@ -134,11 +134,10 @@ void SimpleFEM::ComputeRHS(const FEMMesh &mesh, std::vector<double> &rhs)
 		Vec2 barycenter = mesh.GetNodePosition(elem.GetGlobalNodeForElementNode(0)) + mesh.GetNodePosition(elem.GetGlobalNodeForElementNode(1)) + mesh.GetNodePosition(elem.GetGlobalNodeForElementNode(2)) / 3.;
 		for (int j = 0; j < 3; ++j)
 		{
-			rhs.at(elem.GetGlobalNodeForElementNode(j)) += area*eval_f(barycenter.x(), barycenter.y())*elem.evalSingleBasisGlobalLES(j, &mesh, barycenter.x(), barycenter.y());
+			rhs.at(elem.GetGlobalNodeForElementNode(j)) += (area*eval_f(barycenter.x(), barycenter.y())*elem.evalSingleBasisGlobalLES(j, &mesh, barycenter.x(), barycenter.y()));
 		}
 		//Task4 ends here
 	}
-
 }
 
 // TASK 5

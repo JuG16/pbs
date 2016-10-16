@@ -29,8 +29,16 @@ void FEMElementTri::Assemble(FEMMesh *pMesh) const
 			{
 				Vec2 basisDerivi;
 				Vec2 basisDerivj;
+				//usind LES (task1)
+				/*
 				this->computeSingleBasisDerivGlobalLES(i, basisDerivi, pMesh);
 				this->computeSingleBasisDerivGlobalLES(j, basisDerivj, pMesh);
+				*/
+				//using Geom (task2)
+				
+				this->computeSingleBasisDerivGlobalGeom(i, basisDerivi, pMesh);
+				this->computeSingleBasisDerivGlobalGeom(j, basisDerivj, pMesh);
+				
 				pMesh->AddToStiffnessMatrix(this->GetGlobalNodeForElementNode(i), this->GetGlobalNodeForElementNode(j), area*(basisDerivi.x()*basisDerivj.x() + basisDerivi.y()*basisDerivj.y()));
 			}
 		}
@@ -40,7 +48,22 @@ void FEMElementTri::Assemble(FEMMesh *pMesh) const
 // TASK 2
 void FEMElementTri::computeSingleBasisDerivGlobalGeom(int nodeId, Vector2 &basisDerivGlobal, const FEMMesh *pMesh) const
 {
-	
+	Vec2 dvec;
+	if (nodeId == 0)
+	{
+		dvec = pMesh->GetNodePosition(this->GetGlobalNodeForElementNode(2)) - pMesh->GetNodePosition(this->GetGlobalNodeForElementNode(1));
+	}
+	else if (nodeId == 1)
+	{
+		dvec = pMesh->GetNodePosition(this->GetGlobalNodeForElementNode(0)) - pMesh->GetNodePosition(this->GetGlobalNodeForElementNode(2));
+	}
+	else if (nodeId == 2)
+	{
+		dvec = pMesh->GetNodePosition(this->GetGlobalNodeForElementNode(1)) - pMesh->GetNodePosition(this->GetGlobalNodeForElementNode(0));
+	}
+	basisDerivGlobal.x() = dvec.y();
+	basisDerivGlobal.y() = -dvec.x();
+	basisDerivGlobal = dvec.norm()*basisDerivGlobal.normalized();
 }
 
 // TASK 1
