@@ -36,8 +36,10 @@ void FEMElementTri::Assemble(FEMMesh *pMesh) const
 				*/
 				//using Geom (task2)
 				
+				
 				this->computeSingleBasisDerivGlobalGeom(i, basisDerivi, pMesh);
 				this->computeSingleBasisDerivGlobalGeom(j, basisDerivj, pMesh);
+				
 				
 				pMesh->AddToStiffnessMatrix(this->GetGlobalNodeForElementNode(i), this->GetGlobalNodeForElementNode(j), area*(basisDerivi.x()*basisDerivj.x() + basisDerivi.y()*basisDerivj.y()));
 			}
@@ -63,7 +65,9 @@ void FEMElementTri::computeSingleBasisDerivGlobalGeom(int nodeId, Vector2 &basis
 	}
 	basisDerivGlobal.x() = dvec.y();
 	basisDerivGlobal.y() = -dvec.x();
-	basisDerivGlobal = dvec.norm()*basisDerivGlobal.normalized();
+	double area;
+	this->computeElementArea(pMesh, area);
+	basisDerivGlobal = 1./(2*area/dvec.norm())*basisDerivGlobal.normalized();
 }
 
 // TASK 1

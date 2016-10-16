@@ -10,13 +10,13 @@
 #include "MeshViewer.h"
 
 // size of grid
-static const int gridSize = 20;
+static const int gridSize = 5;
 // use a graded mesh, or a regular mesh
 static const bool gradedMesh = false;
 // laplace or poisson problem?
 static const bool laplaceProblem = true;
 // display debug information?
-static const bool debugOut = false;
+static const bool debugOut = true;
 
 
 double eval_u(double x, double y)
