@@ -30,10 +30,12 @@ void FEMElementTri::Assemble(FEMMesh *pMesh) const
 				Vec2 basisDerivi;
 				Vec2 basisDerivj;
 				//usind LES (task1)
+				
 				/*
 				this->computeSingleBasisDerivGlobalLES(i, basisDerivi, pMesh);
 				this->computeSingleBasisDerivGlobalLES(j, basisDerivj, pMesh);
 				*/
+
 				//using Geom (task2)
 				
 				

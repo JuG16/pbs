@@ -8,11 +8,12 @@
 #include "SimpleFEMDefs.h"
 #include "SimpleFEM.h"
 #include "MeshViewer.h"
+#include <iomanip>
 
 // size of grid
-static const int gridSize = 20;
+static const int gridSize = 32;
 // use a graded mesh, or a regular mesh
-static const bool gradedMesh = false;
+static const bool gradedMesh = true;
 // laplace or poisson problem?
 static const bool laplaceProblem = false;
 // display debug information?
@@ -133,7 +134,8 @@ void SimpleFEM::ComputeRHS(const FEMMesh &mesh, std::vector<double> &rhs)
 		Vec2 barycenter = (mesh.GetNodePosition(elem.GetGlobalNodeForElementNode(0)) + mesh.GetNodePosition(elem.GetGlobalNodeForElementNode(1)) + mesh.GetNodePosition(elem.GetGlobalNodeForElementNode(2))) / 3.;
 		for (int j = 0; j < 3; ++j)
 		{
-			rhs.at(elem.GetGlobalNodeForElementNode(j)) += (area*eval_f(barycenter.x(), barycenter.y())*elem.evalSingleBasisGlobalLES(j, &mesh, barycenter.x(), barycenter.y()));
+			rhs.at(elem.GetGlobalNodeForElementNode(j)) += area*eval_f(barycenter.x(), barycenter.y())*1./3; //does the same as below due to regularity of triangles
+			//rhs.at(elem.GetGlobalNodeForElementNode(j)) += area*eval_f(barycenter.x(), barycenter.y())*elem.evalSingleBasisGlobalLES(j, &mesh, barycenter.x(), barycenter.y()); 
 		}
 		//Task4 ends here
 	}
@@ -166,6 +168,14 @@ void SimpleFEM::computeError(FEMMesh &mesh, const std::vector<double> &sol_num, 
 	}
 
 	err_nrm = std::sqrt(err_nrm);
+	/*
+	std::vector<double> res1(verror.size());
+	mesh.getMat().MultVector(verror, res1);
+	for (int i = 0; i < verror.size(); ++i)
+	{
+		err_nrm += res1.at(i)*verror.at(i);
+	}
+	err_nrm = std::sqrt(err_nrm);*/
 	//Task 5 ends here
 }
 
@@ -232,7 +242,7 @@ int main(int argc, char *argv[])
 	double err_nrm = 0;
 	std::vector<double> verr(nNodes);
 	SimpleFEM::computeError(mesh, solution, verr, err_nrm);
-	printf("Error norm is %f\n", err_nrm);
+	std::cout << std::setprecision(6) << "Error norm is " << err_nrm << std::endl;
 	// Visualize the solution:
 	// draw the triangles with colors according to solution
 	// blue means zero, red means maxValue.
