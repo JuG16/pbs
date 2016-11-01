@@ -6,7 +6,38 @@
 #include "gauss_seidel.h"
 #include "fluid2d.h"
 #include "Utilities/Array2T.h"
+#include "Utilities/Vector2T.h"
 
+
+
+typedef Vector2T<double> Vec2;
+double bilinearinterpolation(Vec2 &Q11, double &val11, Vec2 &Q12, double &val12, Vec2 &Q21, double &val21, Vec2 &Q22, double &val22, Vec2 &pos)
+{
+	double f1 = (Q21.x() - pos.x()) / (Q21.x() - Q11.x())*val11 + (pos.x() - Q11.x()) / (Q21.x() - Q11.x())*val21;
+	double f2 = (Q22.x() - pos.x()) / (Q22.x() - Q12.x())*val12 + (pos.x() - Q12.x()) / (Q22.x() - Q12.x())*val22;
+	return (Q22.y() - pos.y()) / (Q22.y() - Q11.y())*f1 + (pos.y() - Q11.y()) / (Q22.y() - Q11.y())*f2;
+}
+
+void project(double &xold, double &yold, double dx)
+{
+	if (xold <2.5*dx)
+	{
+		xold = 2.5*dx;
+	}
+	else if (xold > 1. - 2.5*dx)
+	{
+		xold = 1. - 2.5*dx;
+	}
+
+	if (yold < 2.5*dx)
+	{
+		yold = 2.5*dx;
+	}
+	else if (yold > 1. - 2.5*dx)
+	{
+		yold = 1. - 2.5*dx;
+	}
+}
 // Problem 1
 void ExSolvePoisson(int _xRes, int _yRes, int _iterations, double _accuracy, Array2d &_field, Array2d &_b)
 {
@@ -18,17 +49,30 @@ void ExSolvePoisson(int _xRes, int _yRes, int _iterations, double _accuracy, Arr
 		//switched around order for caching purposes (correct?)
 		for (int x = 1; x < _xRes - 1; x++)
 		{
-			for (int y = 1; y < _xRes - 1; y++)
+			for (int y = 1; y < _yRes - 1; y++)
 			{
-				_field(x, y) = 1.*(_b(x, y) + _field(x - 1, y) + _field(x, y - 1) + _field(x + 1, y) + _field(x, y + 1)) / 4;
+				_field(x, y) = (dx*dx*_b(x, y) + _field(x - 1, y) + _field(x, y - 1) + _field(x + 1, y) + _field(x, y + 1)) / 4.;
 			}
 		}
 		// For your debugging, and ours, please add these prints after every iteration
 		//how to compute the residual???
-		/*if(it == _iterations - 1) 
+		double residual = 0;
+		for (int x = 1; x < _xRes - 1; ++x)
+		{
+			for (int y = 1; y < _yRes - 1; ++y)
+			{
+				residual += std::abs(_b(x, y) - (1. / (dx*dx)*(4*_field(x, y) - _field(x - 1, y) - _field(x + 1, y) - _field(x, y - 1) - _field(x, y + 1))));
+			}
+		}
+		residual /= (1.*(_xRes - 2)*(_yRes - 2));
+		if (residual < _accuracy)
+		{
+			printf("Pressure solver: it=%d , res=%f, converged \n", it, residual);
+			break;
+		}
+		if(it == _iterations - 1) 
 			printf("Pressure solver: it=%d , res=%f \n", it, residual);
-		if(residual < _accuracy)
-			printf("Pressure solver: it=%d , res=%f, converged \n", it, residual);*/
+		
 	}
 	
 	
@@ -39,12 +83,102 @@ void ExCorrectVelocities(int _xRes, int _yRes, double _dt, const Array2d &_press
 {
 	double dx = 1.0 / _xRes;
 
-	
+	for (int i = 0; i < _xRes-1; ++i)
+	{
+		for (int j = 0; j < _yRes-1; ++j)
+		{
+			_xVelocity(i + 1, j) -= _dt*(_pressure(i + 1, j) - _pressure(i, j)) / dx;
+		}
+	}
+	for (int i = 0; i < _xRes - 1; ++i)
+	{
+		for (int j = 0; j < _yRes - 1; ++j)
+		{
+			_yVelocity(i, j + 1) -= _dt*(_pressure(i, j + 1) - _pressure(i, j)) / dx;
+		}
+	}
+
 	// Note: velocity u_{i+1/2} is practically stored at i+1
 }
 
 // Problem 3
 void ExAdvectWithSemiLagrange(int _xRes, int _yRes, double _dt, Array2d &_xVelocity, Array2d &_yVelocity, Array2d &_density, Array2d &_densityTemp, Array2d &_xVelocityTemp, Array2d &_yVelocityTemp)
 {
+	//dy==dx always?
+	double dx = 1. / _xRes;
+	//pressure
+
+	for (int i = 1; i < _xRes - 1; ++i)
+	{
+		for (int j = 1; j < _yRes - 1; ++j)
+		{
+			//bilinear interpolation gets reduced to linear interpolation (midpoint)
+			double xold = (i + 0.5)*dx - _dt*(_xVelocity(i, j) + _xVelocity(i + 1, j)) / 2.;
+			double yold = (j + 0.5)*dx - _dt*(_yVelocity(i, j) + _yVelocity(i, j + 1)) / 2.;
+			/*project(xold, yold, dx);
+			int ifloor = std::floor(0.5 + xold / dx);
+			int jfloor = std::floor(0.5 + yold / dx);*/
+			int ifloor = min(max(std::floor(0.5 + xold / dx), 2), _xRes - 2);
+			int jfloor = min(max(std::floor(0.5 + yold / dx), 2), _yRes - 2);
+			_densityTemp(i, j) = bilinearinterpolation(Vec2((ifloor - 0.5)*dx, (jfloor - 0.5)*dx), _density(ifloor - 1, jfloor - 1), Vec2((ifloor - 0.5)*dx, (jfloor + 0.5)*dx), _density(ifloor - 1, jfloor), Vec2((ifloor + 0.5)*dx, (jfloor - 0.5)*dx), _density(ifloor, jfloor - 1), Vec2((ifloor + 0.5)*dx, (jfloor + 0.5)*dx), _density(ifloor, jfloor), Vec2(xold, yold));
+		}
+	}
+
+
+
 	// Note: velocity u_{i+1/2} is practically stored at i+1
+	//xvelocity
+	for (int i = 1; i < _xRes; ++i)
+	{
+		for (int j = 1; j < _yRes; ++j)
+		{
+			double xold = i*dx-_dt*_xVelocity(i,j);
+			double yold = (j + 0.5)*dx - _dt*bilinearinterpolation(Vec2((i - 0.5)*dx, j*dx), _yVelocity(i - 1, j), Vec2((i - 0.5)*dx, (j + 1)*dx), _yVelocity(i - 1, j + 1), Vec2((i + 0.5)*dx, j*dx), _yVelocity(i, j), Vec2((i + 0.5)*dx, (j + 1)*dx), _yVelocity(i, j + 1), Vec2(i*dx, (j + 0.5)*dx));
+			/*project(xold, yold, dx);
+			int ifloor = std::floor(xold / dx);
+			int jfloor = std::floor(0.5 + yold / dx);*/
+			int ifloor = min(max(std::floor(xold / dx), 2), _xRes-3);
+			int jfloor = min(max(std::floor(0.5 + yold / dx), 2), _yRes - 3);
+			_xVelocityTemp(i, j) = bilinearinterpolation(Vec2(ifloor*dx, (jfloor - 0.5)*dx), _xVelocity(ifloor, jfloor-1), Vec2(ifloor*dx, (jfloor + 0.5)*dx), _xVelocity(ifloor, jfloor), Vec2((ifloor + 1)*dx, (jfloor - 0.5)*dx), _xVelocity(ifloor + 1, jfloor-1), Vec2((ifloor + 1)*dx, (jfloor + 0.5)*dx), _xVelocity(ifloor + 1, jfloor), Vec2(xold, yold));
+		}
+	}
+
+	//yvelocity
+	for (int i = 1; i < _xRes; ++i)
+	{
+		for (int j = 1; j < _yRes; ++j)
+		{
+			double xold = (i+0.5)*dx - _dt*bilinearinterpolation(Vec2(i*dx, (j - 0.5)*dx), _xVelocity(i, j - 1), Vec2(i*dx, (j + 0.5)*dx), _xVelocity(i, j), Vec2((i + 1)*dx, (j - 0.5)*dx), _xVelocity(i + 1, j - 1), Vec2((i + 1)*dx, (j + 0.5)*dx), _xVelocity(i + 1, j), Vec2((i + 0.5)*dx, j*dx));
+			double yold = j*dx - _dt*_yVelocity(i, j);
+			/*project(xold, yold, dx);
+			int ifloor = std::floor(0.5 + xold / dx);
+			int jfloor = std::floor(yold / dx);*/
+			int ifloor = min(max(std::floor(0.5 + xold / dx), 2), _xRes - 3);
+			int jfloor = min(max(std::floor(yold / dx), 2), _yRes-3);
+			_yVelocityTemp(i, j) = bilinearinterpolation(Vec2((ifloor-0.5)*dx, jfloor*dx), _yVelocity(ifloor-1, jfloor), Vec2((ifloor-0.5)*dx, (jfloor + 1)*dx), _yVelocity(ifloor-1, jfloor + 1), Vec2((ifloor + 0.5)*dx, jfloor*dx), _yVelocity(ifloor, jfloor), Vec2((ifloor + 0.5)*dx, (jfloor + 1)*dx), _yVelocity(ifloor, jfloor + 1), Vec2(xold, yold));
+		}
+	}
+
+	
+	/*std::swap(_densityTemp, _density);
+	std::swap(_xVelocityTemp, _xVelocity);
+	std::swap(_yVelocityTemp, _yVelocity);*/
+
+	for (int i = 1; i < _xRes - 1; ++i)
+	{
+		for (int j = 1; j < _yRes - 1; ++j)
+		{
+			_density(i, j) = _densityTemp(i, j);
+		}
+	}
+	for (int i = 1; i < _xRes; ++i)
+	{
+		for (int j = 1; j < _yRes; ++j)
+		{
+			_xVelocity(i, j) = _xVelocityTemp(i, j);
+			_yVelocity(i, j) = _yVelocityTemp(i, j);
+		}
+	}
+	
+	std::cout << _density(30, _yRes - 2) << std::endl;
 }
