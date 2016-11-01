@@ -11,31 +11,31 @@
 
 
 typedef Vector2T<double> Vec2;
-double bilinearinterpolation(Vec2 &Q11, double &val11, Vec2 &Q12, double &val12, Vec2 &Q21, double &val21, Vec2 &Q22, double &val22, Vec2 &pos)
+double bilinearinterpolation(double x1, double y1, double x2, double y2, double &val11, double &val12, double &val21, double &val22, Vec2 &pos)
 {
-	double f1 = (Q21.x() - pos.x()) / (Q21.x() - Q11.x())*val11 + (pos.x() - Q11.x()) / (Q21.x() - Q11.x())*val21;
-	double f2 = (Q22.x() - pos.x()) / (Q22.x() - Q12.x())*val12 + (pos.x() - Q12.x()) / (Q22.x() - Q12.x())*val22;
-	return (Q22.y() - pos.y()) / (Q22.y() - Q11.y())*f1 + (pos.y() - Q11.y()) / (Q22.y() - Q11.y())*f2;
+	double f1 = (x2 - pos.x()) / (x2 - x1)*val11 + (pos.x() - x1) / (x2 - x1)*val21;
+	double f2 = (x2 - pos.x()) / (x2 - x1)*val12 + (pos.x() - x1) / (x2 - x1)*val22;
+	return (y2 - pos.y()) / (y2 - y1)*f1 + (pos.y() - y1) / (y2 - y1)*f2;
 }
 
 void project(double &xold, double &yold, double dx)
 {
-	if (xold <2.5*dx)
+	if (xold <1.5*dx)
 	{
-		xold = 2.5*dx;
+		xold = 1.5*dx;
 	}
-	else if (xold > 1. - 2.5*dx)
+	else if (xold > 1. - 1.5*dx)
 	{
-		xold = 1. - 2.5*dx;
+		xold = 1. - 1.5*dx;
 	}
 
-	if (yold < 2.5*dx)
+	if (yold < 1.5*dx)
 	{
-		yold = 2.5*dx;
+		yold = 1.5*dx;
 	}
-	else if (yold > 1. - 2.5*dx)
+	else if (yold > 1. - 1.5*dx)
 	{
-		yold = 1. - 2.5*dx;
+		yold = 1. - 1.5*dx;
 	}
 }
 // Problem 1
@@ -67,11 +67,11 @@ void ExSolvePoisson(int _xRes, int _yRes, int _iterations, double _accuracy, Arr
 		residual /= (1.*(_xRes - 2)*(_yRes - 2));
 		if (residual < _accuracy)
 		{
-			printf("Pressure solver: it=%d , res=%f, converged \n", it, residual);
+			//printf("Pressure solver: it=%d , res=%f, converged \n", it, residual);
 			break;
 		}
-		if(it == _iterations - 1) 
-			printf("Pressure solver: it=%d , res=%f \n", it, residual);
+		//if(it == _iterations - 1) 
+			//printf("Pressure solver: it=%d , res=%f \n", it, residual);
 		
 	}
 	
@@ -115,12 +115,10 @@ void ExAdvectWithSemiLagrange(int _xRes, int _yRes, double _dt, Array2d &_xVeloc
 			//bilinear interpolation gets reduced to linear interpolation (midpoint)
 			double xold = (i + 0.5)*dx - _dt*(_xVelocity(i, j) + _xVelocity(i + 1, j)) / 2.;
 			double yold = (j + 0.5)*dx - _dt*(_yVelocity(i, j) + _yVelocity(i, j + 1)) / 2.;
-			/*project(xold, yold, dx);
+			project(xold, yold, dx);
 			int ifloor = std::floor(0.5 + xold / dx);
-			int jfloor = std::floor(0.5 + yold / dx);*/
-			int ifloor = min(max(std::floor(0.5 + xold / dx), 2), _xRes - 2);
-			int jfloor = min(max(std::floor(0.5 + yold / dx), 2), _yRes - 2);
-			_densityTemp(i, j) = bilinearinterpolation(Vec2((ifloor - 0.5)*dx, (jfloor - 0.5)*dx), _density(ifloor - 1, jfloor - 1), Vec2((ifloor - 0.5)*dx, (jfloor + 0.5)*dx), _density(ifloor - 1, jfloor), Vec2((ifloor + 0.5)*dx, (jfloor - 0.5)*dx), _density(ifloor, jfloor - 1), Vec2((ifloor + 0.5)*dx, (jfloor + 0.5)*dx), _density(ifloor, jfloor), Vec2(xold, yold));
+			int jfloor = std::floor(0.5 + yold / dx);
+			_densityTemp(i, j) = bilinearinterpolation((ifloor - 0.5)*dx, (jfloor - 0.5)*dx, (ifloor+0.5)*dx, (jfloor+0.5)*dx, _density(ifloor - 1, jfloor - 1), _density(ifloor - 1, jfloor), _density(ifloor, jfloor - 1), _density(ifloor, jfloor), Vec2(xold, yold));
 		}
 	}
 
@@ -133,13 +131,11 @@ void ExAdvectWithSemiLagrange(int _xRes, int _yRes, double _dt, Array2d &_xVeloc
 		for (int j = 1; j < _yRes; ++j)
 		{
 			double xold = i*dx-_dt*_xVelocity(i,j);
-			double yold = (j + 0.5)*dx - _dt*bilinearinterpolation(Vec2((i - 0.5)*dx, j*dx), _yVelocity(i - 1, j), Vec2((i - 0.5)*dx, (j + 1)*dx), _yVelocity(i - 1, j + 1), Vec2((i + 0.5)*dx, j*dx), _yVelocity(i, j), Vec2((i + 0.5)*dx, (j + 1)*dx), _yVelocity(i, j + 1), Vec2(i*dx, (j + 0.5)*dx));
-			/*project(xold, yold, dx);
+			double yold = (j + 0.5)*dx - _dt*(_yVelocity(i - 1, j) + _yVelocity(i - 1, j + 1) + _yVelocity(i, j) + _yVelocity(i, j + 1)) / 4;
+			project(xold, yold, dx);
 			int ifloor = std::floor(xold / dx);
-			int jfloor = std::floor(0.5 + yold / dx);*/
-			int ifloor = min(max(std::floor(xold / dx), 2), _xRes-3);
-			int jfloor = min(max(std::floor(0.5 + yold / dx), 2), _yRes - 3);
-			_xVelocityTemp(i, j) = bilinearinterpolation(Vec2(ifloor*dx, (jfloor - 0.5)*dx), _xVelocity(ifloor, jfloor-1), Vec2(ifloor*dx, (jfloor + 0.5)*dx), _xVelocity(ifloor, jfloor), Vec2((ifloor + 1)*dx, (jfloor - 0.5)*dx), _xVelocity(ifloor + 1, jfloor-1), Vec2((ifloor + 1)*dx, (jfloor + 0.5)*dx), _xVelocity(ifloor + 1, jfloor), Vec2(xold, yold));
+			int jfloor = std::floor(0.5 + yold / dx);
+			_xVelocityTemp(i, j) = bilinearinterpolation(ifloor*dx, (jfloor - 0.5)*dx, (ifloor+1)*dx, (jfloor+0.5)*dx, _xVelocity(ifloor, jfloor-1), _xVelocity(ifloor, jfloor), _xVelocity(ifloor + 1, jfloor-1), _xVelocity(ifloor + 1, jfloor), Vec2(xold, yold));
 		}
 	}
 
@@ -148,23 +144,21 @@ void ExAdvectWithSemiLagrange(int _xRes, int _yRes, double _dt, Array2d &_xVeloc
 	{
 		for (int j = 1; j < _yRes; ++j)
 		{
-			double xold = (i+0.5)*dx - _dt*bilinearinterpolation(Vec2(i*dx, (j - 0.5)*dx), _xVelocity(i, j - 1), Vec2(i*dx, (j + 0.5)*dx), _xVelocity(i, j), Vec2((i + 1)*dx, (j - 0.5)*dx), _xVelocity(i + 1, j - 1), Vec2((i + 1)*dx, (j + 0.5)*dx), _xVelocity(i + 1, j), Vec2((i + 0.5)*dx, j*dx));
+			double xold = (i + 0.5)*dx - _dt*(_xVelocity(i, j - 1) + _xVelocity(i, j) + _xVelocity(i + 1, j - 1) + _xVelocity(i + 1, j)) / 4;
 			double yold = j*dx - _dt*_yVelocity(i, j);
-			/*project(xold, yold, dx);
+			project(xold, yold, dx);
 			int ifloor = std::floor(0.5 + xold / dx);
-			int jfloor = std::floor(yold / dx);*/
-			int ifloor = min(max(std::floor(0.5 + xold / dx), 2), _xRes - 3);
-			int jfloor = min(max(std::floor(yold / dx), 2), _yRes-3);
-			_yVelocityTemp(i, j) = bilinearinterpolation(Vec2((ifloor-0.5)*dx, jfloor*dx), _yVelocity(ifloor-1, jfloor), Vec2((ifloor-0.5)*dx, (jfloor + 1)*dx), _yVelocity(ifloor-1, jfloor + 1), Vec2((ifloor + 0.5)*dx, jfloor*dx), _yVelocity(ifloor, jfloor), Vec2((ifloor + 0.5)*dx, (jfloor + 1)*dx), _yVelocity(ifloor, jfloor + 1), Vec2(xold, yold));
+			int jfloor = std::floor(yold / dx);
+			_yVelocityTemp(i, j) = bilinearinterpolation((ifloor-0.5)*dx,  jfloor*dx, (ifloor+0.5)*dx, (jfloor+1)*dx, _yVelocity(ifloor-1, jfloor), _yVelocity(ifloor-1, jfloor + 1), _yVelocity(ifloor, jfloor), _yVelocity(ifloor, jfloor + 1), Vec2(xold, yold));
 		}
 	}
 
 	
-	/*std::swap(_densityTemp, _density);
+	std::swap(_densityTemp, _density);
 	std::swap(_xVelocityTemp, _xVelocity);
-	std::swap(_yVelocityTemp, _yVelocity);*/
+	std::swap(_yVelocityTemp, _yVelocity);
 
-	for (int i = 1; i < _xRes - 1; ++i)
+	/*for (int i = 1; i < _xRes - 1; ++i)
 	{
 		for (int j = 1; j < _yRes - 1; ++j)
 		{
@@ -178,7 +172,6 @@ void ExAdvectWithSemiLagrange(int _xRes, int _yRes, double _dt, Array2d &_xVeloc
 			_xVelocity(i, j) = _xVelocityTemp(i, j);
 			_yVelocity(i, j) = _yVelocityTemp(i, j);
 		}
-	}
+	}*/
 	
-	std::cout << _density(30, _yRes - 2) << std::endl;
 }
