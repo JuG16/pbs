@@ -16,7 +16,7 @@
 #endif
 
 Fluid2D::Fluid2D(int xRes, int yRes)
-:	_xRes(xRes),
+	: _xRes(xRes),
 	_yRes(yRes),
 	_impulseStrength(5000.0f),
 	_pngOutput(false),
@@ -204,8 +204,8 @@ void Fluid2D::computeDivergence()
 
 	/*for (int i = 0; i < _xRes*_yRes; i++)
 	{
-		if (fabs(_divergence[i]) > 1e-6)
-			printf("%d %e\n", i, _divergence[i]);
+	if (fabs(_divergence[i]) > 1e-6)
+	printf("%d %e\n", i, _divergence[i]);
 	}*/
 }
 

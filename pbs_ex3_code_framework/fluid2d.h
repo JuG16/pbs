@@ -16,10 +16,8 @@
 #else
 #include "GL/glut.h"
 #endif  
-
-// resolution of the simulation
+// resolution of the simulationq
 const int simulationResolution = 200;
-
 // global control defines
 #define OUTPATH "./output/"
 
