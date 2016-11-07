@@ -42,70 +42,63 @@ inline void project(double &xold, double &yold, double dx)
 // Problem 1
 void ExSolvePoisson(int _xRes, int _yRes, int _iterations, double _accuracy, Array2d &_field, Array2d &_b)
 {
-	
+
 	double dx = 1.0 / _xRes;
-	// far better convergence without zero intitial condition
-	//_field.zero();
 	for(int it = 0; it < _iterations; ++it)
 	{
-		// Note that the boundaries are handles by the framework, so you iterations should be similar to:
-		for (int y = 1; y < _yRes - 1; y++)
-		{
-			for (int x = 1; x < _xRes - 1; x++)
-			{
-				// Formula according to exercise slide 5, d_{i,j} is given with _b
-				_field(x,y) = ( dx*dx*_b(x,y) + _field(x-1,y) + _field(x,y-1) + _field(x+1,y) + _field(x,y+1) ) / 4.0;
-			}
-		}
-		// compute the residual, needs a second loop
 		double residual = 0;
-		for (int y = 1; y < _yRes - 1; y++)
+		// Note that the boundaries are handles by the framework, so you iterations should be similar to:
+		for (int x = 1; x < _xRes - 1; x++)
 		{
-			for (int x = 1; x < _xRes - 1; x++)
+			for (int y = 1; y < _yRes - 1; y++)
 			{
-				residual += std::abs(_b(x,y)
-							- (4*_field(x,y) - _field(x+1,y) - _field(x,y+1) - _field(x-1,y) - _field(x,y-1))/(dx*dx));
+				_field(x,y) = ( dx*dx*_b(x,y) + _field(x-1,y) + _field(x,y-1) + _field(x+1,y) + _field(x,y+1) ) / 4.0;
+				//to get a result similar to the one on the homepage compute residual here, however its probably more reasonable
+				//to compute it after all values are updated (second loop below)
+				//residual += std::abs(_b(x, y) - (4 * _field(x, y) - _field(x + 1, y) - _field(x, y + 1) - _field(x - 1, y) - _field(x, y - 1)) / (dx*dx));
+
 			}
 		}
-		residual /= (_yRes-2)*(_xRes-2);	// averaging
+		
+		//loop to compute residual after all values are updated
+		for (int x = 1; x < _xRes - 1; x++)
+		{
+			for (int y = 1; y < _yRes - 1; y++)
+			{
+				residual += std::abs(_b(x,y)- (4*_field(x,y) - _field(x+1,y) - _field(x,y+1) - _field(x-1,y) - _field(x,y-1))/(dx*dx));
+			}
+		}
+		residual /= (_yRes-2)*(_xRes-2);
 		// For your debugging, and ours, please add these prints after every iteration
 		if(it == _iterations - 1) 
 			printf("Pressure solver: it=%d , res=%f \n", it, residual);
 		if(residual < _accuracy)
 		{
 			printf("Pressure solver: it=%d , res=%f, converged \n", it, residual);
-			break;	// terminate iterative solver
+			break;	
 		}
 	}
 
-	/*for (int i = 0; i < _xRes; ++i)
-	{
-		for (int j = 0; j < _yRes; ++j)
-		{
-			std::cout << std::setw(15) << _field(i, j);
-		}
-		std::cout << std::endl;
-	}*/
+
 	
 	
 }
 
 // Problem 2
-//how to do interpolation if not allowed to read values of boundary
 void ExCorrectVelocities(int _xRes, int _yRes, double _dt, const Array2d &_pressure, Array2d &_xVelocity, Array2d &_yVelocity)
 {
 	double dx = 1.0 / _xRes;
 
-	for (int i = 0; i < _xRes; ++i)
+	for (int i = 0; i < _xRes-1; ++i)
 	{
-		for (int j = 0; j < _yRes; ++j)
+		for (int j = 1; j < _yRes-1; ++j)
 		{
 			_xVelocity(i + 1, j) -= _dt*(_pressure(i + 1, j) - _pressure(i, j)) / dx;
-		}
+		} 
 	}
-	for (int i = 0; i < _xRes; ++i)
+	for (int i = 1; i < _xRes-1; ++i)
 	{
-		for (int j = 0; j < _yRes; ++j)
+		for (int j = 0; j < _yRes-1; ++j)
 		{
 			_yVelocity(i, j + 1) -= _dt*(_pressure(i, j + 1) - _pressure(i, j)) / dx;
 		}
@@ -129,6 +122,7 @@ void ExAdvectWithSemiLagrange(int _xRes, int _yRes, double _dt, Array2d &_xVeloc
 			double xold = (i + 0.5)*dx - _dt*(_xVelocity(i, j) + _xVelocity(i + 1, j)) / 2.;
 			double yold = (j + 0.5)*dx - _dt*(_yVelocity(i, j) + _yVelocity(i, j + 1)) / 2.;
 			project(xold, yold, dx);
+			
 			int ifloor = std::floor(0.5 + xold / dx);
 			int jfloor = std::floor(0.5 + yold / dx);
 			_densityTemp(i, j) = bilinearinterpolation((ifloor - 0.5)*dx, (jfloor - 0.5)*dx, (ifloor+0.5)*dx, (jfloor+0.5)*dx, _density(ifloor - 1, jfloor - 1), _density(ifloor - 1, jfloor), _density(ifloor, jfloor - 1), _density(ifloor, jfloor), Vec2(xold, yold));
@@ -166,22 +160,13 @@ void ExAdvectWithSemiLagrange(int _xRes, int _yRes, double _dt, Array2d &_xVeloc
 		}
 	}
 
-	
-	std::swap(_densityTemp, _density);
+	//not sure wether this would work. depends on when boundary conditions are computed but would be more efficient (prevents copying)
+	/*std::swap(_densityTemp, _density);
 	std::swap(_xVelocityTemp, _xVelocity);
-	std::swap(_yVelocityTemp, _yVelocity);
+	std::swap(_yVelocityTemp, _yVelocity);*/
 
-	for (int i = 0; i < _xRes; ++i)
-	{
-		_density(i, 0) = _density(i, 1);
-		_density(i, _yRes - 1) = _density(i, _yRes - 2);
-	}
-	for (int i = 0; i < _yRes; ++i)
-	{
-		_density(0, i) = _density(1, i);
-		_density(_xRes - 1, i) = _density(_xRes - 2, i);
-	}
-	/*for (int i = 1; i < _xRes-1; ++i)
+
+	for (int i = 1; i < _xRes-1; ++i)
 	{
 		for (int j = 1; j < _yRes-1; ++j)
 		{
@@ -201,8 +186,21 @@ void ExAdvectWithSemiLagrange(int _xRes, int _yRes, double _dt, Array2d &_xVeloc
 		{
 			_yVelocity(i, j) = _yVelocityTemp(i, j);
 		}
+	}
+
+	//adds density on the boundary (i believe this isnt done by the framework)
+	//only changes visual not physics (since density on border isnt used for computation)
+	/*for (int i = 0; i < _xRes; ++i)
+	{
+		_density(i, 0) = _density(i, 1);
+		_density(i, _yRes - 1) = _density(i, _yRes - 2);
+	}
+	for (int i = 0; i < _yRes; ++i)
+	{
+		_density(0, i) = _density(1, i);
+		_density(_xRes - 1, i) = _density(_xRes - 2, i);
 	}*/
 
-	
+
 	
 }

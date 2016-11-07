@@ -7,6 +7,7 @@
 #include "fluid2d.h"
 #include <string>
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 #include <stdlib.h>
 #include "Utilities/Array2T.h"
@@ -135,6 +136,16 @@ void Fluid2D::solvePressure()
 
 	// solve Poisson equation
 	copyBorder(_pressure);
+
+	/*for (int i = 0; i < _xRes; ++i)
+	{
+		for (int j = 0; j < _yRes; ++j)
+		{
+			std::cout <<std::setw(15)<< _pressure(i, j);
+		}
+		std::cout << std::endl;
+	}*/
+
 	_solver->solvePoisson(_xRes, _yRes, _pressure, _divergence);
 
 	correctVelocities();

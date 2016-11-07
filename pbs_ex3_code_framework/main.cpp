@@ -154,7 +154,7 @@ void displayCallback()
 		drawFields(fluid->xRes(), fluid->yRes(), fluid->density(), fluid->xVelocity(), fluid->yVelocity());
 		break;
 	case 2:
-		drawFields(fluid->xRes(), fluid->yRes(), fluid->density(), fluid->divergence(), fluid->divergence());
+		drawFields(fluid->xRes(), fluid->yRes(), fluid->density(), fluid->pressure(), fluid->pressure());
 		break;
 	case 3:
 		drawFields(fluid->xRes(), fluid->yRes(), fluid->density(), fluid->divergence(), fluid->divergence());
