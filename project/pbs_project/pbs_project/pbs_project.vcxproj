@@ -110,8 +110,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="rendering.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="simulation.h" />
+    <ClInclude Include="sphere.h" />
     <ClInclude Include="typedef.h" />
+    <ClInclude Include="vehicle.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="pbs_project.rc" />
