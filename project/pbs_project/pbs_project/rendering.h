@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../include/ogre/build/sdk/include/OGRE/OgreAnimable.h" //instead of last part put <"sometext"> from API
+#include "../include/ogre/build/sdk/include/OGRE/Ogre.h" //instead of last part put <"sometext"> from API
 #include "sphere.h"
 #include "typedef.h"
 
