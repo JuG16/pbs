@@ -4,6 +4,8 @@
 class vehicle
 {
 public:
+	vehicle(vec3d pos, real_t mass = 1, vec3d vel = vec3d(0, 0, 0)) :pos_(pos), mass_(mass), vel_(vel)
+	{}
 	inline void setpos(const vec3d pos)
 	{
 		pos_ = pos;
