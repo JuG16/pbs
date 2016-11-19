@@ -1,7 +1,7 @@
 #pragma once
 
 #include "typedef.h"
-
+//maybe want to add rotation at some point
 class sphere
 {
 public:
@@ -28,13 +28,17 @@ public:
 		vel_(1) = y;
 		vel_(2) = z;
 	}
-	inline void getpos(vec3d &pos)const
+	inline vec3d getpos()const
 	{
-		pos = pos_;
+		return pos_;
 	}
-	inline void getvel(vec3d &vel)const
+	inline vec3d getvel()const
 	{
-		vel = vel_;
+		return vel_;
+	}
+	inline real_t getrad()const
+	{
+		return radius_;
 	}
 
 private:
