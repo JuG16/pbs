@@ -4,10 +4,19 @@
 #include "sphere.h"
 #include "typedef.h"
 
-template <typename container>
-void drawframe(container &spheres, vehicle &car)
+
+//template <typename container>
+//void drawframe(container &spheres, vehicle &car)
+void drawframe()
 {
 	//do plotting using ogre3d
 	//sphere is a container with random access "[]"
 	//every element is of type "sphere"
+	Ogre::SceneManager* mSceneMgr=SceneManager();
+	mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
+	Ogre::Entity* ogreEntity = mSceneMgr->createEntity("ogrehead.mesh");
+	Ogre::SceneNode* ogreNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	ogreNode->attachObject(ogreEntity);
+	Ogre::Light* light;
+	light->setPosition(20, 80, 50);
 }
