@@ -26,6 +26,16 @@ public:
 		vel_(1) = y;
 		vel_(2) = z;
 	}
+	inline void setangvel(vec3d angvel)
+	{
+		angvel_ = angvel;
+	}
+	inline void setangvel(real_t x, real_t y, real_t z)
+	{
+		angvel_(0) = x;
+		angvel_(1) = y;
+		angvel_(2) = z;
+	}
 	inline vec3d getpos()const
 	{
 		return pos_;
@@ -34,8 +44,22 @@ public:
 	{
 		return vel_;
 	}
+	inline vec3d getangvel()const
+	{
+		return angvel_;
+	}
+	inline mat3d getinertia()const
+	{
+		return inertia_;
+	}
+	inline real_t getmass()const
+	{
+		return mass_;
+	}
 private:
 	vec3d pos_;
+	mat3d inertia_; //Trägheitsmoment
 	vec3d vel_;
+	vec3d angvel_;
 	real_t mass_;
 };
