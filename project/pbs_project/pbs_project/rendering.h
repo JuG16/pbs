@@ -12,7 +12,8 @@ void drawframe()
 	//do plotting using ogre3d
 	//sphere is a container with random access "[]"
 	//every element is of type "sphere"
-	Ogre::SceneManager* mSceneMgr=SceneManager();
+	Ogre::Root *root = new Ogre::Root();
+	Ogre::SceneManager* mSceneMgr=root->createSceneManager(Ogre::ST_GENERIC);
 	mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
 	Ogre::Entity* ogreEntity = mSceneMgr->createEntity("ogrehead.mesh");
 	Ogre::SceneNode* ogreNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
