@@ -35,7 +35,7 @@ int main(int argc, char** argv)
 		std::cout << "Type -help for available options" << std::endl;
 		return 0;
 	}
-	for (int i = 1; i < argc; i+=2)
+	/*for (int i = 1; i < argc; i+=2)
 	{
 		if (!std::strcmp(argv[i], "n_sphere"))
 		{
@@ -58,12 +58,14 @@ int main(int argc, char** argv)
 			std::cout << "unrecognised Option: " << argv[i] << std::endl;
 			std::cout << "use -help to see all available options" << std::endl;
 		}
-	}
+	}*/
 
 	std::vector<sphere> spheres;
+	vehicle car();
 	for (int i = 0; i < n_sphere; ++i)
 	{
 		//spheres.push_back(/*initialize sphere !position!*/);
 	}
+	drawframe();
 	return 0;
 }
