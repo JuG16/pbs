@@ -79,11 +79,10 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(OGRE_HOME)\lib\$(Configuration);$(OGRE_HOME)\boost\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(VC_SourcePath)\..\include\ogre\build\lib\Debug\OgreMain_d.lib;$(VC_SourcePath)\..\include\ogre\build\sdk\lib\debug\OIS_d.lib;$(VC_SourcePath)\..\include\ogre\build\sdk\lib\debug\OgreOverlay_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\include\ogre\build\lib\Debug\OgreMain_d.lib;..\include\ogre\build\sdk\lib\debug\OIS_d.lib;..\include\ogre\build\sdk\lib\debug\OgreOverlay_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(OutDir)\$(TargetFileName)" 
-"$(OGRE_HOME)\Bin\$(Configuration)"
+      <Command>
   </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -110,8 +109,7 @@
       <AdditionalDependencies>OgreMain.lib;OIS.lib;OgreOverlay.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(OutDir)\$(TargetFileName)" 
-"$(OGRE_HOME)\Bin\$(Configuration)"
+      <Command>
   </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
