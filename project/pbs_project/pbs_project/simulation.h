@@ -15,7 +15,7 @@ public:
 		//every element is of type "sphere"
 		forces_.resize(6 * (n_spheres+1)); //+1 in size is for car
 		velocities_.resize(6 * (n_spheres+1));
-		massmatrix_.resize(6 * (n_spheres+1), 6 * (n_spheres+1);
+		massmatrix_.resize(6 * (n_spheres+1), 6 * (n_spheres+1));
 		massmatrix_.reserve(12 * (n_spheres + 1));
 		std::vector<Eigen::Triplet<real_t>> triplets;
 		triplets.reserve(12 * (n_spheres + 1));

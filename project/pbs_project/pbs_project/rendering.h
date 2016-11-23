@@ -18,6 +18,6 @@ void drawframe()
 	Ogre::Entity* ogreEntity = mSceneMgr->createEntity("ogrehead.mesh");
 	Ogre::SceneNode* ogreNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 	ogreNode->attachObject(ogreEntity);
-	Ogre::Light* light;
+	Ogre::Light* light=new Ogre::Light();
 	light->setPosition(20, 80, 50);
 }
