@@ -142,10 +142,13 @@ public:
 		solver.factorize(jacobian_*massmatrixinv_*jacobian_.transpose());
 		auto lambda = solver.solve(eta_);
 		
-		//update velocities
-		solver.analyzePattern(massmatrix_);
-		solver.factorize(massmatrix_);
-		velocities_=solver.solve(dt*(jacobian_.transpose()*lambda+fext_)+massmatrix_*velocities_)
+		//update velocities schwachsinn??
+		//solver.analyzePattern(massmatrix_);
+		//solver.factorize(massmatrix_);
+		//velocities_=solver.solve(dt*(jacobian_.transpose()*lambda+fext_)+massmatrix_*velocities_)
+		
+		//correct?
+		velocities_ = massmatrixinv_*(dt*(jacobian_.transpose()*lambda + fext_)) + velocities_;
 
 	}
 private:
@@ -156,6 +159,7 @@ private:
 	smatrix_t massmatrix_; //is denoted a M in paper "iterative Dynamics" (6nx6n) where n is the number of objects
 	//massmatrix is Blockdiagonal: each object contributes wit 2 3x3 matrices, where the first is diag(m), where m is the mass of the object
 	//the second is I, where I is the moment of inertia of the object
+	//since only inversematrix is used for computation can just set inverse=0 for static objects (infinite mass and inertia)
 	smatrix_t massmatrixinv_; //M^-1 can be precomputed since its constant
 	smatrix_t jacobian_; //denoted J in paper "Iterative Dynamics" (6nxs) declared as member to prevent memory alloc every step (not sure that this works)
 	vector_t eta_; //denoted as "eta" in paper "Iterative Dynamics" (sx1) declared as member to prevent memory alloc every step 
