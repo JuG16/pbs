@@ -13,14 +13,14 @@ public:
 		//initialize system -> set initial positions and velocities of all components
 		//sphere is a container with random access "[]"
 		//every element is of type "sphere"
-		forces_.resize(6 * (n_spheres+1)); //+1 in size is for car
-		velocities_.resize(6 * (n_spheres+1));
+		forces_.resize(6 * (n_spheres+2)); //+1 in size is for car, +1 for environment
+		velocities_.resize(6 * (n_spheres+2));
 		int_t s = 1; //how large is s???
 		eta_.resize(s);
 		jacobian_.resize(6 * (n_spheres + 1), s);
 
 		//initialization of massmatrix using triplets
-		massmatrix_.resize(6 * (n_spheres+1), 6 * (n_spheres+1));
+		massmatrix_.resize(6 * (n_spheres+2), 6 * (n_spheres+2));
 		massmatrix_.reserve(12 * (n_spheres + 1));
 		std::vector<Eigen::Triplet<real_t>> triplets;
 		triplets.reserve(12 * (n_spheres + 1));
@@ -60,7 +60,7 @@ public:
 		massmatrix_.makeCompressed();
 
 		//initialization of massmatrixinv using properperties for inversion of blockdiagonal matrix (assuming nonsingularity)
-		massmatrixinv_.resize(6 * (n_spheres + 1), 6 * (n_spheres + 1));
+		massmatrixinv_.resize(6 * (n_spheres + 2), 6 * (n_spheres + 2));
 		massmatrixinv_.reserve(12 * (n_spheres + 1));
 		std::vector<Eigen::Triplet<real_t>> triplets;
 		triplets.reserve(12 * (n_spheres + 1));
@@ -100,6 +100,8 @@ public:
 		triplets.push_back(Eigen::Triplet(6 * i + 5, 6 * i + 4, tempinertia(2, 1)));
 		triplets.push_back(Eigen::Triplet(6 * i + 5, 6 * i + 5, tempinertia(2, 2)));
 
+
+		//for environment just dont set value (->remains 0) and therefore has infinite mass
 		massmatrixinv_.setFromTriplets(triplets.begin(), triplets.end());
 		massmatrixinv_.makeCompressed();
 
@@ -110,11 +112,7 @@ public:
 	{
 		//sphere is a container with random access "[]"
 		//every element is of type "sphere"
-		for (int i = 0; i < n_spheres; ++i)
-		{
-			velocities(6 * i, 6 * i + 2) = spheres[i].getvel();
-			velocities(6 * i + 3, 6 * i + 5) = spheres[i].getangvel();
-		}
+		
 
 
 		//comput J matrix
@@ -159,9 +157,14 @@ public:
 					triplets.push_back(Eigen::Triplet(row, 6 * j + 5, r2xn(0)));
 					triplets.push_back(Eigen::Triplet(row, 6 * j + 6, r2xn(0)));
 				}
+				//do sphere-car interaction here
+				//do sphere-environment interaction here (needs some way to detect contact->function for environment)
 			}
+			//do car-environment interaction here (same)
 		}
 
+		jacobian_.setFromTriplets(triplets.begin(), triplets.end()); //does this work multiple times (reinitializing)
+		jacobian_.makeCompressed();
 		/*//compute contact points (really stupid for now, use better datastructure later)
 		for (int i = 0; i < n_spheres; ++i)
 		{
@@ -179,10 +182,20 @@ public:
 		//can we assume J*M*J^-1 is sparse?
 
 		//compute lambda
+		//do 3 steps to utilize sparsity
 		ssolver solver;
-		solver.analyzePattern(jacobian_*massmatrixinv_*jacobian_.transpose());
-		solver.factorize(jacobian_*massmatrixinv_*jacobian_.transpose());
-		auto lambda = solver.solve(eta_);
+		//solve for M^-1 J^T lambda
+		solver.analyzePattern(jacobian_);
+		solver.factorize(jacobian_);
+		auto MJlambda = solver.solve(eta_);
+		//solve for J^T lambda
+		solver.analyzePattern(massmatrixinv_);
+		solver.factorize(massmatrixinv_);
+		auto Jlambda = solver.solve(MJlambda);
+		//solve for lambda
+		solver.analyzePattern(jacobian_.transpose());
+		solver.factorize(jacobian_.transpose())
+		auto lambda = solver.solve(Jlambda);
 		
 		//update velocities schwachsinn??
 		//solver.analyzePattern(massmatrix_);
@@ -191,6 +204,14 @@ public:
 		
 		//correct?
 		velocities_ = massmatrixinv_*(dt*(jacobian_.transpose()*lambda + fext_)) + velocities_;
+
+		for (int i = 0; i < n_spheres_; ++i)
+		{
+			spheres[i].setvel(/*respective part of vector velocities*/); //can use blocking?
+			spheres[i].setangvel();//same
+		}
+
+		//set velocity of car
 
 	}
 private:
@@ -201,7 +222,7 @@ private:
 	smatrix_t massmatrix_; //is denoted a M in paper "iterative Dynamics" (6nx6n) where n is the number of objects
 	//massmatrix is Blockdiagonal: each object contributes wit 2 3x3 matrices, where the first is diag(m), where m is the mass of the object
 	//the second is I, where I is the moment of inertia of the object
-	//since only inversematrix is used for computation can just set inverse=0 for static objects (infinite mass and inertia)
+	//since only inversematrix is used for computation can just set inverse=0 for static objects (infinite mass and inertia) why save massmatrix?
 	smatrix_t massmatrixinv_; //M^-1 can be precomputed since its constant
 	smatrix_t jacobian_; //denoted J in paper "Iterative Dynamics" (6nxs) declared as member to prevent memory alloc every step (not sure that this works)
 	vector_t eta_; //denoted as "eta" in paper "Iterative Dynamics" (sx1) declared as member to prevent memory alloc every step 
