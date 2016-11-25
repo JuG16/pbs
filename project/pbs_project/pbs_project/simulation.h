@@ -119,8 +119,50 @@ public:
 
 		//comput J matrix
 		//needs to compute r somehow?
+		//can probably leave out all noncontact spheres (not setting instead of zero[or wrong sign])
+		//use "grid" to get potential neighbours
+		//store all elements in a grid in a vector 
+		//to delete swap with last and remove last (efficience)
+		//for general shapes need to compute contact point first!! (irrelevant for spheres though)
+		std::vector<Eigen::Triplet<real_t>> triplets;
+		triplets.reserve(1 /* how many nnz to expect?*/);
+		for (int i = 0; i < n_spheres_; ++i) //compute all interactions twice like this?
+		{
+			for (int j = 0; j < n_spheres_; ++j)
+			{
+				if ((spheres[i].getpos() - spheres[j].getpos()).norm < (spheres[i].getrad() + spheres[j].getrad()))
+				{
+					//sphere-sphere collision (need to add friction)
+					vec3d contactpoint = (spheres[i].getpos() + spheres[j].getpos()) / 2.;
+					//using notion of paper for variables assuming sphere[i] is object 1 and sphere[j] object 2
+					//dont think using only 1 normal works for general shapes (as presented in paper)
+					vec3d n = (contactpoint - spheres[i].getpos()).normalize();
+					vec3d r1 = contactpoint - spheres[i].getpos();
+					vec3d r2 = contactpoint - spheres[j].getpos();
+					const real_t row = i*n_spheres_ + j; //correct??
+					//need to scale all values with beta_*penetration depth?
+					//need to add contactcaching
+					//object 1
+					triplets.push_back(Eigen::Triplet(row, 6 * i, -n(0)));
+					triplets.push_back(Eigen::Triplet(row, 6 * i + 1, -n(1)));
+					triplets.push_back(Eigen::Triplet(row, 6 * i + 2, -n(2)));
+					const vec3d r1xn = -r1.cross(n); //- since only - crossprod gets used
+					triplets.push_back(Eigen::Triplet(row, 6 * i + 3, r1xn(0)));
+					triplets.push_back(Eigen::Triplet(row, 6 * i + 4, r1xn(1)));
+					triplets.push_back(Eigen::Triplet(row, 6 * i + 5, r1xn(2)));
+					//object 2
+					triplets.push_back(Eigen::Triplet(row, 6 * j, n(0)));
+					triplets.push_back(Eigen::Triplet(row, 6 * j + 1, n(1)));
+					triplets.push_back(Eigen::Triplet(row, 6 * j + 2, n(2)));
+					const vec3d r2xn = r2.cross(n);
+					triplets.push_back(Eigen::Triplet(row, 6 * j + 4, r2xn(0)));
+					triplets.push_back(Eigen::Triplet(row, 6 * j + 5, r2xn(0)));
+					triplets.push_back(Eigen::Triplet(row, 6 * j + 6, r2xn(0)));
+				}
+			}
+		}
 
-		//compute contact points (really stupid for now, use better datastructure later)
+		/*//compute contact points (really stupid for now, use better datastructure later)
 		for (int i = 0; i < n_spheres; ++i)
 		{
 			for (int j = 0; j < n_spheres; ++j)
@@ -130,7 +172,7 @@ public:
 					//contact
 				}
 			}
-		}
+		}*/
 		//probably have to use some iterative solvers instead ?
 		//compute eta
 		eta = -jacobian_*(1. / dt*velocities_ + massmatrixinv_*fext_);
@@ -166,6 +208,7 @@ private:
 	//s =??? something with number of constraints
 	smatrix_t fext_; //denoted as F_ext in paper "Iterative Dynamics" (6nx1) declared as member to prevent memory alloc every step (not sure that this works)
 	//only consists of gravity in -z axis, ->do as constant somehow (performance)
+	real_t beta_; //parameter used for overlapping denoted as "beta" in paper "Iterative Dynamics" should be <1/dt for stability
 };
 
 //compute J from constraints:

@@ -2,6 +2,7 @@
 
 #include "../include/eigen3/Eigen/Dense"
 #include "../include/eigen3/Eigen/Sparse"
+#include "../include/eigen3/Eigen/Geometry"
 
 typedef double real_t;
 typedef int int_t;
