@@ -17,9 +17,25 @@ public:
 		//every element is of type "sphere"
 		forces_.resize(6 * (n_spheres+2)); //+1 in size is for car, +1 for environment
 		velocities_.resize(6 * (n_spheres+2));
-		int_t s = 1; //how large is s???
+		const int_t s = 1; //how large is s???
 		eta_.resize(s);
-		jacobian_.resize(6 * (n_spheres + 1), s);
+		jacobian_.resize(s,6 * (n_spheres + 2));
+
+		//set external forces
+		fext_.resize(6 * (n_spheres + 2));
+		fext_.setZero(6 * (n_spheres + 2));
+		for (int i = 0; i < n_spheres + 2; ++i)
+		{
+			fext_(6 * i + 2) = -9.81;
+		}
+		
+
+		//set initial velocities
+		for (int i = 0; i < n_spheres; ++i)
+		{
+			velocities_.segment<3>(6 * i) = spheres[i].getvel();
+			velocities_.segment<3>(6 * i + 3) = spheres[i].getangvel();
+		}
 
 		//initialization of massmatrix using triplets
 		massmatrix_.resize(6 * (n_spheres+2), 6 * (n_spheres+2));
@@ -116,7 +132,7 @@ public:
 		//every element is of type "sphere"
 		
 
-
+		std::cout << "step start" << std::endl;
 		//comput J matrix
 		//needs to compute r somehow?
 		//can probably leave out all noncontact spheres (not setting instead of zero[or wrong sign])
@@ -167,6 +183,7 @@ public:
 
 		jacobian_.setFromTriplets(triplets.begin(), triplets.end()); //does this work multiple times (reinitializing)
 		jacobian_.makeCompressed();
+		std::cout << "check1" << std::endl;
 		/*//compute contact points (really stupid for now, use better datastructure later)
 		for (int i = 0; i < n_spheres; ++i)
 		{
@@ -181,13 +198,13 @@ public:
 		//probably have to use some iterative solvers instead ?
 		//compute eta
 		eta_ = -jacobian_*(1. / dt*velocities_ + massmatrixinv_*fext_);
-		//can we assume J*M*J^-1 is sparse?
-
+		//can we assume J*M^-1*J^T is sparse?
+		std::cout << "check2" << std::endl;
 		//compute lambda
-		//do 3 steps to utilize sparsity
+		//do 3 steps to utilize sparsity (doesnt work since parts are not squared)
 		ssolver solver;
 		//solve for M^-1 J^T lambda
-		solver.analyzePattern(jacobian_);
+		/*solver.analyzePattern(jacobian_);
 		solver.factorize(jacobian_);
 		auto MJlambda = solver.solve(eta_);
 		//solve for J^T lambda
@@ -197,7 +214,14 @@ public:
 		//solve for lambda
 		solver.analyzePattern(jacobian_.transpose());
 		solver.factorize(jacobian_.transpose());
-		auto lambda = solver.solve(Jlambda);
+		auto lambda = solver.solve(Jlambda);*/
+
+		//solver.analyzePattern(jacobian_*massmatrixinv_*jacobian_.transpose());
+		//solver.factorize(jacobian_*massmatrixinv_*jacobian_.transpose());
+		solver.compute(jacobian_*massmatrixinv_*jacobian_.transpose());
+		auto lambda = solver.solve(eta_);
+		std::cout << "#iterations:" << solver.iterations() << std::endl;
+		std::cout << "error" << solver.error() << std::endl;
 		
 		//update velocities schwachsinn??
 		//solver.analyzePattern(massmatrix_);
@@ -205,20 +229,27 @@ public:
 		//velocities_=solver.solve(dt*(jacobian_.transpose()*lambda+fext_)+massmatrix_*velocities_)
 		
 		//correct?
+		std::cout << "lambda:" << std::endl;
+		std::cout << lambda << std::endl;
+		std::cout << "fext:" << std::endl;
+		std::cout << fext_ << std::endl;
 		velocities_ = massmatrixinv_*(dt*(jacobian_.transpose()*lambda + fext_)) + velocities_;
 
+		std::cout << "check3" << std::endl;
 		for (int i = 0; i < n_spheres_; ++i)
 		{
-			spheres[i].setvel(velocities_.segment(6*i,6*i+2)); //can use blocking?
-			spheres[i].setangvel(velocities_.segment(6*i+3,6*i+5));//same
+			spheres[i].setvel(velocities_.segment<3>(6*i)); //can use blocking?
+			spheres[i].setangvel(velocities_.segment<3>(6*i+3));//same
 		}
 
+		std::cout << "check4" << std::endl;
 		//set velocity of car
-		std::cout << std::setw(15) << "sphere number" << std::setw(15) << "position" << std::setw(15) << "velocity" << std::endl;
 		for (int i = 0; i < n_spheres_; ++i)
 		{
 			spheres[i].setpos(spheres[i].getpos() + dt*spheres[i].getvel());
-			std::cout << std::setw(15) << i << std::setw(15) << spheres[i].getpos() << std::setw(15) << spheres[i].getvel() << std::endl;
+			std::cout <<  i << std::endl;
+			std::cout << spheres[i].getpos() << std::endl;
+			std::cout << spheres[i].getvel() << std::endl;
 		}
 	}
 private:
@@ -231,10 +262,10 @@ private:
 	//the second is I, where I is the moment of inertia of the object
 	//since only inversematrix is used for computation can just set inverse=0 for static objects (infinite mass and inertia) why save massmatrix?
 	smatrix_t massmatrixinv_; //M^-1 can be precomputed since its constant
-	smatrix_t jacobian_; //denoted J in paper "Iterative Dynamics" (6nxs) declared as member to prevent memory alloc every step (not sure that this works)
+	smatrix_t jacobian_; //denoted J in paper "Iterative Dynamics" (sx6n) declared as member to prevent memory alloc every step (not sure that this works)
 	vector_t eta_; //denoted as "eta" in paper "Iterative Dynamics" (sx1) declared as member to prevent memory alloc every step 
 	//s =??? something with number of constraints
-	smatrix_t fext_; //denoted as F_ext in paper "Iterative Dynamics" (6nx1) declared as member to prevent memory alloc every step (not sure that this works)
+	vector_t fext_; //denoted as F_ext in paper "Iterative Dynamics" (6nx1) declared as member to prevent memory alloc every step (not sure that this works)
 	//only consists of gravity in -z axis, ->do as constant somehow (performance)
 	real_t beta_; //parameter used for overlapping denoted as "beta" in paper "Iterative Dynamics" should be <1/dt for stability
 };

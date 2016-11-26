@@ -37,19 +37,19 @@ int main(int argc, char** argv)
 	}
 	for (int i = 1; i < argc; i+=2)
 	{
-		if (!std::strcmp(argv[i], "n_sphere"))
+		if (!std::strcmp(argv[i], "-n_sphere"))
 		{
 			n_sphere = std::atoi(argv[i + 1]);
 		}
-		else if (!std::strcmp(argv[i],"mass_sphere"))
+		else if (!std::strcmp(argv[i],"-mass_sphere"))
 		{
 			mass_sphere = std::atof(argv[i + 1]);
 		}
-		else if (!std::strcmp(argv[i], "radius_sphere"))
+		else if (!std::strcmp(argv[i], "-radius_sphere"))
 		{
 			radius_sphere = std::atof(argv[i + 1]);
 		}
-		else if (!std::strcmp(argv[i], "mass_car"))
+		else if (!std::strcmp(argv[i], "-mass_car"))
 		{
 			mass_car = std::atof(argv[i + 1]);
 		}
@@ -57,6 +57,7 @@ int main(int argc, char** argv)
 		{
 			std::cout << "unrecognised Option: " << argv[i] << std::endl;
 			std::cout << "use -help to see all available options" << std::endl;
+			return 0;
 		}
 	}
 
@@ -68,7 +69,7 @@ int main(int argc, char** argv)
 		spheres.push_back(s);
 	}
 	simulation sim = simulation(spheres, n_sphere, car);
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		sim.step(spheres, car, 0.1);
 	}
