@@ -2,6 +2,8 @@
 #include "typedef.h"
 #include "sphere.h"
 #include "vehicle.h"
+#include <iostream>
+#include <iomanip>
 
 
 class simulation
@@ -26,35 +28,35 @@ public:
 		triplets.reserve(12 * (n_spheres + 1));
 		for(int i=0;i<n_spheres;++i)
 		{
-			triplets.push_back(Eigen::Triplet(6 * i, 6 * i, sphere[i].getmass()));
-			triplets.push_back(Eigen::Triplet(6 * i + 1, 6 * i + 1, sphere[i].getmass()));
-			triplets.push_back(Eigen::Triplet(6 * i + 2, 6 * i + 2, sphere[i].getmass()));
+			triplets.push_back(Eigen::Triplet<real_t>(6 * i, 6 * i, spheres[i].getmass()));
+			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 1, 6 * i + 1, spheres[i].getmass()));
+			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 2, 6 * i + 2, spheres[i].getmass()));
 
 			mat3d tempinertia = spheres[i].getinertia();
-			triplets.push_back(Eigen::Triplet(6 * i + 3, 6 * i + 3, tempinertia(0, 0)));
-			triplets.push_back(Eigen::Triplet(6 * i + 3, 6 * i + 4, tempinertia(0, 1)));
-			triplets.push_back(Eigen::Triplet(6 * i + 3, 6 * i + 5, tempinertia(0, 2)));
-			triplets.push_back(Eigen::Triplet(6 * i + 4, 6 * i + 3, tempinertia(1, 0)));
-			triplets.push_back(Eigen::Triplet(6 * i + 4, 6 * i + 4, tempinertia(1, 1)));
-			triplets.push_back(Eigen::Triplet(6 * i + 4, 6 * i + 5, tempinertia(1, 2)));
-			triplets.push_back(Eigen::Triplet(6 * i + 5, 6 * i + 3, tempinertia(2, 0)));
-			triplets.push_back(Eigen::Triplet(6 * i + 5, 6 * i + 4, tempinertia(2, 1)));
-			triplets.push_back(Eigen::Triplet(6 * i + 5, 6 * i + 5, tempinertia(2, 2)));
+			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 3, 6 * i + 3, tempinertia(0, 0)));
+			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 3, 6 * i + 4, tempinertia(0, 1)));
+			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 3, 6 * i + 5, tempinertia(0, 2)));
+			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 4, 6 * i + 3, tempinertia(1, 0)));
+			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 4, 6 * i + 4, tempinertia(1, 1)));
+			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 4, 6 * i + 5, tempinertia(1, 2)));
+			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 5, 6 * i + 3, tempinertia(2, 0)));
+			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 5, 6 * i + 4, tempinertia(2, 1)));
+			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 5, 6 * i + 5, tempinertia(2, 2)));
 		}
-		triplets.push_back(Eigen::Triplet(6 * i, 6 * i, car.getmass()));
-		triplets.push_back(Eigen::Triplet(6 * i + 1, 6 * i + 1, car.getmass()));
-		triplets.push_back(Eigen::Triplet(6 * i + 2, 6 * i + 2, car.getmass()));
+		triplets.push_back(Eigen::Triplet<real_t>(6 * n_spheres, 6 * n_spheres, car.getmass()));
+		triplets.push_back(Eigen::Triplet<real_t>(6 * n_spheres + 1, 6 * n_spheres + 1, car.getmass()));
+		triplets.push_back(Eigen::Triplet<real_t>(6 * n_spheres + 2, 6 * n_spheres + 2, car.getmass()));
 
 		mat3d tempinertia = car.getinertia();
-		triplets.push_back(Eigen::Triplet(6 * i + 3, 6 * i + 3, tempinertia(0, 0)));
-		triplets.push_back(Eigen::Triplet(6 * i + 3, 6 * i + 4, tempinertia(0, 1)));
-		triplets.push_back(Eigen::Triplet(6 * i + 3, 6 * i + 5, tempinertia(0, 2)));
-		triplets.push_back(Eigen::Triplet(6 * i + 4, 6 * i + 3, tempinertia(1, 0)));
-		triplets.push_back(Eigen::Triplet(6 * i + 4, 6 * i + 4, tempinertia(1, 1)));
-		triplets.push_back(Eigen::Triplet(6 * i + 4, 6 * i + 5, tempinertia(1, 2)));
-		triplets.push_back(Eigen::Triplet(6 * i + 5, 6 * i + 3, tempinertia(2, 0)));
-		triplets.push_back(Eigen::Triplet(6 * i + 5, 6 * i + 4, tempinertia(2, 1)));
-		triplets.push_back(Eigen::Triplet(6 * i + 5, 6 * i + 5, tempinertia(2, 2)));
+		triplets.push_back(Eigen::Triplet<real_t>(6 * n_spheres + 3, 6 * n_spheres + 3, tempinertia(0, 0)));
+		triplets.push_back(Eigen::Triplet<real_t>(6 * n_spheres + 3, 6 * n_spheres + 4, tempinertia(0, 1)));
+		triplets.push_back(Eigen::Triplet<real_t>(6 * n_spheres + 3, 6 * n_spheres + 5, tempinertia(0, 2)));
+		triplets.push_back(Eigen::Triplet<real_t>(6 * n_spheres + 4, 6 * n_spheres + 3, tempinertia(1, 0)));
+		triplets.push_back(Eigen::Triplet<real_t>(6 * n_spheres + 4, 6 * n_spheres + 4, tempinertia(1, 1)));
+		triplets.push_back(Eigen::Triplet<real_t>(6 * n_spheres + 4, 6 * n_spheres + 5, tempinertia(1, 2)));
+		triplets.push_back(Eigen::Triplet<real_t>(6 * n_spheres + 5, 6 * n_spheres + 3, tempinertia(2, 0)));
+		triplets.push_back(Eigen::Triplet<real_t>(6 * n_spheres + 5, 6 * n_spheres + 4, tempinertia(2, 1)));
+		triplets.push_back(Eigen::Triplet<real_t>(6 * n_spheres + 5, 6 * n_spheres + 5, tempinertia(2, 2)));
 
 		massmatrix_.setFromTriplets(triplets.begin(), triplets.end());
 		massmatrix_.makeCompressed();
@@ -62,43 +64,43 @@ public:
 		//initialization of massmatrixinv using properperties for inversion of blockdiagonal matrix (assuming nonsingularity)
 		massmatrixinv_.resize(6 * (n_spheres + 2), 6 * (n_spheres + 2));
 		massmatrixinv_.reserve(12 * (n_spheres + 1));
-		std::vector<Eigen::Triplet<real_t>> triplets;
+		triplets.clear();
 		triplets.reserve(12 * (n_spheres + 1));
 		for (int i = 0; i<n_spheres; ++i)
 		{
-			real_t massinv = 1. / sphere[i].getmass();
-			triplets.push_back(Eigen::Triplet(6 * i, 6 * i, massinv));
-			triplets.push_back(Eigen::Triplet(6 * i + 1, 6 * i + 1, massinv));
-			triplets.push_back(Eigen::Triplet(6 * i + 2, 6 * i + 2, massinv));
+			real_t massinv = 1. / spheres[i].getmass();
+			triplets.push_back(Eigen::Triplet<real_t>(6 * i, 6 * i, massinv));
+			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 1, 6 * i + 1, massinv));
+			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 2, 6 * i + 2, massinv));
 
 			//compute inverse of inertia (ok since only 3x3 matrix)
 			mat3d tempinertia = spheres[i].getinertia().inverse();
-			triplets.push_back(Eigen::Triplet(6 * i + 3, 6 * i + 3, tempinertia(0, 0)));
-			triplets.push_back(Eigen::Triplet(6 * i + 3, 6 * i + 4, tempinertia(0, 1)));
-			triplets.push_back(Eigen::Triplet(6 * i + 3, 6 * i + 5, tempinertia(0, 2)));
-			triplets.push_back(Eigen::Triplet(6 * i + 4, 6 * i + 3, tempinertia(1, 0)));
-			triplets.push_back(Eigen::Triplet(6 * i + 4, 6 * i + 4, tempinertia(1, 1)));
-			triplets.push_back(Eigen::Triplet(6 * i + 4, 6 * i + 5, tempinertia(1, 2)));
-			triplets.push_back(Eigen::Triplet(6 * i + 5, 6 * i + 3, tempinertia(2, 0)));
-			triplets.push_back(Eigen::Triplet(6 * i + 5, 6 * i + 4, tempinertia(2, 1)));
-			triplets.push_back(Eigen::Triplet(6 * i + 5, 6 * i + 5, tempinertia(2, 2)));
+			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 3, 6 * i + 3, tempinertia(0, 0)));
+			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 3, 6 * i + 4, tempinertia(0, 1)));
+			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 3, 6 * i + 5, tempinertia(0, 2)));
+			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 4, 6 * i + 3, tempinertia(1, 0)));
+			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 4, 6 * i + 4, tempinertia(1, 1)));
+			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 4, 6 * i + 5, tempinertia(1, 2)));
+			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 5, 6 * i + 3, tempinertia(2, 0)));
+			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 5, 6 * i + 4, tempinertia(2, 1)));
+			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 5, 6 * i + 5, tempinertia(2, 2)));
 		}
-		real_t massinc = 1. / car.getmass();
-		triplets.push_back(Eigen::Triplet(6 * i, 6 * i, massinv));
-		triplets.push_back(Eigen::Triplet(6 * i + 1, 6 * i + 1, massinv));
-		triplets.push_back(Eigen::Triplet(6 * i + 2, 6 * i + 2, massinv));
+		real_t massinv = 1. / car.getmass();
+		triplets.push_back(Eigen::Triplet<real_t>(6 * n_spheres, 6 * n_spheres, massinv));
+		triplets.push_back(Eigen::Triplet<real_t>(6 * n_spheres + 1, 6 * n_spheres + 1, massinv));
+		triplets.push_back(Eigen::Triplet<real_t>(6 * n_spheres + 2, 6 * n_spheres + 2, massinv));
 
 		//compute inverse of inertia (ok since only 3x3 matrix)
-		mat3d tempinertia = car.getinertia().inverse();
-		triplets.push_back(Eigen::Triplet(6 * i + 3, 6 * i + 3, tempinertia(0, 0)));
-		triplets.push_back(Eigen::Triplet(6 * i + 3, 6 * i + 4, tempinertia(0, 1)));
-		triplets.push_back(Eigen::Triplet(6 * i + 3, 6 * i + 5, tempinertia(0, 2)));
-		triplets.push_back(Eigen::Triplet(6 * i + 4, 6 * i + 3, tempinertia(1, 0)));
-		triplets.push_back(Eigen::Triplet(6 * i + 4, 6 * i + 4, tempinertia(1, 1)));
-		triplets.push_back(Eigen::Triplet(6 * i + 4, 6 * i + 5, tempinertia(1, 2)));
-		triplets.push_back(Eigen::Triplet(6 * i + 5, 6 * i + 3, tempinertia(2, 0)));
-		triplets.push_back(Eigen::Triplet(6 * i + 5, 6 * i + 4, tempinertia(2, 1)));
-		triplets.push_back(Eigen::Triplet(6 * i + 5, 6 * i + 5, tempinertia(2, 2)));
+		tempinertia = car.getinertia().inverse();
+		triplets.push_back(Eigen::Triplet<real_t>(6 * n_spheres + 3, 6 * n_spheres + 3, tempinertia(0, 0)));
+		triplets.push_back(Eigen::Triplet<real_t>(6 * n_spheres + 3, 6 * n_spheres + 4, tempinertia(0, 1)));
+		triplets.push_back(Eigen::Triplet<real_t>(6 * n_spheres + 3, 6 * n_spheres + 5, tempinertia(0, 2)));
+		triplets.push_back(Eigen::Triplet<real_t>(6 * n_spheres + 4, 6 * n_spheres + 3, tempinertia(1, 0)));
+		triplets.push_back(Eigen::Triplet<real_t>(6 * n_spheres + 4, 6 * n_spheres + 4, tempinertia(1, 1)));
+		triplets.push_back(Eigen::Triplet<real_t>(6 * n_spheres + 4, 6 * n_spheres + 5, tempinertia(1, 2)));
+		triplets.push_back(Eigen::Triplet<real_t>(6 * n_spheres + 5, 6 * n_spheres + 3, tempinertia(2, 0)));
+		triplets.push_back(Eigen::Triplet<real_t>(6 * n_spheres + 5, 6 * n_spheres + 4, tempinertia(2, 1)));
+		triplets.push_back(Eigen::Triplet<real_t>(6 * n_spheres + 5, 6 * n_spheres + 5, tempinertia(2, 2)));
 
 
 		//for environment just dont set value (->remains 0) and therefore has infinite mass
@@ -126,36 +128,36 @@ public:
 		triplets.reserve(1 /* how many nnz to expect?*/);
 		for (int i = 0; i < n_spheres_; ++i) //compute all interactions twice like this?
 		{
-			for (int j = 0; j < n_spheres_; ++j)
+			for (int j = i+1; j < n_spheres_; ++j)
 			{
-				if ((spheres[i].getpos() - spheres[j].getpos()).norm < (spheres[i].getrad() + spheres[j].getrad()))
+				if ((spheres[i].getpos() - spheres[j].getpos()).norm() < (spheres[i].getrad() + spheres[j].getrad()))
 				{
 					//sphere-sphere collision (need to add friction)
 					vec3d contactpoint = (spheres[i].getpos() + spheres[j].getpos()) / 2.;
 					//using notion of paper for variables assuming sphere[i] is object 1 and sphere[j] object 2
 					//dont think using only 1 normal works for general shapes (as presented in paper)
-					vec3d n = (contactpoint - spheres[i].getpos()).normalize();
+					vec3d n = (contactpoint - spheres[i].getpos()).normalized();
 					vec3d r1 = contactpoint - spheres[i].getpos();
 					vec3d r2 = contactpoint - spheres[j].getpos();
-					const real_t row = i*n_spheres_ + j; //correct??
+					const int_t row = i*n_spheres_ + j; //correct??
 					//need to scale all values with beta_*penetration depth?
 					//need to add contactcaching
 					//object 1
-					triplets.push_back(Eigen::Triplet(row, 6 * i, -n(0)));
-					triplets.push_back(Eigen::Triplet(row, 6 * i + 1, -n(1)));
-					triplets.push_back(Eigen::Triplet(row, 6 * i + 2, -n(2)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i, -n(0)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 1, -n(1)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 2, -n(2)));
 					const vec3d r1xn = -r1.cross(n); //- since only - crossprod gets used
-					triplets.push_back(Eigen::Triplet(row, 6 * i + 3, r1xn(0)));
-					triplets.push_back(Eigen::Triplet(row, 6 * i + 4, r1xn(1)));
-					triplets.push_back(Eigen::Triplet(row, 6 * i + 5, r1xn(2)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 3, r1xn(0)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 4, r1xn(1)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 5, r1xn(2)));
 					//object 2
-					triplets.push_back(Eigen::Triplet(row, 6 * j, n(0)));
-					triplets.push_back(Eigen::Triplet(row, 6 * j + 1, n(1)));
-					triplets.push_back(Eigen::Triplet(row, 6 * j + 2, n(2)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j, n(0)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 1, n(1)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 2, n(2)));
 					const vec3d r2xn = r2.cross(n);
-					triplets.push_back(Eigen::Triplet(row, 6 * j + 4, r2xn(0)));
-					triplets.push_back(Eigen::Triplet(row, 6 * j + 5, r2xn(0)));
-					triplets.push_back(Eigen::Triplet(row, 6 * j + 6, r2xn(0)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 4, r2xn(0)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 5, r2xn(0)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 6, r2xn(0)));
 				}
 				//do sphere-car interaction here
 				//do sphere-environment interaction here (needs some way to detect contact->function for environment)
@@ -178,7 +180,7 @@ public:
 		}*/
 		//probably have to use some iterative solvers instead ?
 		//compute eta
-		eta = -jacobian_*(1. / dt*velocities_ + massmatrixinv_*fext_);
+		eta_ = -jacobian_*(1. / dt*velocities_ + massmatrixinv_*fext_);
 		//can we assume J*M*J^-1 is sparse?
 
 		//compute lambda
@@ -194,7 +196,7 @@ public:
 		auto Jlambda = solver.solve(MJlambda);
 		//solve for lambda
 		solver.analyzePattern(jacobian_.transpose());
-		solver.factorize(jacobian_.transpose())
+		solver.factorize(jacobian_.transpose());
 		auto lambda = solver.solve(Jlambda);
 		
 		//update velocities schwachsinn??
@@ -207,12 +209,17 @@ public:
 
 		for (int i = 0; i < n_spheres_; ++i)
 		{
-			spheres[i].setvel(/*respective part of vector velocities*/); //can use blocking?
-			spheres[i].setangvel();//same
+			spheres[i].setvel(velocities_.segment(6*i,6*i+2)); //can use blocking?
+			spheres[i].setangvel(velocities_.segment(6*i+3,6*i+5));//same
 		}
 
 		//set velocity of car
-
+		std::cout << std::setw(15) << "sphere number" << std::setw(15) << "position" << std::setw(15) << "velocity" << std::endl;
+		for (int i = 0; i < n_spheres_; ++i)
+		{
+			spheres[i].setpos(spheres[i].getpos() + dt*spheres[i].getvel());
+			std::cout << std::setw(15) << i << std::setw(15) << spheres[i].getpos() << std::setw(15) << spheres[i].getvel() << std::endl;
+		}
 	}
 private:
 	//probably can do a lot "matrixfree" instead of sparse matrix calculation for performance

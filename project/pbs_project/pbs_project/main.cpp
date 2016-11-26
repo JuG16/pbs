@@ -35,7 +35,7 @@ int main(int argc, char** argv)
 		std::cout << "Type -help for available options" << std::endl;
 		return 0;
 	}
-	/*for (int i = 1; i < argc; i+=2)
+	for (int i = 1; i < argc; i+=2)
 	{
 		if (!std::strcmp(argv[i], "n_sphere"))
 		{
@@ -51,21 +51,27 @@ int main(int argc, char** argv)
 		}
 		else if (!std::strcmp(argv[i], "mass_car"))
 		{
-			mass_car = std::atof(argc[i + 1]);
+			mass_car = std::atof(argv[i + 1]);
 		}
 		else
 		{
 			std::cout << "unrecognised Option: " << argv[i] << std::endl;
 			std::cout << "use -help to see all available options" << std::endl;
 		}
-	}*/
+	}
 
 	std::vector<sphere> spheres;
-	vehicle car();
+	vehicle car=vehicle(vec3d(1, 1, 1));
 	for (int i = 0; i < n_sphere; ++i)
 	{
-		//spheres.push_back(/*initialize sphere !position!*/);
+		sphere s=sphere(vec3d(0, 0, 0));
+		spheres.push_back(s);
 	}
-	drawframe();
+	simulation sim = simulation(spheres, n_sphere, car);
+	for (int i = 0; i < 10; i++)
+	{
+		sim.step(spheres, car, 0.1);
+	}
+	//drawframe();
 	return 0;
 }
