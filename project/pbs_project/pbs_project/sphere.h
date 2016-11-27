@@ -5,7 +5,7 @@
 class sphere
 {
 public:
-	sphere(vec3d pos, mat3d inertia=Eigen::MatrixXd::Identity(3,3), real_t radius = 1, real_t mass = 1, vec3d vel = vec3d(0, 0, 0)) :pos_(pos), inertia_(inertia), radius_(radius), mass_(mass), vel_(vel)
+	sphere(vec3d pos, mat3d inertia=Eigen::MatrixXd::Identity(3,3), real_t radius = 1, real_t mass = 1, vec3d vel = vec3d(0, 0, 0), quaternion_t quat = quaternion_t(1, 0, 0, 0)) :pos_(pos), inertia_(inertia), radius_(radius), mass_(mass), vel_(vel), quaternion_(quat)
 	{}
 
 	inline void setpos(const vec3d pos)
@@ -65,9 +65,10 @@ public:
 
 private:
 	vec3d pos_;
-	mat3d inertia_; //Trägheitsmoment
+	mat3d inertia_; //Trägheitsmoment in bodyframe
 	vec3d vel_;
 	vec3d angvel_;
+	quaternion_t quaternion_; //used for rotation denoted as q in paper "Iterative Dynamics"
 	real_t mass_;
 	real_t radius_;
 

@@ -12,5 +12,6 @@ typedef Eigen::SparseMatrix<real_t> smatrix_t; //sparse matrix type, use resize(
 typedef Eigen::Matrix<real_t, Eigen::Dynamic, 1> vector_t; //col vector or as vector?
 typedef Eigen::Matrix<real_t, 3, 3> mat3d; //3x3 matrix
 typedef Eigen::Matrix<real_t, 3, 1> vec3d; //3 dimensional column vector
+typedef Eigen::Quaternion<real_t> quaternion_t; //4 dimensional column vector
 //typedef Eigen::SparseLU<Eigen::SparseMatrix<real_t>> ssolver; //solver for smatrix_t type
 typedef Eigen::ConjugateGradient<Eigen::SparseMatrix<real_t>> ssolver;

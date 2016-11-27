@@ -4,7 +4,7 @@
 class vehicle
 {
 public:
-	vehicle(vec3d pos, real_t mass = 1, vec3d vel = vec3d(0, 0, 0)) :pos_(pos), mass_(mass), vel_(vel)
+	vehicle(vec3d pos, real_t mass = 1, real_t length=1, real_t width=1, vec3d vel = vec3d(0, 0, 0)) :pos_(pos), mass_(mass), length_(length), width_(width), vel_(vel)
 	{}
 	inline void setpos(const vec3d pos)
 	{
@@ -61,5 +61,9 @@ private:
 	mat3d inertia_; //Trägheitsmoment
 	vec3d vel_;
 	vec3d angvel_;
+	vec3d quaternion_; //used for rotation denoted as q in paper "Iterative Dynamics" (probably irrelevant for sphere)
 	real_t mass_;
+	//assume it to be a box (for collision handling)
+	real_t length_;
+	real_t width_;
 };
