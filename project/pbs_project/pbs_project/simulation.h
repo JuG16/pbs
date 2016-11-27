@@ -2,6 +2,7 @@
 #include "typedef.h"
 #include "sphere.h"
 #include "vehicle.h"
+#include "utility.h"
 #include <iostream>
 #include <iomanip>
 
@@ -142,6 +143,7 @@ public:
 		//for general shapes need to compute contact point first!! (irrelevant for spheres though)
 		std::vector<Eigen::Triplet<real_t>> triplets;
 		triplets.reserve(1 /* how many nnz to expect?*/);
+		int_t row = 0;
 		for (int i = 0; i < n_spheres_; ++i) //compute all interactions twice like this?
 		{
 			for (int j = i+1; j < n_spheres_; ++j)
@@ -155,7 +157,6 @@ public:
 					vec3d n = (contactpoint - spheres[i].getpos()).normalized();
 					vec3d r1 = contactpoint - spheres[i].getpos();
 					vec3d r2 = contactpoint - spheres[j].getpos();
-					const int_t row = i*n_spheres_ + j; //correct??
 					//need to scale all values with beta_*penetration depth?
 					//need to add contactcaching
 					//object 1
@@ -174,27 +175,60 @@ public:
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 4, r2xn(0)));
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 5, r2xn(0)));
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 6, r2xn(0)));
+					row++;
 				}
-				//do sphere-car interaction here
-				//do sphere-environment interaction here (needs some way to detect contact->function for environment)
 			}
-			//do car-environment interaction here (same)
+			//do sphere-car interaction here
+			vec3d contactpoint = ;
+			vec3d n = (contactpoint - spheres[i].getpos()).normalized();
+			vec3d r1 = contactpoint - spheres[i].getpos();
+			vec3d r2 = contactpoint - car.getpos();
+			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i, -n(0)));
+			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 1, -n(1)));
+			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 2, -n(2)));
+			const vec3d r1xn = -r1.cross(n); //- since only - crossprod gets used
+			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 3, r1xn(0)));
+			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 4, r1xn(1)));
+			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 5, r1xn(2)));
+			//car
+			const int_t j = 6 * (n_spheres_ + 1); //to get block of car (first after spheres)
+			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j, n(0)));
+			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 1, n(1)));
+			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 2, n(2)));
+			const vec3d r2xn = r2.cross(n);
+			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 4, r2xn(0)));
+			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 5, r2xn(0)));
+			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 6, r2xn(0)));
+			row++;
+
+			//do sphere-environment interaction here (needs some way to detect contact->function for environment)
+			contactpoint = ;
+			vec3d n = (contactpoint - spheres[i].getpos()).normalized();
+			vec3d r1 = contactpoint - spheres[i].getpos();
+			vec3d r2 = contactpoint - car.getpos();
+			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i, -n(0)));
+			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 1, -n(1)));
+			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 2, -n(2)));
+			const vec3d r1xn = -r1.cross(n); //- since only - crossprod gets used
+			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 3, r1xn(0)));
+			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 4, r1xn(1)));
+			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 5, r1xn(2)));
+			//environment (probably can remove this since has infinite mass anyways
+			const int_t j = 6 * (n_spheres_ + 2); //to get block of environment (second after spheres)
+			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j, n(0)));
+			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 1, n(1)));
+			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 2, n(2)));
+			const vec3d r2xn = r2.cross(n);
+			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 4, r2xn(0)));
+			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 5, r2xn(0)));
+			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 6, r2xn(0)));
 		}
+		//do car-environment interaction here (same)
 
 		jacobian_.setFromTriplets(triplets.begin(), triplets.end()); //does this work multiple times (reinitializing)
 		jacobian_.makeCompressed();
 		std::cout << "check1" << std::endl;
-		/*//compute contact points (really stupid for now, use better datastructure later)
-		for (int i = 0; i < n_spheres; ++i)
-		{
-			for (int j = 0; j < n_spheres; ++j)
-			{
-				if ((spheres[i].getpos() - spheres[j].getpos()).norm() < spheres[i].getrad() + spheres[j].getrad())
-				{
-					//contact
-				}
-			}
-		}*/
+		
 		//probably have to use some iterative solvers instead ?
 		//compute eta
 		eta_ = -jacobian_*(1. / dt*velocities_ + massmatrixinv_*fext_);
@@ -246,7 +280,10 @@ public:
 		//set velocity of car
 		for (int i = 0; i < n_spheres_; ++i)
 		{
+			//position update
 			spheres[i].setpos(spheres[i].getpos() + dt*spheres[i].getvel());
+			//rotation update
+			spheres[i].setquat(spheres[i].getquat() + dt / 2.*quatwmult(spheres[i].getquat(), spheres[i].getangvel());
 			std::cout <<  i << std::endl;
 			std::cout << spheres[i].getpos() << std::endl;
 			std::cout << spheres[i].getvel() << std::endl;
@@ -254,6 +291,7 @@ public:
 	}
 private:
 	//probably can do a lot "matrixfree" instead of sparse matrix calculation for performance
+	//ordering for matrices and vectors is: spheres, car, environment 
 	int_t n_spheres_;
 	vector_t forces_; //is denoted as F_c in paper "Iterative Dynamics" (6nx1) where n is the number of objects
 	vector_t velocities_; //is denoted as V in paper "Iterative Dynamics" (6nx1) where n is the number of objects
@@ -261,7 +299,7 @@ private:
 	//massmatrix is Blockdiagonal: each object contributes wit 2 3x3 matrices, where the first is diag(m), where m is the mass of the object
 	//the second is I, where I is the moment of inertia of the object
 	//since only inversematrix is used for computation can just set inverse=0 for static objects (infinite mass and inertia) why save massmatrix?
-	smatrix_t massmatrixinv_; //M^-1 can be precomputed since its constant
+	smatrix_t massmatrixinv_; //M^-1 can be precomputed since its constant (probably not because of global I=R*I_b*R^T) can use Eigen::Matrix3d R = q.toRotationMatrix() to get rotation matrix
 	smatrix_t jacobian_; //denoted J in paper "Iterative Dynamics" (sx6n) declared as member to prevent memory alloc every step (not sure that this works)
 	vector_t eta_; //denoted as "eta" in paper "Iterative Dynamics" (sx1) declared as member to prevent memory alloc every step 
 	//s =??? something with number of constraints

@@ -83,7 +83,7 @@
     </Link>
     <PostBuildEvent>
       <Command>
-  </Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -110,7 +110,7 @@
     </Link>
     <PostBuildEvent>
       <Command>
-  </Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -132,6 +132,7 @@
     <ClInclude Include="simulation.h" />
     <ClInclude Include="sphere.h" />
     <ClInclude Include="typedef.h" />
+    <ClInclude Include="utility.h" />
     <ClInclude Include="vehicle.h" />
   </ItemGroup>
   <ItemGroup>
