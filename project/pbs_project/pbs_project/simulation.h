@@ -2,6 +2,7 @@
 #include "typedef.h"
 #include "sphere.h"
 #include "vehicle.h"
+#include "plane.h"
 #include "utility.h"
 #include <iostream>
 #include <iomanip>
@@ -185,30 +186,38 @@ public:
 			}
 			//do sphere-car interaction here
 			//AABB for candidates (interesection with non spheres doesnt work yet)
-			/*if(intersect)
-			//vec3d contactpoint = ;
-			vec3d n = (contactpoint - spheres[i].getpos()).normalized();
-			vec3d r1 = contactpoint - spheres[i].getpos();
-			vec3d r2 = contactpoint - car.getpos();
-			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i, -n(0)));
-			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 1, -n(1)));
-			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 2, -n(2)));
-			const vec3d r1xn = -r1.cross(n); //- since only - crossprod gets used
-			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 3, r1xn(0)));
-			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 4, r1xn(1)));
-			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 5, r1xn(2)));
-			//car
-			const int_t j = 6 * (n_spheres_ + 1); //to get block of car (first after spheres)
-			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j, n(0)));
-			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 1, n(1)));
-			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 2, n(2)));
-			const vec3d r2xn = r2.cross(n);
-			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 4, r2xn(0)));
-			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 5, r2xn(0)));
-			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 6, r2xn(0)));
-			row++;
+			if (intersect(minpos, maxpos, spheres[i]))
+			{
+				//compute planes for each side (of original box)
+				//test for intersection
+				//->probably use function for return early	
+				vec3d contactpoint;
+				if (computecontact(car, spheres[i], contactpoint))
+				{
+					vec3d n = (contactpoint - spheres[i].getpos()).normalized();
+					vec3d r1 = contactpoint - spheres[i].getpos();
+					vec3d r2 = contactpoint - car.getpos();
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i, -n(0)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 1, -n(1)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 2, -n(2)));
+					const vec3d r1xn = -r1.cross(n); //- since only - crossprod gets used
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 3, r1xn(0)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 4, r1xn(1)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 5, r1xn(2)));
+					//car
+					const int_t j = 6 * (n_spheres_ + 1); //to get block of car (first after spheres)
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j, n(0)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 1, n(1)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 2, n(2)));
+					const vec3d r2xn = r2.cross(n);
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 4, r2xn(0)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 5, r2xn(0)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 6, r2xn(0)));
+					row++;
+				}
+			}
 
-			//do sphere-environment interaction here (needs some way to detect contact->function for environment)
+			/*//do sphere-environment interaction here (needs some way to detect contact->function for environment)
 			//contactpoint = ;
 			n = (contactpoint - spheres[i].getpos()).normalized();
 			r1 = contactpoint - spheres[i].getpos();
@@ -221,10 +230,10 @@ public:
 			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 4, r1xn2(1)));
 			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 5, r1xn2(2)));
 			//environment (probably can remove this since has infinite mass anyways
-			const int_t j2 = 6 * (n_spheres_ + 2); //to get block of environment (second after spheres)
-			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j2, n(0)));
-			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j2 + 1, n(1)));
-			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j2 + 2, n(2)));
+			const int_t j = 6 * (n_spheres_ + 2); //to get block of environment (second after spheres)
+			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j, n(0)));
+			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 1, n(1)));
+			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 2, n(2)));
 			const vec3d r2xn2 = r2.cross(n);
 			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 4, r2xn2(0)));
 			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 5, r2xn2(0)));
@@ -290,7 +299,7 @@ public:
 			//position update
 			spheres[i].setpos(spheres[i].getpos() + dt*spheres[i].getvel());
 			//rotation update
-			//spheres[i].setquat(spheres[i].getquat() + quatscalar(dt/2.,quatwmult(spheres[i].getquat(), spheres[i].getangvel()))); (need to do cwise addition by hand)
+			spheres[i].setquat(quataddcwise(spheres[i].getquat(),quatscalar(dt/2.,quatwmult(spheres[i].getquat(), spheres[i].getangvel())))); //terrible since all functions are self made (probably better to use vec4d)
 			std::cout <<  i << std::endl;
 			std::cout << spheres[i].getpos() << std::endl;
 			std::cout << spheres[i].getvel() << std::endl;

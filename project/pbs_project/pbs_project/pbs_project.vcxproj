@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="plane.h" />
     <ClInclude Include="rendering.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="simulation.h" />

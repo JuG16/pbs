@@ -1,6 +1,7 @@
 #pragma once
 #include "typedef.h"
 
+
 //computes the quaternion product
 inline quaternion_t quatmult(quaternion_t const &q1, quaternion_t const &q2)
 {
@@ -29,6 +30,12 @@ inline quaternion_t quatscalar(const real_t scalar, quaternion_t const &q)
 	return quaternion_t(scalar*q.w(), scalar*q.x(), scalar*q.y(), scalar*q.z());
 }
 
+//cwise addition of quaternions
+inline quaternion_t quataddcwise(quaternion_t const &q1, quaternion_t const &q2)
+{
+	return quaternion_t(q1.w() + q2.w(), q1.x() + q2.x(), q1.y() + q2.y(), q1.z() + q2.z());
+}
+
 //elementwise compares the vectors and sets min elementwise
 inline void elemwisemin(vec3d &min, vec3d const &curr)
 {
@@ -44,3 +51,19 @@ inline void elemwisemax(vec3d &max, vec3d const &curr)
 	max(1) = (max(1) < curr(1)) ? max(1) : curr(1);
 	max(2) = (max(2) < curr(2)) ? max(2) : curr(2);
 }
+
+//checks wether an AABB and a sphere intersect (doesnt work for general box-sphere intersection)
+inline bool intersect(vec3d const &minpos, vec3d const &maxpos, sphere& const s)
+{
+	//find closest point to sphere within box
+	real_t x = std::max(minpos.x(), std::min(s.getpos().x(), maxpos.x()));
+	real_t y = std::max(minpos.y(), std::min(s.getpos().y(), maxpos.y()));
+	real_t z = std::max(minpos.z(), std::min(s.getpos().z(), maxpos.z()));
+
+	vec3d pt = vec3d(x, y, z);
+
+	real_t dist = (s.getpos() - pt).norm();
+
+	return dist < s.getrad();
+}
+

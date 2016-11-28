@@ -1,6 +1,9 @@
 #include "typedef.h"
 #include "simulation.h"
 #include "rendering.h"
+#include "sphere.h"
+#include "vehicle.h"
+#include "plane.h"
 #include <iostream>
 #include <iomanip>
 #include <vector>

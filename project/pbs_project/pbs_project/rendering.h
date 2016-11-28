@@ -2,6 +2,8 @@
 
 #include "../include/ogre/build/sdk/include/OGRE/Ogre.h" //instead of last part put <"sometext"> from API
 #include "sphere.h"
+#include "vehicle.h"
+#include "plane.h"
 #include "typedef.h"
 
 
