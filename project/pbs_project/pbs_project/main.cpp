@@ -73,6 +73,6 @@ int main(int argc, char** argv)
 	{
 		sim.step(spheres, car, 0.1);
 	}
-	//drawframe();
+	drawframe();
 	return 0;
 }

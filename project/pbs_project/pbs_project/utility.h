@@ -22,3 +22,25 @@ inline quaternion_t quatwmult(quaternion_t const &q1, vec3d const &w)
 
 	return qres;
 }
+
+//computes scalar multiplication of a quaternion
+inline quaternion_t quatscalar(const real_t scalar, quaternion_t const &q)
+{
+	return quaternion_t(scalar*q.w(), scalar*q.x(), scalar*q.y(), scalar*q.z());
+}
+
+//elementwise compares the vectors and sets min elementwise
+inline void elemwisemin(vec3d &min, vec3d const &curr)
+{
+	min(0) = (min(0) < curr(0)) ? min(0) : curr(0);
+	min(1) = (min(1) < curr(1)) ? min(1) : curr(1);
+	min(2) = (min(2) < curr(2)) ? min(2) : curr(2);
+}
+
+//elementwise compares the vectors and sets max elementwise
+inline void elemwisemax(vec3d &max, vec3d const &curr)
+{
+	max(0) = (max(0) < curr(0)) ? max(0) : curr(0);
+	max(1) = (max(1) < curr(1)) ? max(1) : curr(1);
+	max(2) = (max(2) < curr(2)) ? max(2) : curr(2);
+}

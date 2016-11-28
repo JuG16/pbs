@@ -38,6 +38,10 @@ public:
 		angvel_(1) = y;
 		angvel_(2) = z;
 	}
+	inline void setquat(quaternion_t q)
+	{
+		quaternion_ = q;
+	}
 	inline vec3d getpos()const
 	{
 		return pos_;
@@ -57,6 +61,10 @@ public:
 	inline mat3d getinertia()const
 	{
 		return inertia_;
+	}
+	inline quaternion_t getquat()const
+	{
+		return quaternion_;
 	}
 	inline real_t getmass()const
 	{

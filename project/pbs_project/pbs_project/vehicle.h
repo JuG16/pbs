@@ -1,11 +1,40 @@
 #pragma once
 #include "typedef.h"
+#include "utility.h"
 
 class vehicle
 {
 public:
-	vehicle(vec3d pos, real_t mass = 1, real_t length=1, real_t width=1, vec3d vel = vec3d(0, 0, 0), quaternion_t quat=quaternion_t(1,0,0,0)) :pos_(pos), mass_(mass), length_(length), width_(width), vel_(vel), quaternion_(quat)
+	vehicle(vec3d pos, real_t mass = 1, real_t length=1, real_t width=1, real_t height=1, vec3d vel = vec3d(0, 0, 0), quaternion_t quat=quaternion_t(1,0,0,0)) :pos_(pos), mass_(mass), length_(length), width_(width), height_(height), vel_(vel), quaternion_(quat)
 	{}
+	void computeAABB(vec3d &minpos, vec3d &maxpos)
+	{
+		mat3d rotmat = quaternion_.toRotationMatrix();
+		vec3d currpos = pos_ + rotmat*vec3d(length_, width_, height_);
+		minpos = currpos;
+		maxpos = currpos;
+		currpos= pos_ + rotmat*vec3d(length_, width_, -height_);
+		elemwisemin(minpos, currpos);
+		elemwisemax(maxpos, currpos);
+		currpos = pos_ + rotmat*vec3d(length_, -width_, height_);
+		elemwisemin(minpos, currpos);
+		elemwisemax(maxpos, currpos);
+		currpos = pos_ + rotmat*vec3d(length_, -width_, -height_);
+		elemwisemin(minpos, currpos);
+		elemwisemax(maxpos, currpos);
+		currpos = pos_ + rotmat*vec3d(-length_, width_, height_);
+		elemwisemin(minpos, currpos);
+		elemwisemax(maxpos, currpos);
+		currpos = pos_ + rotmat*vec3d(-length_, width_, -height_);
+		elemwisemin(minpos, currpos);
+		elemwisemax(maxpos, currpos);
+		currpos = pos_ + rotmat*vec3d(-length_, -width_, height_);
+		elemwisemin(minpos, currpos);
+		elemwisemax(maxpos, currpos);
+		currpos = pos_ + rotmat*vec3d(-length_, -width_, -height_);
+		elemwisemin(minpos, currpos);
+		elemwisemax(maxpos, currpos);
+	}
 	inline void setpos(const vec3d pos)
 	{
 		pos_ = pos;
@@ -64,6 +93,18 @@ public:
 	{
 		return mass_;
 	}
+	inline real_t getlength()const
+	{
+		return length_;
+	}
+	inline real_t getwidth()const
+	{
+		return width_;
+	}
+	inline real_t getheight()const
+	{
+		return height_;
+	}
 private:
 	vec3d pos_;
 	mat3d inertia_; //Trägheitsmoment in bodyframe
@@ -74,4 +115,5 @@ private:
 	//assume it to be a box (for collision handling)
 	real_t length_;
 	real_t width_;
+	real_t height_;
 };
