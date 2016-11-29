@@ -19,7 +19,7 @@ public:
 		//every element is of type "sphere"
 		forces_.resize(6 * (n_spheres+2)); //+1 in size is for car, +1 for environment
 		velocities_.resize(6 * (n_spheres+2));
-		const int_t s = 1; //how large is s???
+		const int_t s = 10; //how large is s???
 		eta_.resize(s);
 		jacobian_.resize(s,6 * (n_spheres + 2));
 
@@ -184,16 +184,19 @@ public:
 					row++;
 				}
 			}
+			
 			//do sphere-car interaction here
 			//AABB for candidates (interesection with non spheres doesnt work yet)
 			if (intersect(minpos, maxpos, spheres[i]))
 			{
+				
 				//compute planes for each side (of original box)
 				//test for intersection
 				//->probably use function for return early	
 				vec3d contactpoint;
 				if (computecontact(car, spheres[i], contactpoint))
 				{
+					
 					vec3d n = (contactpoint - spheres[i].getpos()).normalized();
 					vec3d r1 = contactpoint - spheres[i].getpos();
 					vec3d r2 = contactpoint - car.getpos();
@@ -205,17 +208,19 @@ public:
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 4, r1xn(1)));
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 5, r1xn(2)));
 					//car
-					const int_t j = 6 * (n_spheres_ + 1); //to get block of car (first after spheres)
+					const int_t j = (n_spheres_ + 1); //to get block of car (first after spheres)
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j, n(0)));
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 1, n(1)));
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 2, n(2)));
 					const vec3d r2xn = r2.cross(n);
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 3, r2xn(0)));
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 4, r2xn(0)));
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 5, r2xn(0)));
-					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 6, r2xn(0)));
 					row++;
 				}
+				
 			}
+			std::cout << "check0" << std::endl;
 
 			/*//do sphere-environment interaction here (needs some way to detect contact->function for environment)
 			//contactpoint = ;

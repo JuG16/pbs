@@ -5,6 +5,37 @@
 #include "vehicle.h"
 #include "plane.h"
 #include "typedef.h"
+#include "BaseApplication.h"
+
+
+
+#include "BaseApplication.h"
+
+//---------------------------------------------------------------------------
+
+class TutorialApplication : public BaseApplication
+{
+public:
+	TutorialApplication(void)
+	{
+
+	}
+	virtual ~TutorialApplication(void)
+	{
+
+	}
+
+protected:
+	void createScene(void)
+	{
+		mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
+		Ogre::Entity* ogreEntity = mSceneMgr->createEntity("sphere.mesh");
+		Ogre::SceneNode* ogreNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+		ogreNode->attachObject(ogreEntity);
+		Ogre::Light* light = mSceneMgr->createLight("MainLight");
+		light->setPosition(20, 80, 50);
+	}
+};
 
 
 //template <typename container>

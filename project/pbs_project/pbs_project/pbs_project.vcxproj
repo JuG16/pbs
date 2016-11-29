@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BaseApplication.h" />
     <ClInclude Include="plane.h" />
     <ClInclude Include="rendering.h" />
     <ClInclude Include="resource.h" />
@@ -140,6 +141,7 @@
     <ResourceCompile Include="pbs_project.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BaseApplication.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
