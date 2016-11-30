@@ -95,14 +95,21 @@ int drawframe() {
 		node->setMaterialTexture(0, driver->getTexture("../media/sydney.bmp"));		
 	}*/
 
-	float TRadius = 5.0f;
+	float TRadius = 3.0f;
 	scene::ISceneNode *Node = smgr->addSphereSceneNode(TRadius, 32);
 	Node->setMaterialFlag(video::EMF_LIGHTING, 1);
 	Node->setMaterialFlag(video::EMF_NORMALIZE_NORMALS, true);
 	Node->setMaterialTexture(0, driver->getTexture("../media/stones.jpg"));
+	
+	vector3df TScale = vector3df(10.0f, 0.5f, 10.0f);
+	scene::ISceneNode *NodeBox = smgr->addCubeSceneNode(1.0f);
+	NodeBox->setScale(TScale);
+	NodeBox->setMaterialFlag(video::EMF_LIGHTING, 1);
+	NodeBox->setMaterialFlag(video::EMF_NORMALIZE_NORMALS, true);
+	NodeBox->setMaterialTexture(0, driver->getTexture("../media/wall.jpg"));
 
-
-	smgr->addCameraSceneNodeMaya();
+	//smgr->addCameraSceneNodeMaya();
+	smgr->addCameraSceneNode(0, vector3df(0, 30, -40), vector3df(0, 5, 0));
 	while (device->run())
 	{
 		driver->beginScene(true, true, SColor(255, 100, 101, 140));
