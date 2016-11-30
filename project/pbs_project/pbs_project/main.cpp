@@ -77,8 +77,8 @@ int main(int argc, char** argv)
 		sim.step(spheres, car, 0.1);
 	}
 
-	TutorialApplication rend;
-	rend.go();
-	//drawframe();
+	//TutorialApplication rend;
+	//rend.go();
+	int success=drawframe();
 	return 0;
 }
