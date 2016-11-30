@@ -194,7 +194,7 @@ public:
 				//test for intersection
 				//->probably use function for return early	
 				vec3d contactpoint;
-				if (computecontact(car, spheres[i], contactpoint))
+				if (computecontact(car, spheres[i], contactpoint)) //probably wrong
 				{
 					
 					vec3d n = (contactpoint - spheres[i].getpos()).normalized();
