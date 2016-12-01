@@ -126,9 +126,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="box.h" />
     <ClInclude Include="plane.h" />
     <ClInclude Include="rendering.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="rigidbody.h" />
     <ClInclude Include="simulation.h" />
     <ClInclude Include="sphere.h" />
     <ClInclude Include="typedef.h" />

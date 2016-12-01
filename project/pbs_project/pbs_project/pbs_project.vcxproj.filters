@@ -39,6 +39,12 @@
     <ClInclude Include="plane.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="rigidbody.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="box.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="pbs_project.rc">
