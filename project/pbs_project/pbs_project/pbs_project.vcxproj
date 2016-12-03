@@ -127,6 +127,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="box.h" />
+    <ClInclude Include="gjk_algorithm.h" />
     <ClInclude Include="plane.h" />
     <ClInclude Include="rendering.h" />
     <ClInclude Include="resource.h" />

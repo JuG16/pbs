@@ -11,6 +11,9 @@ public:
 	virtual void addtoscene(ISceneManager* smgr, IVideoDriver* driver) = 0;
 
 	virtual bool computecontactpoint(rigidbody *obj2) = 0;
+
+	virtual vec3d getfarthestpoint(vec3d const &dir) = 0;
+
 	inline void setpos(const vec3d pos)
 	{
 		pos_ = pos;

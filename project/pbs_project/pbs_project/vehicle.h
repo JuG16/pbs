@@ -25,6 +25,12 @@ public:
 		NodeBox->setMaterialTexture(0, driver->getTexture("../media/wall.jpg"));
 	}
 
+	vec3d getfarthestpoint(vec3d const &dir)override
+	{
+		//no creative idea how to do this
+		return vec3d(0, 0, 0);
+	}
+
 	void computeAABB(vec3d &minpos, vec3d &maxpos)
 	{
 		mat3d rotmat = quaternion_.toRotationMatrix();
