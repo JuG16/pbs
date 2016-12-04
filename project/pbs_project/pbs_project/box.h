@@ -1,4 +1,5 @@
 #pragma once
+#include <limits>
 #include "typedef.h"
 #include "utility.h"
 #include "rigidbody.h"
@@ -6,7 +7,7 @@
 class box :public rigidbody
 {
 public:
-	box(vec3d pos, mat3d inertia = Eigen::MatrixXd::Identity(3, 3), real_t mass = 1, real_t length = 1, real_t width = 1, real_t height = 1, vec3d vel = vec3d(0, 0, 0), quaternion_t quat = quaternion_t(1, 0, 0, 0)) : rigidbody(pos, inertia, mass, vel, quat)
+	box(vec3d pos, mat3d inertia = Eigen::MatrixXd::Identity(3, 3), real_t mass = 1, real_t length = 1, real_t width = 1, real_t height = 1, vec3d vel = vec3d(0, 0, 0), vec3d angvel = vec3d(0, 0, 0), quaternion_t quat = quaternion_t(1, 0, 0, 0)) : rigidbody(pos, inertia, mass, vel, angvel, quat)
 	{
 		length_ = length;
 		width_ = width;
@@ -29,7 +30,7 @@ public:
 		//to get the one in the corresponding direction one simply needs to maximize the dot-product (maximum will always be >0)
 
 		const mat3d rotmat = quaternion_.toRotationMatrix();
-		real_t maxval = 0;
+		real_t maxval = -std::numeric_limits<real_t>::max();;
 		vec3d maxcorner;
 		std::vector<vec3d> corners = this->getcorners();
 		for (auto currcorner : corners)

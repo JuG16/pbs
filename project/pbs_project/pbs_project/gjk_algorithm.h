@@ -1,6 +1,6 @@
 #pragma once
 #include <limits>
-
+#include <iostream>
 #include "typedef.h"
 #include "rigidbody.h"
 
@@ -56,7 +56,7 @@ public:
 
 		b_ = support(box1, box2, dir);
 
-		dir = -c_.v_;//negative direction
+		dir = -b_.v_;//negative direction
 
 		nrPointsSimplex_ = 1;
 		for(int steps=0;steps<50;++steps)
@@ -125,6 +125,7 @@ public:
 					addedge(it->points[0], it->points[1]);
 					addedge(it->points[1], it->points[2]);
 					addedge(it->points[2], it->points[0]);
+					it = triangles_.erase(it);
 					continue;
 				}
 				++it;

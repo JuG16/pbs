@@ -6,7 +6,7 @@
 class rigidbody
 {
 public:
-	rigidbody(vec3d pos, mat3d inertia = Eigen::MatrixXd::Identity(3, 3), real_t mass = 1, vec3d vel = vec3d(0, 0, 0), quaternion_t quat = quaternion_t(1, 0, 0, 0)) :pos_(pos), inertia_(inertia),  mass_(mass), vel_(vel), quaternion_(quat)
+	rigidbody(vec3d pos, mat3d inertia = Eigen::MatrixXd::Identity(3, 3), real_t mass = 1, vec3d vel = vec3d(0, 0, 0), vec3d angvel=vec3d(0,0,0), quaternion_t quat = quaternion_t(1, 0, 0, 0)) :pos_(pos), inertia_(inertia),  mass_(mass), vel_(vel), angvel_(angvel), quaternion_(quat)
 	{}
 	virtual void addtoscene(ISceneManager* smgr, IVideoDriver* driver)const = 0;
 
@@ -17,6 +17,10 @@ public:
 	virtual bool issphere()const = 0;
 
 	virtual real_t getrad()const = 0; //only call for spheres (verify with issphere)
+
+	virtual real_t getlength()const = 0; //only call for objects that use this (verify with issphere)
+	virtual real_t getheight()const = 0; //only call for objects that use this (verify with issphere)
+	virtual real_t getwidth()const = 0; //only call for objects that use this (verify with issphere)
 
 	inline void setpos(const vec3d pos)
 	{
@@ -84,7 +88,4 @@ protected:
 	quaternion_t quaternion_; //used for rotation denoted as q in paper "Iterative Dynamics" (probably irrelevant for sphere)	
 	real_t mass_;
 	//assume it to be a box (for collision handling)
-	real_t length_;
-	real_t width_;
-	real_t height_;
 };

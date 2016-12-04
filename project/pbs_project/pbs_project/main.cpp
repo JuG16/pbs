@@ -10,6 +10,8 @@
 #include <string>
 #include <cstdlib>
 
+#include "gjk_algorithm.h"
+
 int main(int argc, char** argv)
 {
 	//vectors for options and corresponding descriptions for -help
@@ -18,7 +20,7 @@ int main(int argc, char** argv)
 
 
 	//standard settings
-	int_t n_sphere = 10;
+	int_t n_sphere = 1;
 	real_t mass_sphere = 1;
 	real_t radius_sphere = 0.1;
 	real_t mass_car = 100;
@@ -66,11 +68,21 @@ int main(int argc, char** argv)
 	
 	std::vector<rigidbody*> objects;
 
-	objects.push_back(new vehicle(vec3d(1, 1, 1)));
+	objects.push_back(new vehicle(vec3d(0, 0, 0)));
 	for (int i = 0; i < n_sphere; ++i)
 	{
-		objects.push_back(new sphere(vec3d(0, 0, 0)));
+		objects.push_back(new sphere(vec3d(2, 2, 1+i)));
 	}
+
+	/*vec3d contactpoint;
+	vec3d n;
+	real_t pen_depth;
+	gjk_algorithm gjk = gjk_algorithm();
+	std::cout << "check" << std::endl;
+	if (gjk.collisiondetection(objects[0], objects[1]))
+	{
+		std::cout << "returned true" << std::endl;
+	}*/
 
 	simulation sim = simulation(objects, objects.size()); //how to do this (n_objects is changing at runtime so no array possible)->use iterators
 	for (int i = 0; i < 2; i++)

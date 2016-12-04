@@ -100,7 +100,7 @@ public:
 		//every element is of type "sphere"
 		
 
-		std::cout << "step start" << std::endl;
+		std::cout << "step start..." << std::endl;
 		//comput J matrix
 		//needs to compute r somehow?
 		//can probably leave out all noncontact spheres (not setting instead of zero[or wrong sign])
@@ -109,15 +109,16 @@ public:
 		//to delete swap with last and remove last (efficience)
 		//for general shapes need to compute contact point first!! (irrelevant for spheres though)
 		std::vector<Eigen::Triplet<real_t>> triplets;
-		triplets.reserve(1 /* how many nnz to expect?*/);
+		triplets.reserve(3*n_objects_*n_objects_);
 		int_t row = 0;
 
-		//AABB for candidates for car
+		//AABB for candidates for car (need to put in)
 		//vec3d minpos;
 		//vec3d maxpos;
 		//car.computeAABB(minpos, maxpos);
 		for (int i = 0; i < n_objects_; ++i) //compute all interactions twice like this?
 		{
+			std::cout << i << std::endl;
 			for (int j = i+1; j < n_objects_; ++j)
 			{
 				bool contact = false;
@@ -127,17 +128,20 @@ public:
 
 				if (objects[i]->issphere()&&objects[j]->issphere()) //use fact that sphere sphere collision is far easier (makes sense since there are a lot of spheres)
 				{
+					std::cout << "sphere-sphere" << std::endl;
 					//sphere-sphere collision (need to add friction)
 					if ((objects[i]->getpos() - objects[j]->getpos()).norm() < (objects[i]->getrad() + objects[j]->getrad()))
 					{
-						contactpoint = (objects[i]->getpos() - objects[j]->getpos()) / 2.;
+						contactpoint = objects[j]->getpos()+(objects[i]->getpos() - objects[j]->getpos()) / 2.;
 						vec3d n = (contactpoint - objects[i]->getpos()).normalized();
 						pen_depth = ((objects[i]->getrad() + objects[j]->getrad()) - (objects[i]->getpos() - objects[j]->getpos()).norm()) / 2.;
 						contact = true;
+						std::cout << contactpoint << std::endl;
 					}
 				}
 				else //use gjk and eta algorithm
 				{	
+					std::cout << "box" << std::endl;
 					gjk_algorithm gjk = gjk_algorithm();
 					if (gjk.collisiondetection(objects[i], objects[j]))
 					{
@@ -147,9 +151,10 @@ public:
 						}
 						else
 						{
-							std::cout << "unexpected error in GJK algorithmö. Step terminates" << std::endl;
+							std::cout << "unexpected error in GJK algorithm. Step terminates" << std::endl;
 							return;
 						}
+						std::cout << contactpoint << std::endl;
 					}
 				}
 				if (contact)
@@ -174,9 +179,9 @@ public:
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 1, n(1)));
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 2, n(2)));
 					const vec3d r2xn = r2.cross(n);
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 3, r2xn(0)));
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 4, r2xn(0)));
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 5, r2xn(0)));
-					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 6, r2xn(0)));
 					row++;
 
 				}
@@ -245,13 +250,13 @@ public:
 
 		jacobian_.setFromTriplets(triplets.begin(), triplets.end()); //does this work multiple times (reinitializing)
 		jacobian_.makeCompressed();
-		std::cout << "check1" << std::endl;
+		std::cout << jacobian_ << std::endl;
 		
 		//probably have to use some iterative solvers instead ?
 		//compute eta
 		eta_ = -jacobian_*(1. / dt*velocities_ + massmatrixinv_*fext_);
 		//can we assume J*M^-1*J^T is sparse?
-		std::cout << "check2" << std::endl;
+		std::cout << eta_ << std::endl;
 		//compute lambda
 		//do 3 steps to utilize sparsity (doesnt work since parts are not squared)
 		ssolver solver;
@@ -270,7 +275,7 @@ public:
 
 		//solver.analyzePattern(jacobian_*massmatrixinv_*jacobian_.transpose());
 		//solver.factorize(jacobian_*massmatrixinv_*jacobian_.transpose());
-		solver.compute(jacobian_*massmatrixinv_*jacobian_.transpose());
+		solver.compute(jacobian_*massmatrixinv_*jacobian_.transpose()); //problem: if all zero can get any result
 		auto lambda = solver.solve(eta_);
 		std::cout << "#iterations:" << solver.iterations() << std::endl;
 		std::cout << "error" << solver.error() << std::endl;
