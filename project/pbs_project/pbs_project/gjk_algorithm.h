@@ -16,37 +16,26 @@ public:
 	{
 		vec3d dir = vec3d(1, 1, 1);
 
-		c_ = support(box1, box2, dir);
+		b_ = support(box1, box2, dir);
 
 		dir = -c_;//negative direction
 
-		b_ = support(box1, box2, dir);
-
-		if (b_.dot(dir) < 0)
+		nrPointsSimplex_ = 1;
+		for(int steps=0;steps<50;++steps)
 		{
-			return false;
-		}
-		dir = (c_ - b_).cross(-b_);
 
-		nrPointsSimplex_ = 2; //begin with 2 points in simplex
-
-		int steps = 0;//avoid infinite loop
-		while (steps<50)
-		{
 			a_ = support(box1, box2, dir);
+			nrPointsSimplex_++;
+
 			if (a_.dot(dir) < 0)
 			{
 				return false;
 			}
-			else
-			{
 
-				if (ContainsOrigin(dir))
-				{
-					return true;
-				}
+			if (ContainsOrigin(dir)) //contains origin is "dosimplex"
+			{
+				return true;
 			}
-			steps++;
 
 		}
 
@@ -55,7 +44,7 @@ public:
 
 private:
 
-	vec3d  support(const rigidbody& a, const rigidbody& b, const vec3d dir) const
+	vec3d  support(rigidbody const &a, rigidbody const &b, const vec3d dir) const
 	{
 		vec3d p1 = a.getfarthestpoint(dir);
 		vec3d p2 = b.getfarthestpoint(-dir);
@@ -69,204 +58,168 @@ private:
 	{
 		if (nrPointsSimplex_ == 2)
 		{
-			return triangle(dir);
+			line(dir);
+			return false;
 		}
 		else if (nrPointsSimplex_ == 3)
 		{
+			triangle(dir);
+			return;
+		}
+		else if(nrPointsSimplex_==4)
+		{
 			return tetrahedron(dir);
 		}
-
 		return false;
 	}
-	bool line(vec3d& dir)
+	void line(vec3d& dir)
 	{
 		vec3d ab = b_ - a_;
-
-		dir = ab.cross(-a_);
-
+		dir = (ab.cross(-a_)).cross(ab);
 		c_ = b_;
 		b_ = a_;
 		nrPointsSimplex_ = 2;
+		return;
 
-		return false;
+		/*
+		this case cancels out because otherwise the main algorithm would already have returned false (cant get to the origin)
+		else
+		{
+			dir = -a_;
+			b_ = a_;
+			nrPointsSimplex_ = 1;
+			return;
+		}*/
+
 	}
-	bool triangle(vec3d& dir) //always returns false (correct?)
+	void triangle(vec3d& dir)
 	{
 		vec3d ab = b_ - a_;
 		vec3d ac = c_ - a_;
-		vec3d abc = ab.cross(ac);
+		vec3d abc = ab.cross(ac); //normal
 
-
-		vec3d ab_abc =ab.cross(abc);
-
-		if (ab_abc.dot(-a_) > 0)
+		if ((abc.cross(ac)).dot(-a_) > 0)
 		{
-			
+			dir = (ab.cross(-a_)).cross(ab);
 			c_ = b_;
 			b_ = a_;
+			nrPointsSimplex_ = 2;
+			return;
 
-			//dir is not ab_abc because it's not point towards the origin
-			dir = ab.cross(-a_);
-
-			//direction change; can't build tetrahedron
-			return false;
-		}
-
-
-		vec3d abc_ac = abc.cross(ac);
-
-		// is the origin away from ac edge? or it is in abc?
-		//if a0 is in that direction than
-		if (abc_ac.dot(-a_) > 0)
-		{
-			//keep c the same
-			b_ = a_;
-
-			//dir is not abc_ac because it's not point towards the origin
-			dir = ac.cross(-a_);
-
-			//direction change; can't build tetrahedron
-			return false;
-		}
-
-		//now can build tetrahedron; check if it's above or below
-		if (abc.dot(-a_) > 0)
-		{
-			//base of tetrahedron
-			d_ = c_;
-			c_ = b_;
-			b_ = a_;
-
-			//new direction
-			dir = abc;
+			//other parts cancel out because of similar reason to line argument
+			/*if (ac.dot(-a_) > 0)
+			{
+				dir = (ac.cross(-a_)).cross(ac);
+				b_ = a_;
+				nrPointsSimplex_ = 2;
+				return;
+			}
+			else
+			{
+				if (ab.dot(-a_))
+				{
+					dir = (ab.cross(-a_)).cross(ab);
+					c_ = b_;
+					b_ = a_;
+					nrPointsSimplex_ = 2;
+					return;
+				}
+				else
+				{
+					dir = -a_;
+					b_ = a_;
+					nrPointsSimplex_ = 1;
+					return;
+				}
+			}*/
 		}
 		else
 		{
-			//upside down tetrahedron
-			d_ = b_;
-			b_ = a_;
-			dir = -abc;
+			if (ab.cross(abc).dot(-a_) > 0)
+			{
+				dir = (ab.cross(-a_)).cross(ab);
+				c_ = b_;
+				b_ = a_;
+				nrPointsSimplex_ = 2;
+				return;
+				
+				//same argument as above
+				/*if (ab.dot(-a_))
+				{
+					dir = (ab.cross(-a_)).cross(ab);
+					c_ = b_;
+					b_ = a_;
+					nrPointsSimplex_ = 2;
+					return;
+				}
+				else
+				{
+					dir = -a_;
+					b_ = a_;
+					nrPointsSimplex_ = 1;
+					return;
+				}*/
+			}
+			else
+			{
+				if (abc.dot(-a_) > 0)
+				{
+					dir = abc;
+					d_ = c_;
+					c_ = b_;
+					b_ = a_;
+					nrPointsSimplex_ = 3;
+					return;
+				}
+				else
+				{
+					dir = -abc;
+					d_ = b_;
+					b_ = a_;
+					nrPointsSimplex_ = 3;
+					return;
+				}
+			}
 		}
-
-		nrPointsSimplex_ = 3;
-
-		return false;
 	}
 	bool tetrahedron(vec3d& dir)
 	{
-		vec3d ab = b_ - a_;
-		vec3d ac = c_ - a_;
+		const vec3d ab = b_ - a_;
+		const vec3d ac = c_ - a_;
+		const vec3d ad = d_ - a_;
 
-		//build abc triangle
-		vec3d abc = ab.cross(ac);
-
-		//CASE 1
-		if (abc.dot(-a_) > 0)
+		//origin in front of triangle abc
+		if ((ab.cross(ac).dot(-a_)) > 0)
 		{
-			//in front of triangle ABC
-			//we don't have to change the ao,ab,ac,abc meanings
-			checkTetrahedron(-a_, ab, ac, abc, dir);
+			nrPointsSimplex_ = 3;
+			triangle(dir);
+			return false;
 		}
 
-
-		//CASE 2:
-
-		vec3d ad = d_ - a_;
-
-		//build acd triangle
-		vec3d acd = ac.cross(ad);
-
-		//same direaction with ao
-		if (acd.dot(-a_) > 0)
+		//origin in front of triangle acd
+		else if (((ac.cross(ad).dot(-a_) > 0)
 		{
-
-			//in front of triangle ACD
+			nrPointsSimplex_ = 3;
 			b_ = c_;
 			c_ = d_;
-			ab = ac;
-			ac = ad;
-			abc = acd;
-
-			checkTetrahedron(-a_, ab, ac, abc, dir);
-		}
-
-		//build adb triangle
-		vec3d adb = ad.cross(ab);
-
-		//case 3:
-
-		//same direaction with ao
-		if (adb.dot(-a_) > 0)
-		{
-
-			//in front of triangle ADB
-
-			c_ = b_;
-			b_ = d_;
-
-			ac = ab;
-			ab = ad;
-
-			abc = adb;
-			checkTetrahedron(-a_, ab, ac, abc, dir);
-		}
-
-
-		//origin in tetrahedron
-		return true;
-	}
-
-	bool checkTetrahedron(const vec3d& ao, const vec3d& ab, const vec3d& ac, const vec3d& abc, vec3d& dir)
-	{
-
-		//almost the same like triangle checks
-		vec3d ab_abc = ab.cross(abc);
-
-		if (ab_abc.dot(ao) > 0)
-		{
-			c_ = b_;
-			b_ = a_;
-
-			//dir is not ab_abc because it's not point towards the origin;
-			//ABxA0xAB direction we are looking for
-			dir = ab.cross(ao);
-
-			//build new triangle
-			// d will be lost
-			nrPointsSimplex_ = 2;
-
+			triangle(dir);
 			return false;
 		}
 
-		vec3d acp = abc.cross(ac);
-
-		if (acp.dot(ao) > 0)
+		//origin in fron of triangle abd
+		else if (((ad.cross(ab).dot(-a_))))
 		{
-			b_ = a_;
-
-			//dir is not abc_ac because it's not point towards the origin;
-			//ACxA0xAC direction we are looking for
-			dir = ac.cross(ao);
-
-			//build new triangle
-			// d will be lost
-			nrPointsSimplex_ = 2;
-
+			nrPointsSimplex_ = 3;
+			c_ = d_;
+			triangle(dir);
 			return false;
 		}
 
-		//build new tetrahedron with new base
-		d_ = c_;
-		c_ = b_;
-		b_ = a_;
-
-		dir = abc;
-
-		nrPointsSimplex_ = 3;
-
-		return false;
+		else
+		{
+			return true;
+		}
 	}
-
 	vec3d a_, b_, c_, d_;
 	int nrPointsSimplex_ = 0;
 };

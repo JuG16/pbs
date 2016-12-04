@@ -23,39 +23,61 @@ public:
 		NodeBox->setMaterialTexture(0, driver->getTexture("../media/wall.jpg"));
 	}
 
-	vec3d getfarthestpoint(vec3d const &dir)override
+	vec3d getfarthestpoint(vec3d const &dir)const override
 	{
-		//no creative idea how to do this
-		return vec3d(0, 0, 0);
+		//notice that a corner will at least be one of the farthest points no matter the direction so its sufficient to consider corners
+		//to get the one in the corresponding direction one simply needs to maximize the dot-product (maximum will always be >0)
+
+		const mat3d rotmat = quaternion_.toRotationMatrix();
+		real_t maxval = 0;
+		vec3d maxcorner;
+		std::vector<vec3d> corners = this->getcorners();
+		for (auto currcorner : corners)
+		{
+			if (currcorner.dot(dir) > maxval)
+			{
+				maxval = currcorner.dot(dir);
+				maxcorner = currcorner;
+			}
+		}
+		return maxcorner;
+	}
+
+	std::vector<vec3d> getcorners() override
+	{
+		std::vector<vec3d> res;
+		vec3d currcorner;
+		const mat3d rotmat = quaternion_.toRotationMatrix();
+		currcorner = pos_ + rotmat*vec3d(length_, width_, height_);
+		res.push_back(currcorner);
+		currcorner = pos_ + rotmat*vec3d(length_, width_, -height_);
+		res.push_back(currcorner);
+		currcorner = pos_ + rotmat*vec3d(length_, -width_, height_);
+		res.push_back(currcorner);
+		currcorner = pos_ + rotmat*vec3d(-length_, -width_, -height_);
+		res.push_back(currcorner);
+		currcorner = pos_ + rotmat*vec3d(-length_, width_, height_);
+		res.push_back(currcorner);
+		currcorner = pos_ + rotmat*vec3d(-length_, -width_, -height_);
+		res.push_back(currcorner);
+		currcorner = pos_ + rotmat*vec3d(-length_, -width_, height_);
+		res.push_back(currcorner);
+		currcorner = pos_ + rotmat*vec3d(length_, width_, -height_);
+		res.push_back(currcorner);
+		return res;
 	}
 
 	void computeAABB(vec3d &minpos, vec3d &maxpos)
 	{
 		mat3d rotmat = quaternion_.toRotationMatrix();
-		vec3d currpos = pos_ + rotmat*vec3d(length_, width_, height_);
-		minpos = currpos;
-		maxpos = currpos;
-		currpos = pos_ + rotmat*vec3d(length_, width_, -height_);
-		elemwisemin(minpos, currpos);
-		elemwisemax(maxpos, currpos);
-		currpos = pos_ + rotmat*vec3d(length_, -width_, height_);
-		elemwisemin(minpos, currpos);
-		elemwisemax(maxpos, currpos);
-		currpos = pos_ + rotmat*vec3d(length_, -width_, -height_);
-		elemwisemin(minpos, currpos);
-		elemwisemax(maxpos, currpos);
-		currpos = pos_ + rotmat*vec3d(-length_, width_, height_);
-		elemwisemin(minpos, currpos);
-		elemwisemax(maxpos, currpos);
-		currpos = pos_ + rotmat*vec3d(-length_, width_, -height_);
-		elemwisemin(minpos, currpos);
-		elemwisemax(maxpos, currpos);
-		currpos = pos_ + rotmat*vec3d(-length_, -width_, height_);
-		elemwisemin(minpos, currpos);
-		elemwisemax(maxpos, currpos);
-		currpos = pos_ + rotmat*vec3d(-length_, -width_, -height_);
-		elemwisemin(minpos, currpos);
-		elemwisemax(maxpos, currpos);
+		std::vector<vec3d> corners = this->getcorners();
+		minpos = corners.at(0);
+		maxpos = corners.at(0);
+		for (auto currpos : corners)
+		{
+			elemwisemin(minpos, currpos);
+			elemwisemax(maxpos, currpos);
+		}
 	}
 	inline real_t getlength()const
 	{

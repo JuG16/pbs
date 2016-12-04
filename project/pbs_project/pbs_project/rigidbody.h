@@ -12,7 +12,9 @@ public:
 
 	virtual bool computecontactpoint(rigidbody *obj2) = 0;
 
-	virtual vec3d getfarthestpoint(vec3d const &dir) = 0;
+	virtual vec3d getfarthestpoint(vec3d const &dir)const = 0;
+
+	virtual std::vector<vec3d> getcorners() = 0;
 
 	inline void setpos(const vec3d pos)
 	{

@@ -19,9 +19,15 @@ public:
 		Node->setMaterialTexture(0, driver->getTexture("../media/stones.jpg"));
 	}
 
-	vec3d getfarthestpoint(vec3d const &dir) override
+	vec3d getfarthestpoint(vec3d const &dir)const override
 	{
 		return this->getpos()+radius_*dir.normalized();
+	}
+
+	std::vector<vec3d> getcorners() override
+	{
+		std::vector<vec3d> res;
+		return res;
 	}
 
 	inline real_t getrad()const
