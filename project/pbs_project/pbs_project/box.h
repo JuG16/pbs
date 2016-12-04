@@ -13,7 +13,7 @@ public:
 		height_ = height;
 	}
 
-	void addtoscene(ISceneManager* smgr, IVideoDriver* driver) override
+	void addtoscene(ISceneManager* smgr, IVideoDriver* driver)const override
 	{
 		vector3df TScale = vector3df(length_, width_, height_);
 		scene::ISceneNode *NodeBox = smgr->addCubeSceneNode(1.0f);
@@ -43,7 +43,7 @@ public:
 		return maxcorner;
 	}
 
-	std::vector<vec3d> getcorners() override
+	std::vector<vec3d> getcorners()const override
 	{
 		std::vector<vec3d> res;
 		vec3d currcorner;
@@ -67,6 +67,15 @@ public:
 		return res;
 	}
 
+	bool issphere()const override
+	{
+		return false;
+	}
+
+	real_t getrad()const override
+	{
+		return 0;
+	}
 	void computeAABB(vec3d &minpos, vec3d &maxpos)
 	{
 		mat3d rotmat = quaternion_.toRotationMatrix();

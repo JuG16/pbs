@@ -11,7 +11,7 @@ public:
 		radius_ = radius;
 	}
 
-	void addtoscene(ISceneManager* smgr, IVideoDriver* driver) override
+	void addtoscene(ISceneManager* smgr, IVideoDriver* driver)const override
 	{
 		scene::ISceneNode *Node = smgr->addSphereSceneNode(radius_, 32);
 		Node->setMaterialFlag(video::EMF_LIGHTING, 1);
@@ -24,13 +24,18 @@ public:
 		return this->getpos()+radius_*dir.normalized();
 	}
 
-	std::vector<vec3d> getcorners() override
+	std::vector<vec3d> getcorners()const override
 	{
 		std::vector<vec3d> res;
 		return res;
 	}
 
-	inline real_t getrad()const
+	bool issphere()const override
+	{
+		return true;
+	}
+
+	real_t getrad()const override
 	{
 		return radius_;
 	}

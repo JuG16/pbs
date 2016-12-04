@@ -5,6 +5,7 @@
 #include "plane.h"
 #include "utility.h"
 #include "rigidbody.h"
+#include "gjk_algorithm.h"
 #include <iostream>
 #include <iomanip>
 
@@ -118,18 +119,45 @@ public:
 		{
 			for (int j = i+1; j < n_objects_; ++j)
 			{
-				//if ((spheres[i].getpos() - spheres[j].getpos()).norm() < (spheres[i].getrad() + spheres[j].getrad()))
+				bool contact = false;
 				vec3d contactpoint;
+				vec3d n;
+				real_t pen_depth;
 
-				if(objects[i].computecontactpoint(&objects[j])) //need to implement this function for derived classes
+				if (objects[i].issphere&&objects[j].issphere()) //use fact that sphere sphere collision is far easier (makes sense since there are a lot of spheres)
 				{
 					//sphere-sphere collision (need to add friction)
-
+					if ((objects[i].getpos() - objects[j].getpos()).norm() < (objects[i].getrad() + objects[j].getrad()))
+					{
+						contactpoint = (objects[i].getpos() - objects[j].getpos()) / 2.;
+						vec3d n = (contactpoint - objects[i].getpos()).normalized();
+						pen_depth = ((objects[i].getrad() + objects[j].getrad()) - (objects[i].getpos() - objects[j].getpos()).norm()) / 2.;
+						contact = true;
+					}
+				}
+				else //use gjk and eta algorithm
+				{	
+					gjk_algorithm gjk = gjk_algorithm();
+					if (gjk.collisiondetection(objects[i], objects[j]))
+					{
+						if (gjk.computecontactpoint(objects[i], objects[j], contactpoint, n, pen_depth))
+						{
+							contact = true;
+						}
+						else
+						{
+							std::cout << "unexpected error in GJK algorithmö. Step terminates" << std::endl;
+							return;
+						}
+					}
+				}
+				if (contact)
+				{
 					//using notion of paper for variables assuming sphere[i] is object 1 and sphere[j] object 2
-					//dont think using only 1 normal works for general shapes (as presented in paper)
-					vec3d n = (contactpoint - objects[i].getpos()).normalized();
+
 					vec3d r1 = contactpoint - objects[i].getpos();
 					vec3d r2 = contactpoint - objects[j].getpos();
+
 					//need to scale all values with beta_*penetration depth?
 					//need to add contactcaching
 					//object 1
@@ -149,6 +177,7 @@ public:
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 5, r2xn(0)));
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 6, r2xn(0)));
 					row++;
+
 				}
 			}
 			
@@ -258,23 +287,23 @@ public:
 		velocities_ = massmatrixinv_*(dt*(jacobian_.transpose()*lambda + fext_)) + velocities_;
 
 		std::cout << "check3" << std::endl;
-		for (int i = 0; i < n_spheres_; ++i)
+		for (int i = 0; i < n_objects_; ++i)
 		{
-			spheres[i].setvel(velocities_.segment<3>(6*i)); //can use blocking?
-			spheres[i].setangvel(velocities_.segment<3>(6*i+3));//same
+			objects[i].setvel(velocities_.segment<3>(6*i)); //can use blocking?
+			objects[i].setangvel(velocities_.segment<3>(6*i+3));//same
 		}
 
 		std::cout << "check4" << std::endl;
 		//set velocity of car
-		for (int i = 0; i < n_spheres_; ++i)
+		for (int i = 0; i < n_objects_; ++i)
 		{
 			//position update
-			spheres[i].setpos(spheres[i].getpos() + dt*spheres[i].getvel());
+			objects[i].setpos(objects[i].getpos() + dt*objects[i].getvel());
 			//rotation update
-			spheres[i].setquat(quataddcwise(spheres[i].getquat(),quatscalar(dt/2.,quatwmult(spheres[i].getquat(), spheres[i].getangvel())))); //terrible since all functions are self made (probably better to use vec4d)
+			objects[i].setquat(quataddcwise(objects[i].getquat(),quatscalar(dt/2.,quatwmult(objects[i].getquat(), objects[i].getangvel())))); //terrible since all functions are self made (probably better to use vec4d)
 			std::cout <<  i << std::endl;
-			std::cout << spheres[i].getpos() << std::endl;
-			std::cout << spheres[i].getvel() << std::endl;
+			std::cout << objects[i].getpos() << std::endl;
+			std::cout << objects[i].getvel() << std::endl;
 		}
 	}
 private:

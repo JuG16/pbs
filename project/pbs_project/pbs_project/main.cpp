@@ -63,18 +63,19 @@ int main(int argc, char** argv)
 			return 0;
 		}
 	}
-
-	std::vector<sphere> spheres;
+	
+	std::vector<rigidbody> objects;
 	vehicle car=vehicle(vec3d(1, 1, 1));
+	objects.push_back(car);
 	for (int i = 0; i < n_sphere; ++i)
 	{
 		sphere s=sphere(vec3d(0, 0, 0));
-		spheres.push_back(s);
+		objects.push_back(s);
 	}
-	simulation sim = simulation(spheres, n_sphere, car);
+	simulation sim = simulation(objects, objects.size()); //how to do this (n_objects is changing at runtime so no array possible)->use iterators
 	for (int i = 0; i < 2; i++)
 	{
-		sim.step(spheres, car, 0.1);
+		sim.step(objects, 0.001);
 	}
 
 	//TutorialApplication rend;

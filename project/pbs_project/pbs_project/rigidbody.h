@@ -8,13 +8,15 @@ class rigidbody
 public:
 	rigidbody(vec3d pos, mat3d inertia = Eigen::MatrixXd::Identity(3, 3), real_t mass = 1, vec3d vel = vec3d(0, 0, 0), quaternion_t quat = quaternion_t(1, 0, 0, 0)) :pos_(pos), inertia_(inertia),  mass_(mass), vel_(vel), quaternion_(quat)
 	{}
-	virtual void addtoscene(ISceneManager* smgr, IVideoDriver* driver) = 0;
-
-	virtual bool computecontactpoint(rigidbody *obj2) = 0;
+	virtual void addtoscene(ISceneManager* smgr, IVideoDriver* driver)const = 0;
 
 	virtual vec3d getfarthestpoint(vec3d const &dir)const = 0;
 
-	virtual std::vector<vec3d> getcorners() = 0;
+	virtual std::vector<vec3d> getcorners()const = 0;
+
+	virtual bool issphere()const = 0;
+
+	virtual real_t getrad()const = 0; //only call for spheres (verify with issphere)
 
 	inline void setpos(const vec3d pos)
 	{
