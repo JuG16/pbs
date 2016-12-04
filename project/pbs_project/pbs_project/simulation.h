@@ -13,7 +13,7 @@
 class simulation
 {
 public:
-	simulation(rigidbody *objects, int_t n_objects):n_objects_(n_objects)
+	simulation(std::vector<rigidbody*> objects, int_t n_objects):n_objects_(n_objects)
 	{
 		//initialize system -> set initial positions and velocities of all components
 		
@@ -28,12 +28,13 @@ public:
 		fext_.setZero(6 * n_objects_);
 		for (int i = 0; i < n_objects_; ++i)
 		{
+		
 			//set external forces
 			fext_(6 * i + 2) = -9.81;
 
 			//set initial velocities
-			velocities_.segment<3>(6 * i) = objects[i].getvel();
-			velocities_.segment<3>(6 * i + 3) = objects[i].getangvel();
+			velocities_.segment<3>(6 * i) = objects[i]->getvel();
+			velocities_.segment<3>(6 * i + 3) = objects[i]->getangvel();
 		}
 
 
@@ -44,11 +45,11 @@ public:
 		triplets.reserve(12 * n_objects_);
 		for(int i=0;i<n_objects;++i)
 		{
-			triplets.push_back(Eigen::Triplet<real_t>(6 * i, 6 * i, objects[i].getmass()));
-			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 1, 6 * i + 1, objects[i].getmass()));
-			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 2, 6 * i + 2, objects[i].getmass()));
+			triplets.push_back(Eigen::Triplet<real_t>(6 * i, 6 * i, objects[i]->getmass()));
+			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 1, 6 * i + 1, objects[i]->getmass()));
+			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 2, 6 * i + 2, objects[i]->getmass()));
 
-			mat3d tempinertia = objects[i].getinertia();
+			mat3d tempinertia = objects[i]->getinertia();
 			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 3, 6 * i + 3, tempinertia(0, 0)));
 			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 3, 6 * i + 4, tempinertia(0, 1)));
 			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 3, 6 * i + 5, tempinertia(0, 2)));
@@ -70,13 +71,13 @@ public:
 		triplets.reserve(12 * n_objects_);
 		for (int i = 0; i<n_objects_; ++i)
 		{
-			real_t massinv = 1. / objects[i].getmass();
+			real_t massinv = 1. / objects[i]->getmass();
 			triplets.push_back(Eigen::Triplet<real_t>(6 * i, 6 * i, massinv));
 			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 1, 6 * i + 1, massinv));
 			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 2, 6 * i + 2, massinv));
 
 			//compute inverse of inertia (ok since only 3x3 matrix)
-			mat3d tempinertia = objects[i].getinertia().inverse();
+			mat3d tempinertia = objects[i]->getinertia().inverse();
 			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 3, 6 * i + 3, tempinertia(0, 0)));
 			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 3, 6 * i + 4, tempinertia(0, 1)));
 			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 3, 6 * i + 5, tempinertia(0, 2)));
@@ -93,7 +94,7 @@ public:
 
 	}
 
-	void step(rigidbody *objects, real_t dt)
+	void step(std::vector<rigidbody*> objects, real_t dt)
 	{
 		//sphere is a container with random access "[]"
 		//every element is of type "sphere"
@@ -124,14 +125,14 @@ public:
 				vec3d n;
 				real_t pen_depth;
 
-				if (objects[i].issphere&&objects[j].issphere()) //use fact that sphere sphere collision is far easier (makes sense since there are a lot of spheres)
+				if (objects[i]->issphere()&&objects[j]->issphere()) //use fact that sphere sphere collision is far easier (makes sense since there are a lot of spheres)
 				{
 					//sphere-sphere collision (need to add friction)
-					if ((objects[i].getpos() - objects[j].getpos()).norm() < (objects[i].getrad() + objects[j].getrad()))
+					if ((objects[i]->getpos() - objects[j]->getpos()).norm() < (objects[i]->getrad() + objects[j]->getrad()))
 					{
-						contactpoint = (objects[i].getpos() - objects[j].getpos()) / 2.;
-						vec3d n = (contactpoint - objects[i].getpos()).normalized();
-						pen_depth = ((objects[i].getrad() + objects[j].getrad()) - (objects[i].getpos() - objects[j].getpos()).norm()) / 2.;
+						contactpoint = (objects[i]->getpos() - objects[j]->getpos()) / 2.;
+						vec3d n = (contactpoint - objects[i]->getpos()).normalized();
+						pen_depth = ((objects[i]->getrad() + objects[j]->getrad()) - (objects[i]->getpos() - objects[j]->getpos()).norm()) / 2.;
 						contact = true;
 					}
 				}
@@ -155,8 +156,8 @@ public:
 				{
 					//using notion of paper for variables assuming sphere[i] is object 1 and sphere[j] object 2
 
-					vec3d r1 = contactpoint - objects[i].getpos();
-					vec3d r2 = contactpoint - objects[j].getpos();
+					vec3d r1 = contactpoint - objects[i]->getpos();
+					vec3d r2 = contactpoint - objects[j]->getpos();
 
 					//need to scale all values with beta_*penetration depth?
 					//need to add contactcaching
@@ -289,8 +290,8 @@ public:
 		std::cout << "check3" << std::endl;
 		for (int i = 0; i < n_objects_; ++i)
 		{
-			objects[i].setvel(velocities_.segment<3>(6*i)); //can use blocking?
-			objects[i].setangvel(velocities_.segment<3>(6*i+3));//same
+			objects[i]->setvel(velocities_.segment<3>(6*i)); //can use blocking?
+			objects[i]->setangvel(velocities_.segment<3>(6*i+3));//same
 		}
 
 		std::cout << "check4" << std::endl;
@@ -298,12 +299,12 @@ public:
 		for (int i = 0; i < n_objects_; ++i)
 		{
 			//position update
-			objects[i].setpos(objects[i].getpos() + dt*objects[i].getvel());
+			objects[i]->setpos(objects[i]->getpos() + dt*objects[i]->getvel());
 			//rotation update
-			objects[i].setquat(quataddcwise(objects[i].getquat(),quatscalar(dt/2.,quatwmult(objects[i].getquat(), objects[i].getangvel())))); //terrible since all functions are self made (probably better to use vec4d)
+			objects[i]->setquat(quataddcwise(objects[i]->getquat(),quatscalar(dt/2.,quatwmult(objects[i]->getquat(), objects[i]->getangvel())))); //terrible since all functions are self made (probably better to use vec4d)
 			std::cout <<  i << std::endl;
-			std::cout << objects[i].getpos() << std::endl;
-			std::cout << objects[i].getvel() << std::endl;
+			std::cout << objects[i]->getpos() << std::endl;
+			std::cout << objects[i]->getvel() << std::endl;
 		}
 	}
 private:

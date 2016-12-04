@@ -64,14 +64,14 @@ int main(int argc, char** argv)
 		}
 	}
 	
-	std::vector<rigidbody> objects;
-	vehicle car=vehicle(vec3d(1, 1, 1));
-	objects.push_back(car);
+	std::vector<rigidbody*> objects;
+
+	objects.push_back(new vehicle(vec3d(1, 1, 1)));
 	for (int i = 0; i < n_sphere; ++i)
 	{
-		sphere s=sphere(vec3d(0, 0, 0));
-		objects.push_back(s);
+		objects.push_back(new sphere(vec3d(0, 0, 0)));
 	}
+
 	simulation sim = simulation(objects, objects.size()); //how to do this (n_objects is changing at runtime so no array possible)->use iterators
 	for (int i = 0; i < 2; i++)
 	{

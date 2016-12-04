@@ -50,7 +50,7 @@ public:
 		a_ = b_ = c_ = d_ = supportpoint(Eigen::VectorXd::Zero(3), Eigen::VectorXd::Zero(3), Eigen::VectorXd::Zero(3));
 	}
 
-	bool collisiondetection(rigidbody const &box1,rigidbody const &box2)
+	bool collisiondetection(rigidbody* const box1,rigidbody* const box2)
 	{
 		vec3d dir = vec3d(1, 1, 1);
 
@@ -80,7 +80,7 @@ public:
 		return false;
 	}
 
-	bool computecontactpoint(rigidbody const &box1, rigidbody const &box2, vec3d &contactpt, vec3d &colnormal, real_t &pen_depth)
+	bool computecontactpoint(rigidbody* const box1, rigidbody* const box2, vec3d &contactpt, vec3d &colnormal, real_t &pen_depth)
 	{
 		const real_t growth_threshold = 0.001;
 		const int_t max_iter = 30;
@@ -142,10 +142,10 @@ public:
 	}
 private:
 
-	supportpoint support(rigidbody const &a, rigidbody const &b, const vec3d dir) const
+	supportpoint support(rigidbody* const a, rigidbody* const b, const vec3d dir) const
 	{
-		vec3d p1 = a.getfarthestpoint(dir);
-		vec3d p2 = b.getfarthestpoint(-dir);
+		vec3d p1 = a->getfarthestpoint(dir);
+		vec3d p2 = b->getfarthestpoint(-dir);
 
 		vec3d p3 = p1 - p2;
 
@@ -191,7 +191,7 @@ private:
 		else if (nrPointsSimplex_ == 3)
 		{
 			triangle(dir);
-			return;
+			return false;
 		}
 		else if(nrPointsSimplex_==4)
 		{
