@@ -15,7 +15,7 @@
 int drawframe(std::vector<rigidbody*> objects, int_t n_objects) {
 	IrrlichtDevice *device =
 		createDevice(video::EDT_SOFTWARE, dimension2d<u32>(640, 480), 16,
-			true, false, false, 0);
+			false, false, false, 0);
 
 	if (!device)
 		return 1;
