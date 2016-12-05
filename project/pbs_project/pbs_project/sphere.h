@@ -20,8 +20,9 @@ public:
 		
 		Node->setMaterialFlag(video::EMF_LIGHTING, 1);
 		Node->setMaterialFlag(video::EMF_NORMALIZE_NORMALS, true);
-		Node->setMaterialTexture(0, driver->getTexture("../media/stones.jpg"));
+		Node->setMaterialTexture(0, driver->getTexture("../media/156.jpg"));
 		Node->setPosition(vector3df(pos_.x(), pos_.y(), pos_.z()));
+		Node->setRotation(vector3df(angvel_.x(), angvel_.y(), angvel_.z()));
 	}
 
 

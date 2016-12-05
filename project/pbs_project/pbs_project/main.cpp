@@ -20,9 +20,9 @@ int main(int argc, char** argv)
 
 
 	//standard settings
-	int_t n_sphere = 10;
+	int_t n_sphere = 12;
 	real_t mass_sphere = 1;
-	real_t radius_sphere = 1000; //0.1
+	real_t radius_sphere = 5; //0.1
 	real_t mass_car = 100;
 	if (argc == 2&&!std::strcmp(argv[1],"-help")) //strcmp gives 0 if strings are equal!!!
 	{
@@ -68,10 +68,17 @@ int main(int argc, char** argv)
 	
 	std::vector<rigidbody*> objects;
 
-	objects.push_back(new vehicle(vec3d(0, 0, 0)));
-	for (int i = 0; i < n_sphere; ++i)
-	{
-		objects.push_back(new sphere(vec3d(2 + (i * 10), 2 + (i * 10), 1+(i*10))));
+	objects.push_back(new vehicle(vec3d(-10, -10, -10)));
+	int x_grid = 2;
+	int y_grid = 2;
+	int z_grid = 3;
+	int diameter = 2 * radius_sphere;
+	for (int i = 0; i < x_grid; i++){
+		for (int j = 0; j < y_grid; j++) {
+			for (int k = 0; k < z_grid; k++) {
+				objects.push_back(new sphere(vec3d(i*diameter, j*diameter,k*diameter)));
+			}
+		}
 	}
 
 	/*vec3d contactpoint;
