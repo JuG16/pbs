@@ -17,17 +17,13 @@ public:
 	{
 
 		scene::ISceneNode *Node = smgr->addSphereSceneNode(radius_, 32);
-		*Node_=*Node;
+		
 		Node->setMaterialFlag(video::EMF_LIGHTING, 1);
 		Node->setMaterialFlag(video::EMF_NORMALIZE_NORMALS, true);
 		Node->setMaterialTexture(0, driver->getTexture("../media/stones.jpg"));
 		Node->setPosition(vector3df(pos_.x(), pos_.y(), pos_.z()));
 	}
 
-	void updateScene(ISceneManager* smgr, IVideoDriver* driver)const override
-	{
-		Node_->setPosition(vector3df(pos_.x(), pos_.y(), pos_.z()));
-	}
 
 	vec3d getfarthestpoint(vec3d const &dir)const override
 	{
@@ -65,5 +61,4 @@ public:
 
 private:
 	real_t radius_;
-	ISceneNode *Node_;
 };

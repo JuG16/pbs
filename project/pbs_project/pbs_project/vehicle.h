@@ -21,7 +21,6 @@ public:
 	{
 		vector3df TScale = vector3df(length_, width_, height_);
 		scene::ISceneNode *NodeBox = smgr->addCubeSceneNode(1.0f);
-		*Node_ = *NodeBox;
 		NodeBox->setScale(TScale);
 		NodeBox->setMaterialFlag(video::EMF_LIGHTING, 1);
 		NodeBox->setMaterialFlag(video::EMF_NORMALIZE_NORMALS, true);
@@ -29,10 +28,7 @@ public:
 		NodeBox->setPosition(vector3df(pos_.x(), pos_.y(), pos_.z()));
 	}
 
-	void updateScene(ISceneManager* smgr, IVideoDriver* driver)const override
-	{
-		Node_->setPosition(vector3df(pos_.x(), pos_.y(), pos_.z()));
-	}
+
 
 	vec3d getfarthestpoint(vec3d const &dir)const override
 	{
@@ -116,7 +112,7 @@ private:
 	real_t length_;
 	real_t width_;
 	real_t height_;
-	ISceneNode *Node_;
+
 };
 
 //computes the contactpoint of a (general) box and a sphere returns true if found and false otherwise

@@ -101,6 +101,13 @@ int main(int argc, char** argv)
 
 		objects[i]->addtoscene(smgr, driver);
 	}
+	smgr->addCameraSceneNode(0, vector3df(0, 30, -40), vector3df(0, 5, 0));
+	driver->beginScene(true, true, SColor(255, 100, 101, 140));
+
+	smgr->drawAll();
+	guienv->drawAll();
+
+	driver->endScene();
 
 	//int success = drawframe(objects, objects.size());
 	simulation sim = simulation(objects, objects.size()); //how to do this (n_objects is changing at runtime so no array possible)->use iterators
@@ -108,10 +115,11 @@ int main(int argc, char** argv)
 	{
 		for (int i = 0; i < 2; i++)
 		{
+			smgr->clear();
 			sim.step(objects, 0.001);
 			for (int i = 0; i < objects.size(); i++) {
 
-				objects[i]->updateScene(smgr, driver);
+				objects[i]->addtoscene(smgr, driver);
 			}
 
 			//smgr->addCameraSceneNodeMaya();
