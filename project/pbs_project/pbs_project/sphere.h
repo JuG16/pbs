@@ -22,6 +22,7 @@ public:
 		Node->setMaterialFlag(video::EMF_NORMALIZE_NORMALS, true);
 		Node->setMaterialTexture(0, driver->getTexture("../media/stones.jpg"));
 		Node->setPosition(vector3df(pos_.x(), pos_.y(), pos_.z()));
+		Node->setRotation(quattoirr(quaternion_));
 	}
 
 
