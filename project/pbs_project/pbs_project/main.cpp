@@ -20,9 +20,9 @@ int main(int argc, char** argv)
 
 
 	//standard settings
-	int_t n_sphere = 1;
+	int_t n_sphere = 10;
 	real_t mass_sphere = 1;
-	real_t radius_sphere = 0.1;
+	real_t radius_sphere = 1000; //0.1
 	real_t mass_car = 100;
 	if (argc == 2&&!std::strcmp(argv[1],"-help")) //strcmp gives 0 if strings are equal!!!
 	{
@@ -71,7 +71,7 @@ int main(int argc, char** argv)
 	objects.push_back(new vehicle(vec3d(0, 0, 0)));
 	for (int i = 0; i < n_sphere; ++i)
 	{
-		objects.push_back(new sphere(vec3d(2, 2, 1+i)));
+		objects.push_back(new sphere(vec3d(2, 2, 1+(i*5))));
 	}
 
 	/*vec3d contactpoint;
@@ -83,15 +83,18 @@ int main(int argc, char** argv)
 	{
 		std::cout << "returned true" << std::endl;
 	}*/
-
+	std::cout << "size: " << objects.size() << std::endl;
+	
+	int success = drawframe(objects, objects.size());
 	simulation sim = simulation(objects, objects.size()); //how to do this (n_objects is changing at runtime so no array possible)->use iterators
 	for (int i = 0; i < 2; i++)
 	{
 		sim.step(objects, 0.001);
+		int success = drawframe(objects, objects.size());
+		
 	}
+	
+	
 
-	//TutorialApplication rend;
-	//rend.go();
-	int success=drawframe();
 	return 0;
 }

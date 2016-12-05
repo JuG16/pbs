@@ -12,10 +12,10 @@
 #pragma comment(lib, "Irrlicht.lib")
 //#pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
 #endif
-int drawframe() {
+int drawframe(std::vector<rigidbody*> objects, int_t n_objects) {
 	IrrlichtDevice *device =
 		createDevice(video::EDT_SOFTWARE, dimension2d<u32>(640, 480), 16,
-			false, false, false, 0);
+			true, false, false, 0);
 
 	if (!device)
 		return 1;
@@ -40,7 +40,7 @@ int drawframe() {
 		node->setMaterialTexture(0, driver->getTexture("../media/sydney.bmp"));		
 	}*/
 
-	float TRadius = 3.0f;
+	/*float TRadius = 3.0f;
 	scene::ISceneNode *Node = smgr->addSphereSceneNode(TRadius, 32);
 	Node->setMaterialFlag(video::EMF_LIGHTING, 1);
 	Node->setMaterialFlag(video::EMF_NORMALIZE_NORMALS, true);
@@ -51,10 +51,15 @@ int drawframe() {
 	NodeBox->setScale(TScale);
 	NodeBox->setMaterialFlag(video::EMF_LIGHTING, 1);
 	NodeBox->setMaterialFlag(video::EMF_NORMALIZE_NORMALS, true);
-	NodeBox->setMaterialTexture(0, driver->getTexture("../media/wall.jpg"));
+	NodeBox->setMaterialTexture(0, driver->getTexture("../media/wall.jpg"));*/
 
-	//smgr->addCameraSceneNodeMaya();
-	smgr->addCameraSceneNode(0, vector3df(0, 30, -40), vector3df(0, 5, 0));
+	for (int i = 0; i < n_objects; i++) {
+		
+		objects[i]->addtoscene(smgr, driver);
+	}
+
+	smgr->addCameraSceneNodeMaya();
+	//smgr->addCameraSceneNode(0, vector3df(0, 30, -40), vector3df(0, 5, 0));
 	while (device->run())
 	{
 		driver->beginScene(true, true, SColor(255, 100, 101, 140));

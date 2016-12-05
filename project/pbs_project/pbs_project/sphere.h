@@ -2,17 +2,21 @@
 
 #include "typedef.h"
 #include "rigidbody.h"
+#include <iostream>
 //maybe want to add rotation at some point
 class sphere:public rigidbody
 {
 public:
-	sphere(vec3d pos, mat3d inertia=Eigen::MatrixXd::Identity(3,3), real_t radius = 1, real_t mass = 1, vec3d vel = vec3d(0, 0, 0), vec3d angvel=vec3d(0,0,0), quaternion_t quat = quaternion_t(1, 0, 0, 0)) :rigidbody(pos, inertia, mass, vel, angvel, quat)
+	sphere(vec3d pos, mat3d inertia=Eigen::MatrixXd::Identity(3,3), real_t radius = 5, real_t mass = 1, vec3d vel = vec3d(0, 0, 0), vec3d angvel=vec3d(0,0,0), quaternion_t quat = quaternion_t(1, 0, 0, 0)) :rigidbody(pos, inertia, mass, vel, angvel, quat)
 	{
 		radius_ = radius;
+		
 	}
 
 	void addtoscene(ISceneManager* smgr, IVideoDriver* driver)const override
 	{
+		std::cout << "position: " << pos_ << std::endl;
+		std::cout <<"radius: "<< radius_ << std::endl;
 		scene::ISceneNode *Node = smgr->addSphereSceneNode(radius_, 32);
 		Node->setMaterialFlag(video::EMF_LIGHTING, 1);
 		Node->setMaterialFlag(video::EMF_NORMALIZE_NORMALS, true);
