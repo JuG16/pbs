@@ -68,7 +68,7 @@ int main(int argc, char** argv)
 	
 	std::vector<rigidbody*> objects;
 
-	objects.push_back(new vehicle(vec3d(0, 0, 0)));
+	objects.push_back(new vehicle(vec3d(-10, -10, -10)));
 	for (int i = 0; i < n_sphere; ++i)
 	{
 		objects.push_back(new sphere(vec3d(2 + (i * 10), 2 + (i * 10), 1+(i*10))));

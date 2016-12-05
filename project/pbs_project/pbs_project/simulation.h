@@ -111,7 +111,7 @@ public:
 		std::vector<Eigen::Triplet<real_t>> triplets;
 		triplets.reserve(3*n_objects_*n_objects_);
 		int_t row = 0;
-
+		const real_t pen_coeff = 10000000000000000000;
 		//AABB for candidates for car (need to put in)
 		//vec3d minpos;
 		//vec3d maxpos;
@@ -167,10 +167,14 @@ public:
 					//need to scale all values with beta_*penetration depth?
 					//need to add contactcaching
 					//object 1
+					n.normalize();
+					const vec3d r1xn = pen_coeff*pen_depth*-r1.cross(n); //- since only - crossprod gets used
+					const vec3d r2xn = pen_coeff*pen_depth*r2.cross(n);
+					n = pen_coeff*pen_depth*n;
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i, -n(0)));
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 1, -n(1)));
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 2, -n(2)));
-					const vec3d r1xn = -r1.cross(n); //- since only - crossprod gets used
+					
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 3, r1xn(0)));
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 4, r1xn(1)));
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 5, r1xn(2)));
@@ -178,7 +182,7 @@ public:
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j, n(0)));
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 1, n(1)));
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 2, n(2)));
-					const vec3d r2xn = r2.cross(n);
+
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 3, r2xn(0)));
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 4, r2xn(0)));
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 5, r2xn(0)));
@@ -250,13 +254,11 @@ public:
 
 		jacobian_.setFromTriplets(triplets.begin(), triplets.end()); //does this work multiple times (reinitializing)
 		jacobian_.makeCompressed();
-		std::cout << jacobian_ << std::endl;
 		
 		//probably have to use some iterative solvers instead ?
 		//compute eta
 		eta_ = -jacobian_*(1. / dt*velocities_ + massmatrixinv_*fext_);
 		//can we assume J*M^-1*J^T is sparse?
-		std::cout << eta_ << std::endl;
 		//compute lambda
 		//do 3 steps to utilize sparsity (doesnt work since parts are not squared)
 		ssolver solver;
