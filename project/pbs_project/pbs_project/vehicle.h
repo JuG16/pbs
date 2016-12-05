@@ -19,14 +19,19 @@ public:
 
 	void addtoscene(ISceneManager* smgr, IVideoDriver* driver)const override
 	{
-		std::cout << "l: " << length_ << " w: " << width_ << " h: " << height_ << std::endl;
 		vector3df TScale = vector3df(length_, width_, height_);
 		scene::ISceneNode *NodeBox = smgr->addCubeSceneNode(1.0f);
+		*Node_ = *NodeBox;
 		NodeBox->setScale(TScale);
 		NodeBox->setMaterialFlag(video::EMF_LIGHTING, 1);
 		NodeBox->setMaterialFlag(video::EMF_NORMALIZE_NORMALS, true);
 		NodeBox->setMaterialTexture(0, driver->getTexture("../media/wall.jpg"));
 		NodeBox->setPosition(vector3df(pos_.x(), pos_.y(), pos_.z()));
+	}
+
+	void updateScene(ISceneManager* smgr, IVideoDriver* driver)const override
+	{
+		Node_->setPosition(vector3df(pos_.x(), pos_.y(), pos_.z()));
 	}
 
 	vec3d getfarthestpoint(vec3d const &dir)const override
@@ -111,6 +116,7 @@ private:
 	real_t length_;
 	real_t width_;
 	real_t height_;
+	ISceneNode *Node_;
 };
 
 //computes the contactpoint of a (general) box and a sphere returns true if found and false otherwise

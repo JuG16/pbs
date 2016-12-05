@@ -58,8 +58,8 @@ int drawframe(std::vector<rigidbody*> objects, int_t n_objects) {
 		objects[i]->addtoscene(smgr, driver);
 	}
 
-	smgr->addCameraSceneNodeMaya();
-	//smgr->addCameraSceneNode(0, vector3df(0, 30, -40), vector3df(0, 5, 0));
+	//smgr->addCameraSceneNodeMaya();
+	smgr->addCameraSceneNode(0, vector3df(0, 30, -40), vector3df(0, 5, 0));
 	while (device->run())
 	{
 		driver->beginScene(true, true, SColor(255, 100, 101, 140));
@@ -69,7 +69,7 @@ int drawframe(std::vector<rigidbody*> objects, int_t n_objects) {
 
 		driver->endScene();
 	}
-	device->drop();
+	//device->drop();
 
 	return 0;
 }

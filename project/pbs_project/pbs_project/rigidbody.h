@@ -10,6 +10,8 @@ public:
 	{}
 	virtual void addtoscene(ISceneManager* smgr, IVideoDriver* driver)const = 0;
 
+	virtual void updateScene(ISceneManager* smgr, IVideoDriver* driver)const = 0;
+
 	virtual vec3d getfarthestpoint(vec3d const &dir)const = 0;
 
 	virtual std::vector<vec3d> getcorners()const = 0;
