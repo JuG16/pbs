@@ -108,7 +108,7 @@ int main(int argc, char** argv)
 
 		objects[i]->addtoscene(smgr, driver);
 	}
-	smgr->addCameraSceneNode(0, vector3df(0, 30, -40), vector3df(0, 5, 0));
+	smgr->addCameraSceneNode(0, vector3df(0, -30, 0), vector3df(0, 5, 0));
 	driver->beginScene(true, true, SColor(255, 100, 101, 140));
 
 	smgr->drawAll();
@@ -132,7 +132,7 @@ int main(int argc, char** argv)
 
 
 			//smgr->addCameraSceneNodeMaya();
-			smgr->addCameraSceneNode(0, vector3df(0, 30, -40), vector3df(0, 5, 0));
+			smgr->addCameraSceneNode(0, vector3df(0, -30, 0), vector3df(0, 5, 0));
 
 			driver->beginScene(true, true, SColor(255, 100, 101, 140));
 
