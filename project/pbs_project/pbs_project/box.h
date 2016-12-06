@@ -9,6 +9,9 @@ class box :public rigidbody
 public:
 	box(vec3d pos, mat3d inertia = Eigen::MatrixXd::Identity(3, 3), real_t mass = 1, real_t length = 1, real_t width = 1, real_t height = 1, vec3d vel = vec3d(0, 0, 0), vec3d angvel = vec3d(0, 0, 0), quaternion_t quat = quaternion_t(1, 0, 0, 0)) : rigidbody(pos, inertia, mass, vel, angvel, quat)
 	{
+		inertia_inv_ = inertia_.inverse();
+		inertia_inv_glob_ = quaternion_.toRotationMatrix()*inertia_inv_*quaternion_.toRotationMatrix().transpose();
+		mass_inv_ = 1. / mass_;
 		length_ = length;
 		width_ = width;
 		height_ = height;

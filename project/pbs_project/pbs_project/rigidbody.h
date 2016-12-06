@@ -22,6 +22,15 @@ public:
 	virtual real_t getheight()const = 0; //only call for objects that use this (verify with issphere)
 	virtual real_t getwidth()const = 0; //only call for objects that use this (verify with issphere)
 
+	inline void setstatic()
+	{
+		mass_inv_ = 0;
+		inertia_inv_ = Eigen::MatrixXd::Zero(3,3);
+		inertia_inv_glob_ = Eigen::MatrixXd::Zero(3,3);
+		vel_ = Eigen::VectorXd::Zero(3);
+		angvel_ = Eigen::VectorXd::Zero(3);
+	}
+
 	inline void setpos(const vec3d pos)
 	{
 		pos_ = pos;
@@ -55,6 +64,7 @@ public:
 	inline void setquat(quaternion_t q)
 	{
 		quaternion_ = q;
+		inertia_inv_glob_ = quaternion_.toRotationMatrix()*inertia_inv_*quaternion_.toRotationMatrix().transpose();
 	}
 	inline vec3d getpos()const
 	{
@@ -76,16 +86,27 @@ public:
 	{
 		return inertia_;
 	}
+	inline mat3d getinertia_inv_glob()const
+	{
+		return inertia_inv_glob_;
+	}
 	inline real_t getmass()const
 	{
 		return mass_;
 	}
+	inline real_t getmass_inv()const
+	{
+		return mass_inv_;
+	}
 protected:
 	vec3d pos_;
-	mat3d inertia_; //Trägheitsmoment in bodyframe
+	mat3d inertia_;
+	mat3d inertia_inv_;
+	mat3d inertia_inv_glob_;//Trägheitsmoment in bodyframe
 	vec3d vel_;
 	vec3d angvel_;
 	quaternion_t quaternion_; //used for rotation denoted as q in paper "Iterative Dynamics" (probably irrelevant for sphere)	
 	real_t mass_;
+	real_t mass_inv_;
 	//assume it to be a box (for collision handling)
 };
