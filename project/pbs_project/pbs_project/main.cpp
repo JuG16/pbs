@@ -104,18 +104,18 @@ int main(int argc, char** argv)
 
 	if (!device)
 		return 1;
-	device->setWindowCaption(L"Hello World! - Irrlicht Engine Demo");
+	device->setWindowCaption(L"Physically based Simulation - Project");
 	IVideoDriver* driver = device->getVideoDriver();
 	ISceneManager* smgr = device->getSceneManager();
 	IGUIEnvironment* guienv = device->getGUIEnvironment();
-	guienv->addStaticText(L"Hello World! This is the Irrlicht Software renderer!",
+	guienv->addStaticText(L"Our rollercoaster!",
 		rect<s32>(10, 10, 260, 22), true);
 	
 	for (int i = 0; i < objects.size(); i++) {
 
 		objects[i]->addtoscene(smgr, driver);
 	}
-	smgr->addCameraSceneNode(0, vector3df(0, 30, -40), vector3df(0, 5, 0));
+	smgr->addCameraSceneNode(0, vector3df(0, -30, 0), vector3df(0, 5, 0));
 	driver->beginScene(true, true, SColor(255, 100, 101, 140));
 
 	smgr->drawAll();
