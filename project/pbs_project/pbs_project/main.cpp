@@ -88,6 +88,9 @@ int main(int argc, char** argv)
 	//objects.push_back(new sphere(vec3d(-10, 0, 0), Eigen::MatrixXd::Identity(3, 3), 5, 1, vec3d(100,0,0)));
 	//objects.push_back(new sphere(vec3d(10, 0, 0), Eigen::MatrixXd::Identity(3, 3), 5, 1, vec3d(-100,0,0)));
 
+	/*objects.push_back(new sphere(vec3d(-10, 0, 0), Eigen::MatrixXd::Identity(3, 3), 5, 1, vec3d(100, 0, 0)));
+	objects.push_back(new vehicle(vec3d(10, 0, 0), Eigen::MatrixXd::Identity(3, 3), 5, 5, 5, 5, vec3d(-100, 0, 0)));
+	objects[1]->setstatic();*/
 	/*vec3d contactpoint;
 	vec3d n;
 	real_t pen_depth;

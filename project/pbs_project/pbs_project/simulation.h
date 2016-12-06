@@ -74,13 +74,13 @@ public:
 		triplets.reserve(12 * n_objects_);
 		for (int i = 0; i<n_objects_; ++i)
 		{
-			real_t massinv = 1. / objects[i]->getmass();
+			real_t massinv = objects[i]->getmass_inv();
 			triplets.push_back(Eigen::Triplet<real_t>(6 * i, 6 * i, massinv));
 			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 1, 6 * i + 1, massinv));
 			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 2, 6 * i + 2, massinv));
 
 			//compute inverse of inertia (ok since only 3x3 matrix)
-			mat3d tempinertia = objects[i]->getinertia().inverse();
+			mat3d tempinertia = objects[i]->getinertia_inv_glob();
 			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 3, 6 * i + 3, tempinertia(0, 0)));
 			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 3, 6 * i + 4, tempinertia(0, 1)));
 			triplets.push_back(Eigen::Triplet<real_t>(6 * i + 3, 6 * i + 5, tempinertia(0, 2)));
@@ -118,7 +118,7 @@ public:
 		triplets.reserve(3*n_objects_*n_objects_);
 		int_t row = 0;
 		const real_t pen_coeff = 0.1 / dt;
-		const real_t alpha = 0.8; //"amount" of bouncing
+		const real_t alpha = -1.; //"amount" of bouncing
 		coll_resolve_.setZero();
 		//AABB for candidates for car (need to put in)
 		//vec3d minpos;
