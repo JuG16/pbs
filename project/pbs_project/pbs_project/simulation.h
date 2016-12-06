@@ -10,6 +10,8 @@
 #include <iomanip>
 
 
+//#define DEBUG
+
 class simulation
 {
 public:
@@ -21,6 +23,7 @@ public:
 		velocities_.resize(6 * n_objects_);
 		const int_t s = 3 * n_objects_*n_objects_; //how large is s (correct)?
 		eta_.resize(s);
+		coll_resolve_.resize(s);
 		jacobian_.resize(s,6 * n_objects_);
 
 		
@@ -30,7 +33,7 @@ public:
 		{
 		
 			//set external forces
-			fext_(6 * i + 2) = -9.81;
+			fext_(6 * i + 2) = -9.81*objects[i]->getmass();
 
 			//set initial velocities
 			velocities_.segment<3>(6 * i) = objects[i]->getvel();
@@ -99,8 +102,11 @@ public:
 		//sphere is a container with random access "[]"
 		//every element is of type "sphere"
 		
+#ifdef DEBUG
 
 		std::cout << "step start..." << std::endl;
+
+#endif // DEBUG
 		//comput J matrix
 		//needs to compute r somehow?
 		//can probably leave out all noncontact spheres (not setting instead of zero[or wrong sign])
@@ -111,14 +117,20 @@ public:
 		std::vector<Eigen::Triplet<real_t>> triplets;
 		triplets.reserve(3*n_objects_*n_objects_);
 		int_t row = 0;
-		const real_t pen_coeff = 10000000000000000000;
+		const real_t pen_coeff = 0.1 / dt;
+		const real_t alpha = 0.8; //"amount" of bouncing
+		coll_resolve_.setZero();
 		//AABB for candidates for car (need to put in)
 		//vec3d minpos;
 		//vec3d maxpos;
 		//car.computeAABB(minpos, maxpos);
 		for (int i = 0; i < n_objects_; ++i) //compute all interactions twice like this?
 		{
+#ifdef DEBUG
+
 			std::cout << i << std::endl;
+
+#endif // DEBUG
 			for (int j = i+1; j < n_objects_; ++j)
 			{
 				bool contact = false;
@@ -128,49 +140,76 @@ public:
 
 				if (objects[i]->issphere()&&objects[j]->issphere()) //use fact that sphere sphere collision is far easier (makes sense since there are a lot of spheres)
 				{
+#ifdef DEBUG
+
 					std::cout << "sphere-sphere" << std::endl;
+
+#endif // DEBUG
 					//sphere-sphere collision (need to add friction)
 					if ((objects[i]->getpos() - objects[j]->getpos()).norm() < (objects[i]->getrad() + objects[j]->getrad()))
 					{
 						contactpoint = objects[j]->getpos()+(objects[i]->getpos() - objects[j]->getpos()) / 2.;
-						vec3d n = (contactpoint - objects[i]->getpos()).normalized();
+						n = (contactpoint - objects[i]->getpos()).normalized();
 						pen_depth = ((objects[i]->getrad() + objects[j]->getrad()) - (objects[i]->getpos() - objects[j]->getpos()).norm()) / 2.;
 						contact = true;
+#ifdef DEBUG
+
 						std::cout << contactpoint << std::endl;
+
+#endif // DEBUG
+
 					}
 				}
 				else //use gjk and eta algorithm
 				{	
+#ifdef DEBUG
+
 					std::cout << "box" << std::endl;
+
+#endif // DEBUG
 					gjk_algorithm gjk = gjk_algorithm();
 					if (gjk.collisiondetection(objects[i], objects[j]))
 					{
+#ifdef DEBUG
+						std::cout << "collision detected" << std::endl;
+						std::cout << objects[i]->getpos() << std::endl;
+						std::cout << objects[j]->getpos() << std::endl;
+#endif
 						if (gjk.computecontactpoint(objects[i], objects[j], contactpoint, n, pen_depth))
 						{
+							std::cout << pen_depth << std::endl;
 							contact = true;
 						}
 						else
 						{
 							std::cout << "unexpected error in GJK algorithm. Step terminates" << std::endl;
-							return;
 						}
+#ifdef DEBUG
+
 						std::cout << contactpoint << std::endl;
+
+#endif // DEBUG
 					}
 				}
 				if (contact)
 				{
+					
 					//using notion of paper for variables assuming sphere[i] is object 1 and sphere[j] object 2
 
 					vec3d r1 = contactpoint - objects[i]->getpos();
 					vec3d r2 = contactpoint - objects[j]->getpos();
 
+					//use coll_resolve vector ->put -beta*C
+					coll_resolve_(row) = -pen_coeff/dt*(objects[j]->getpos() + r2 - objects[i]->getpos() - r1).dot(n)+alpha*(objects[j]->getvel()+objects[j]->getangvel().cross(r2)-objects[i]->getvel()-objects[i]->getangvel().cross(r1)).dot(n);
+
+
 					//need to scale all values with beta_*penetration depth?
 					//need to add contactcaching
 					//object 1
 					n.normalize();
-					const vec3d r1xn = pen_coeff*pen_depth*-r1.cross(n); //- since only - crossprod gets used
-					const vec3d r2xn = pen_coeff*pen_depth*r2.cross(n);
-					n = pen_coeff*pen_depth*n;
+					const vec3d r1xn = -r1.cross(n); //- since only - crossprod gets used
+					const vec3d r2xn = r2.cross(n);
+					
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i, -n(0)));
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 1, -n(1)));
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 2, -n(2)));
@@ -226,29 +265,12 @@ public:
 				}
 				
 			}*/
+#ifdef DEBUG
+
 			std::cout << "check0" << std::endl;
 
-			/*//do sphere-environment interaction here (needs some way to detect contact->function for environment)
-			//contactpoint = ;
-			n = (contactpoint - spheres[i].getpos()).normalized();
-			r1 = contactpoint - spheres[i].getpos();
-			r2 = contactpoint - car.getpos();
-			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i, -n(0)));
-			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 1, -n(1)));
-			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 2, -n(2)));
-			const vec3d r1xn2 = -r1.cross(n); //- since only - crossprod gets used
-			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 3, r1xn2(0)));
-			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 4, r1xn2(1)));
-			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 5, r1xn2(2)));
-			//environment (probably can remove this since has infinite mass anyways
-			const int_t j = 6 * (n_spheres_ + 2); //to get block of environment (second after spheres)
-			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j, n(0)));
-			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 1, n(1)));
-			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 2, n(2)));
-			const vec3d r2xn2 = r2.cross(n);
-			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 4, r2xn2(0)));
-			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 5, r2xn2(0)));
-			triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 6, r2xn2(0)));*/
+#endif // DEBUG
+
 		}
 		//do car-environment interaction here (same)
 
@@ -257,7 +279,7 @@ public:
 		
 		//probably have to use some iterative solvers instead ?
 		//compute eta
-		eta_ = -jacobian_*(1. / dt*velocities_ + massmatrixinv_*fext_);
+		eta_ = 1./dt*coll_resolve_-jacobian_*(1. / dt*velocities_ + massmatrixinv_*fext_);
 		//can we assume J*M^-1*J^T is sparse?
 		//compute lambda
 		//do 3 steps to utilize sparsity (doesnt work since parts are not squared)
@@ -278,9 +300,17 @@ public:
 		//solver.analyzePattern(jacobian_*massmatrixinv_*jacobian_.transpose());
 		//solver.factorize(jacobian_*massmatrixinv_*jacobian_.transpose());
 		solver.compute(jacobian_*massmatrixinv_*jacobian_.transpose()); //problem: if all zero can get any result
-		auto lambda = solver.solve(eta_);
+		vector_t lambda = solver.solve(eta_);
+		/*for (int i = 0; i < lambda.size(); ++i)
+		{
+			lambda(i) = std::max(lambda(i), 0.);
+		}*/
+#ifdef DEBUG
+
 		std::cout << "#iterations:" << solver.iterations() << std::endl;
 		std::cout << "error" << solver.error() << std::endl;
+
+#endif // DEBUG
 		
 		//update velocities schwachsinn??
 		//solver.analyzePattern(massmatrix_);
@@ -288,20 +318,25 @@ public:
 		//velocities_=solver.solve(dt*(jacobian_.transpose()*lambda+fext_)+massmatrix_*velocities_)
 		
 		//correct?
+#ifdef DEBUG
+
 		std::cout << "lambda:" << std::endl;
 		std::cout << lambda << std::endl;
 		std::cout << "fext:" << std::endl;
 		std::cout << fext_ << std::endl;
-		velocities_ = massmatrixinv_*(dt*(jacobian_.transpose()*lambda + fext_)) + velocities_;
 
-		std::cout << "check3" << std::endl;
+#endif // DEBUG
+		velocities_ = massmatrixinv_*(dt*(jacobian_.transpose()*lambda + fext_)) + velocities_;
 		for (int i = 0; i < n_objects_; ++i)
 		{
 			objects[i]->setvel(velocities_.segment<3>(6*i)); //can use blocking?
 			objects[i]->setangvel(velocities_.segment<3>(6*i+3));//same
 		}
+#ifdef DEBUG
 
 		std::cout << "check4" << std::endl;
+
+#endif // DEBUG
 		//set velocity of car
 		for (int i = 0; i < n_objects_; ++i)
 		{
@@ -309,9 +344,13 @@ public:
 			objects[i]->setpos(objects[i]->getpos() + dt*objects[i]->getvel());
 			//rotation update
 			objects[i]->setquat(quataddcwise(objects[i]->getquat(),quatscalar(dt/2.,quatwmult(objects[i]->getquat(), objects[i]->getangvel())))); //terrible since all functions are self made (probably better to use vec4d)
+#ifdef DEBUG
+
 			std::cout <<  i << std::endl;
 			std::cout << objects[i]->getpos() << std::endl;
 			std::cout << objects[i]->getvel() << std::endl;
+
+#endif // DEBUG
 		}
 	}
 private:
@@ -328,6 +367,7 @@ private:
 	smatrix_t jacobian_; //denoted J in paper "Iterative Dynamics" (sx6n) declared as member to prevent memory alloc every step (not sure that this works)
 	vector_t eta_; //denoted as "eta" in paper "Iterative Dynamics" (sx1) declared as member to prevent memory alloc every step 
 	//s =??? something with number of constraints
+	vector_t coll_resolve_;
 	vector_t fext_; //denoted as F_ext in paper "Iterative Dynamics" (6nx1) declared as member to prevent memory alloc every step (not sure that this works)
 	//only consists of gravity in -z axis, ->do as constant somehow (performance)
 	real_t beta_; //parameter used for overlapping denoted as "beta" in paper "Iterative Dynamics" should be <1/dt for stability

@@ -9,7 +9,7 @@
 class vehicle: public rigidbody
 {
 public:
-	vehicle(vec3d pos, mat3d inertia = Eigen::MatrixXd::Identity(3, 3), real_t mass = 100, real_t length = 5, real_t width = 7, real_t height = 5, vec3d vel = vec3d(1000, 1000,1000), vec3d angvel = vec3d(0, 0, 0), quaternion_t quat = quaternion_t(1, 0, 0, 0)) : rigidbody(pos, inertia, mass, vel, angvel, quat)
+	vehicle(vec3d pos, mat3d inertia = Eigen::MatrixXd::Identity(3, 3), real_t mass = 100, real_t length = 5, real_t width = 5, real_t height = 5, vec3d vel = vec3d(100, 100,100), vec3d angvel = vec3d(0, 0, 0), quaternion_t quat = quaternion_t(1, 0, 0, 0)) : rigidbody(pos, inertia, mass, vel, angvel, quat)
 	{
 		
 		length_ = length;
@@ -56,21 +56,21 @@ public:
 		std::vector<vec3d> res;
 		vec3d currcorner;
 		const mat3d rotmat = quaternion_.toRotationMatrix();
-		currcorner = pos_ + rotmat*vec3d(length_, width_, height_);
+		currcorner = pos_ + rotmat*vec3d(0.5*length_, 0.5*width_, 0.5*height_);
 		res.push_back(currcorner);
-		currcorner = pos_ + rotmat*vec3d(length_, width_, -height_);
+		currcorner = pos_ + rotmat*vec3d(0.5*length_, 0.5*width_, 0.5*-height_);
 		res.push_back(currcorner);
-		currcorner = pos_ + rotmat*vec3d(length_, -width_, height_);
+		currcorner = pos_ + rotmat*vec3d(0.5*length_, 0.5*-width_, 0.5*height_);
 		res.push_back(currcorner);
-		currcorner = pos_ + rotmat*vec3d(length_, -width_, -height_);
+		currcorner = pos_ + rotmat*vec3d(0.5*length_, 0.5*-width_, 0.5*-height_);
 		res.push_back(currcorner);
-		currcorner = pos_ + rotmat*vec3d(-length_, width_, height_);
+		currcorner = pos_ + rotmat*vec3d(0.5*-length_, 0.5*width_, 0.5*height_);
 		res.push_back(currcorner);
-		currcorner = pos_ + rotmat*vec3d(-length_, width_, -height_);
+		currcorner = pos_ + rotmat*vec3d(0.5*-length_, 0.5*width_, 0.5*-height_);
 		res.push_back(currcorner);
-		currcorner = pos_ + rotmat*vec3d(-length_, -width_, height_);
+		currcorner = pos_ + rotmat*vec3d(0.5*-length_, 0.5*-width_, 0.5*height_);
 		res.push_back(currcorner);
-		currcorner = pos_ + rotmat*vec3d(length_, -width_, -height_);
+		currcorner = pos_ + rotmat*vec3d(0.5*length_, 0.5*-width_, 0.5*-height_);
 		res.push_back(currcorner);
 		return res;
 	}

@@ -1,6 +1,7 @@
 #pragma once
 #include <limits>
 #include <iostream>
+#include <cassert>
 #include "typedef.h"
 #include "rigidbody.h"
 
@@ -28,6 +29,7 @@ struct Triangle {
 		points[1] = b;
 		points[2] = c;
 		n_ = ((b.v_ - a.v_).cross(c.v_ - a.v_)).normalized();
+		assert(n_.dot(-a.v_) < 0);
 	}
 };
 
@@ -83,7 +85,7 @@ public:
 	bool computecontactpoint(rigidbody* const box1, rigidbody* const box2, vec3d &contactpt, vec3d &colnormal, real_t &pen_depth)
 	{
 		const real_t growth_threshold = 0.001;
-		const int_t max_iter = 30;
+		const int_t max_iter = 300; //why would it take that many iterations??
 
 		triangles_.emplace_back(a_, b_, c_);
 		triangles_.emplace_back(a_, c_, d_);
@@ -107,7 +109,9 @@ public:
 
 			const supportpoint new_support = support(box1, box2, min_tria_it->n_);
 			const real_t new_dist = min_tria_it->n_.dot(new_support.v_);
-			if (new_dist - min_dist < growth_threshold)
+			const real_t growth = new_dist - min_dist;
+			assert(growth > 0);
+			if (growth < growth_threshold)
 			{
 				//generate contact information (depth and point)
 				vec3d bary_coords;

@@ -9,8 +9,11 @@
 #include <vector>
 #include <string>
 #include <cstdlib>
+#include <chrono>
+#include <thread>
 
 #include "gjk_algorithm.h"
+
 
 int main(int argc, char** argv)
 {
@@ -68,18 +71,22 @@ int main(int argc, char** argv)
 	
 	std::vector<rigidbody*> objects;
 
-	objects.push_back(new vehicle(vec3d(-10, -10, -10)));
-	int x_grid = 2;
-	int y_grid = 2;
-	int z_grid = 3;
-	int diameter = 2 * radius_sphere;
+	//objects.push_back(new vehicle(vec3d(-10, -10, -10)));
+	//objects.push_back(new vehicle(vec3d(10, 0, 0), Eigen::MatrixXd::Identity(3, 3), 100, 10, 10, 10));
+	//objects.push_back(new sphere(vec3d(0, 0, 0)));
+	/*const int x_grid = 2;
+	const int y_grid = 2;
+	const int z_grid = 3;
+	const int diameter = 2 * radius_sphere;
 	for (int i = 0; i < x_grid; i++){
 		for (int j = 0; j < y_grid; j++) {
 			for (int k = 0; k < z_grid; k++) {
 				objects.push_back(new sphere(vec3d(i*diameter, j*diameter,k*diameter)));
 			}
 		}
-	}
+	}*/
+	objects.push_back(new sphere(vec3d(-10, 0, 0), Eigen::MatrixXd::Identity(3, 3), 5, 1, vec3d(100,0,0)));
+	objects.push_back(new sphere(vec3d(10, 0, 0), Eigen::MatrixXd::Identity(3, 3), 5, 1, vec3d(-100,0,0)));
 
 	/*vec3d contactpoint;
 	vec3d n;
@@ -118,27 +125,35 @@ int main(int argc, char** argv)
 
 	//int success = drawframe(objects, objects.size());
 	simulation sim = simulation(objects, objects.size()); //how to do this (n_objects is changing at runtime so no array possible)->use iterators
+	const real_t dt = 0.001;
+	std::chrono::high_resolution_clock clock;
+	std::chrono::time_point<std::chrono::high_resolution_clock> t_start;
+	std::chrono::time_point<std::chrono::high_resolution_clock> t_end;
+
 	while (device->run())
 	{
-		for (int i = 0; i < 2; i++)
+		t_start = clock.now();
+		smgr->clear();
+		sim.step(objects, dt);
+		for (int i = 0; i < objects.size(); i++) {
+
+			objects[i]->addtoscene(smgr, driver);
+		}
+
+		//smgr->addCameraSceneNodeMaya();
+		smgr->addCameraSceneNode(0, vector3df(0, 30, -40), vector3df(0, 5, 0));
+		driver->beginScene(true, true, SColor(255, 100, 101, 140));
+
+		smgr->drawAll();
+		guienv->drawAll();
+
+		driver->endScene();
+		t_end = clock.now();
+		if (std::chrono::duration_cast<std::chrono::milliseconds>(t_end - t_start).count() < 10000*dt)
 		{
-			smgr->clear();
-			sim.step(objects, 0.001);
-			for (int i = 0; i < objects.size(); i++) {
-
-				objects[i]->addtoscene(smgr, driver);
-			}
-
-			//smgr->addCameraSceneNodeMaya();
-			smgr->addCameraSceneNode(0, vector3df(0, 30, -40), vector3df(0, 5, 0));
-			driver->beginScene(true, true, SColor(255, 100, 101, 140));
-
-			smgr->drawAll();
-			guienv->drawAll();
-
-			driver->endScene();
-
-
+			std::cout << "sleeping" << std::endl;
+			const unsigned sleep_t = 10000 * dt - std::chrono::duration_cast<std::chrono::milliseconds>(t_end - t_start).count();
+			std::this_thread::sleep_for(std::chrono::milliseconds(sleep_t));
 		}
 	}
 	device->drop();
