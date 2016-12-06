@@ -25,7 +25,7 @@ int main(int argc, char** argv)
 	//standard settings
 	int_t n_sphere = 12;
 	real_t mass_sphere = 1;
-	real_t radius_sphere = 5; //0.1
+	real_t radius_sphere = 3; //0.1
 	real_t mass_car = 100;
 	if (argc == 2&&!std::strcmp(argv[1],"-help")) //strcmp gives 0 if strings are equal!!!
 	{
@@ -71,10 +71,10 @@ int main(int argc, char** argv)
 	
 	std::vector<rigidbody*> objects;
 
-	//objects.push_back(new vehicle(vec3d(-10, -10, -10)));
+	objects.push_back(new vehicle(vec3d(-10, -10, -10)));
 	//objects.push_back(new vehicle(vec3d(10, 0, 0), Eigen::MatrixXd::Identity(3, 3), 100, 10, 10, 10));
 	//objects.push_back(new sphere(vec3d(0, 0, 0)));
-	/*const int x_grid = 2;
+	const int x_grid = 2;
 	const int y_grid = 2;
 	const int z_grid = 3;
 	const int diameter = 2 * radius_sphere;
@@ -84,9 +84,9 @@ int main(int argc, char** argv)
 				objects.push_back(new sphere(vec3d(i*diameter, j*diameter,k*diameter)));
 			}
 		}
-	}*/
-	objects.push_back(new sphere(vec3d(-10, 0, 0), Eigen::MatrixXd::Identity(3, 3), 5, 1, vec3d(100,0,0)));
-	objects.push_back(new sphere(vec3d(10, 0, 0), Eigen::MatrixXd::Identity(3, 3), 5, 1, vec3d(-100,0,0)));
+	}
+	//objects.push_back(new sphere(vec3d(-10, 0, 0), Eigen::MatrixXd::Identity(3, 3), 5, 1, vec3d(100,0,0)));
+	//objects.push_back(new sphere(vec3d(10, 0, 0), Eigen::MatrixXd::Identity(3, 3), 5, 1, vec3d(-100,0,0)));
 
 	/*vec3d contactpoint;
 	vec3d n;
