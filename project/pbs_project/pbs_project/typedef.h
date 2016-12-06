@@ -25,3 +25,19 @@ using namespace scene;
 using namespace video;
 using namespace io;
 using namespace gui;
+
+
+inline irr::core::vector3df quattoirr(quaternion_t const &quat)
+{
+	irr::core::vector3df vec;
+	irr::core::quaternion quati(quat.x(), quat.y(), quat.z(), quat.w());
+	//
+	quati.toEuler(vec);
+
+	// convert radin to degree
+	vec.X *= 57.2957795f;
+	vec.Y *= 57.2957795f;
+	vec.Z *= 57.2957795f;
+
+	return vec;
+}

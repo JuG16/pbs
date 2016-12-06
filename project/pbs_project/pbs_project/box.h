@@ -22,6 +22,8 @@ public:
 		NodeBox->setMaterialFlag(video::EMF_LIGHTING, 1);
 		NodeBox->setMaterialFlag(video::EMF_NORMALIZE_NORMALS, true);
 		NodeBox->setMaterialTexture(0, driver->getTexture("../media/wall.jpg"));
+		NodeBox->setPosition(vector3df(pos_.x(), pos_.y(), pos_.z()));
+		NodeBox->setRotation(quattoirr(quaternion_));
 	}
 
 	vec3d getfarthestpoint(vec3d const &dir)const override
