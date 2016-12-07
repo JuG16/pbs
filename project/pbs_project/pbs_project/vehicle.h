@@ -9,7 +9,7 @@
 class vehicle: public rigidbody
 {
 public:
-	vehicle(vec3d pos, mat3d inertia = Eigen::MatrixXd::Identity(3, 3), real_t mass = 100, real_t length = 5, real_t width = 5, real_t height = 5, vec3d vel = vec3d(100, 100,100), vec3d angvel = vec3d(0, 0, 0), quaternion_t quat = quaternion_t(1, 0, 0, 0)) : rigidbody(pos, inertia, mass, vel, angvel, quat)
+	vehicle(vec3d pos, mat3d inertia = 10000*Eigen::MatrixXd::Identity(3, 3), real_t mass = 100, real_t length = 5, real_t width = 5, real_t height = 5, vec3d vel = vec3d(-100, -100,-100), vec3d angvel = vec3d(0, 0, 0), quaternion_t quat = quaternion_t(1, 0, 0, 0)) : rigidbody(pos, inertia, mass, vel, angvel, quat)
 	{
 		inertia_inv_ = inertia_.inverse();
 		inertia_inv_glob_ = quaternion_.toRotationMatrix()*inertia_inv_*quaternion_.toRotationMatrix().transpose();
