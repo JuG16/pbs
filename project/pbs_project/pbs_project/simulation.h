@@ -118,7 +118,7 @@ public:
 		triplets.reserve(3*n_objects_*n_objects_);
 		int_t row = 0;
 		const real_t pen_coeff = 0.1 / dt;
-		const real_t alpha = -1.; //"amount" of bouncing
+		const real_t alpha = -0.5; //"amount" of bouncing
 		coll_resolve_.setZero();
 		//AABB for candidates for car (need to put in)
 		//vec3d minpos;
@@ -145,13 +145,17 @@ public:
 					std::cout << "sphere-sphere" << std::endl;
 
 #endif // DEBUG
+					//check after collision wether objects are moving towards each other (else collision has been resolved in previous timestep (but not fast enough)
 					//sphere-sphere collision (need to add friction)
 					if ((objects[i]->getpos() - objects[j]->getpos()).norm() < (objects[i]->getrad() + objects[j]->getrad()))
 					{
 						contactpoint = objects[j]->getpos()+(objects[i]->getpos() - objects[j]->getpos()) / 2.;
 						n = (contactpoint - objects[i]->getpos()).normalized();
-						pen_depth = ((objects[i]->getrad() + objects[j]->getrad()) - (objects[i]->getpos() - objects[j]->getpos()).norm()) / 2.;
-						contact = true;
+						if (n.dot(objects[i]->getvel()) > 0 || n.dot(objects[j]->getvel())<0) //need to check for both objects since 1 could be static (vel=0)
+						{
+							pen_depth = ((objects[i]->getrad() + objects[j]->getrad()) - (objects[i]->getpos() - objects[j]->getpos()).norm()) / 2.;
+							contact = true;
+						}
 #ifdef DEBUG
 
 						std::cout << contactpoint << std::endl;
@@ -177,8 +181,10 @@ public:
 #endif
 						if (gjk.computecontactpoint(objects[i], objects[j], contactpoint, n, pen_depth))
 						{
-							std::cout << pen_depth << std::endl;
-							contact = true;
+							if (n.dot(objects[j]->getvel())>0||n.dot(objects[i]->getvel())<0)//need to check for both objects since one could be static (vel=0)
+							{
+								contact = true;
+							}
 						}
 						else
 						{
