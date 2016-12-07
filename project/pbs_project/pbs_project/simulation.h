@@ -208,8 +208,7 @@ public:
 					//use coll_resolve vector ->put -beta*C
 					coll_resolve_(row) = -pen_coeff/dt*(objects[j]->getpos() + r2 - objects[i]->getpos() - r1).dot(n)+alpha*(objects[j]->getvel()+objects[j]->getangvel().cross(r2)-objects[i]->getvel()-objects[i]->getangvel().cross(r1)).dot(n);
 
-
-					//need to scale all values with beta_*penetration depth?
+					//normal constraints
 					//need to add contactcaching
 					//object 1
 					n.normalize();
@@ -229,8 +228,74 @@ public:
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 2, n(2)));
 
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 3, r2xn(0)));
-					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 4, r2xn(0)));
-					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 5, r2xn(0)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 4, r2xn(1)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 5, r2xn(2)));
+				
+					++row;
+					//friciton constraints
+					vec3d tempvec; //some vector != n
+					if (n(0) > 0.1)
+					{
+						tempvec(0) = -n(0);
+						tempvec(1) = n(1);
+						tempvec(2) = n(2);
+					}
+					else if (n(1) > 0.1)
+					{
+						tempvec(0) = n(0);
+						tempvec(1) = -n(1);
+						tempvec(2) = n(2);
+					}
+					else
+					{
+						tempvec(0) = n(0);
+						tempvec(1) = n(1);
+						tempvec(2) = -n(2);
+					}
+					//2 tangential vectors to the normal (how are they related to each other? how to compute?)
+					const vec3d u1 = n.cross(tempvec); //vector orthogonal to n (tangential to bodies)
+					const vec3d u2 = n.cross(u1); //vector orthogonal to n and u1 
+
+					const vec3d r1xu1 = -r1.cross(u1); //- since only - crossprod gets used
+					const vec3d r2xu1 = r2.cross(u1);
+					const vec3d r1xu2 = -r1.cross(u2);
+					const vec3d r2xu2 = r2.cross(u2);
+					//can we already sum up this values?
+
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i, -u1(0)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 1, -u1(1)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 2, -u1(2)));
+
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 3, r1xu1(0)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 4, r1xu1(1)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 5, r1xu1(2)));
+					//object 2
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j, u1(0)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 1, u1(1)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 2, u1(2)));
+
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 3, r2xu1(0)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 4, r2xu1(1)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 5, r2xu1(2)));
+
+					++row;
+
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i, -u2(0)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 1, -u2(1)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 2, -u2(2)));
+
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 3, r1xu2(0)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 4, r1xu2(1)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 5, r1xu2(2)));
+					//object 2
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j, u2(0)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 1, u2(1)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 2, u2(2)));
+
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 3, r2xu2(0)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 4, r2xu2(1)));
+					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 5, r2xu2(2)));
+
 					row++;
 
 				}
