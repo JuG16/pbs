@@ -82,7 +82,7 @@ public:
 	{
 		return 0;
 	}
-	void computeAABB(vec3d &minpos, vec3d &maxpos)
+	void computeAABB(vec3d &minpos, vec3d &maxpos)const override
 	{
 		mat3d rotmat = quaternion_.toRotationMatrix();
 		std::vector<vec3d> corners = this->getcorners();

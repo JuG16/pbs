@@ -33,10 +33,15 @@ public:
 		return this->getpos()+radius_*dir.normalized();
 	}
 
-	std::vector<vec3d> getcorners()const override
+	std::vector<vec3d> getcorners()const override //unused function 
 	{
 		std::vector<vec3d> res;
 		return res;
+	}
+
+	void computeAABB(vec3d &minpos, vec3d &maxpos)const override //unused function
+	{
+		return;
 	}
 
 	bool issphere()const override

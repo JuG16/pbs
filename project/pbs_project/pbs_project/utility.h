@@ -47,23 +47,37 @@ inline void elemwisemin(vec3d &min, vec3d const &curr)
 //elementwise compares the vectors and sets max elementwise
 inline void elemwisemax(vec3d &max, vec3d const &curr)
 {
-	max(0) = (max(0) < curr(0)) ? max(0) : curr(0);
-	max(1) = (max(1) < curr(1)) ? max(1) : curr(1);
-	max(2) = (max(2) < curr(2)) ? max(2) : curr(2);
+	max(0) = (max(0) > curr(0)) ? max(0) : curr(0);
+	max(1) = (max(1) > curr(1)) ? max(1) : curr(1);
+	max(2) = (max(2) > curr(2)) ? max(2) : curr(2);
 }
 
 //checks wether an AABB and a sphere intersect (doesnt work for general box-sphere intersection)
-inline bool intersect(vec3d const &minpos, vec3d const &maxpos, sphere& const s)
+inline bool intersect(vec3d const &minpos, vec3d const &maxpos, rigidbody* const s)
 {
 	//find closest point to sphere within box
-	real_t x = std::max(minpos.x(), std::min(s.getpos().x(), maxpos.x()));
-	real_t y = std::max(minpos.y(), std::min(s.getpos().y(), maxpos.y()));
-	real_t z = std::max(minpos.z(), std::min(s.getpos().z(), maxpos.z()));
+	real_t x = std::max(minpos.x(), std::min(s->getpos().x(), maxpos.x()));
+	real_t y = std::max(minpos.y(), std::min(s->getpos().y(), maxpos.y()));
+	real_t z = std::max(minpos.z(), std::min(s->getpos().z(), maxpos.z()));
 
 	vec3d pt = vec3d(x, y, z);
 
-	real_t dist = (s.getpos() - pt).norm();
+	//rather use this -> dont have to compute square root
+	const real_t dist2 = (s->getpos() - pt).dot(s->getpos() - pt);
+	return dist2 < (s->getrad()*s->getrad());
 
-	return dist < s.getrad();
+	/*real_t dist = (s->getpos() - pt).norm();
+
+	return dist < s->getrad();*/
 }
 
+
+//checks wether 2 AABB intersect (doesnt work for general box-sphere intersection)
+inline bool intersect(vec3d const &minpos1, vec3d const &maxpos1, vec3d const &minpos2, vec3d const &maxpos2)
+{
+	//find closest point to sphere within box
+	return ((minpos1.x() <= maxpos2.x() && maxpos1.x() >= minpos2.x()) &&
+		(minpos1.y() <= maxpos2.y() && maxpos1.y() >= minpos2.y()) &&
+		(minpos1.z() <= maxpos2.z() && maxpos1.z() >= minpos2.z()));
+
+}

@@ -120,10 +120,6 @@ public:
 		const real_t pen_coeff = 0.1 / dt;
 		const real_t alpha = -0.5; //"amount" of bouncing
 		coll_resolve_.setZero();
-		//AABB for candidates for car (need to put in)
-		//vec3d minpos;
-		//vec3d maxpos;
-		//car.computeAABB(minpos, maxpos);
 		for (int i = 0; i < n_objects_; ++i) //compute all interactions twice like this?
 		{
 #ifdef DEBUG
@@ -164,37 +160,75 @@ public:
 
 					}
 				}
-				else //use gjk and eta algorithm
+				else //first check wit AABB then use gjk and eta algorithm
 				{	
 #ifdef DEBUG
 
 					std::cout << "box" << std::endl;
 
 #endif // DEBUG
-					gjk_algorithm gjk = gjk_algorithm();
-					if (gjk.collisiondetection(objects[i], objects[j]))
+					bool precond = false;
+					if (objects[i]->issphere())
 					{
+						vec3d minpos;
+						vec3d maxpos;
+						objects[j]->computeAABB(minpos, maxpos);
+						if (intersect(minpos, maxpos, objects[i]))
+						{
+							precond = true;
+						}
+					}
+					else if (objects[j]->issphere())
+					{
+						vec3d minpos;
+						vec3d maxpos;
+						objects[i]->computeAABB(minpos, maxpos);
+						if (intersect(minpos, maxpos, objects[j]))
+						{
+							precond = true;
+						}
+					}
+					else
+					{
+						vec3d minpos1;
+						vec3d maxpos1;
+						vec3d minpos2;
+						vec3d maxpos2;
+						objects[i]->computeAABB(minpos1, maxpos1);
+						objects[j]->computeAABB(minpos2, maxpos2);
+						if (intersect(minpos1, maxpos1, minpos2, maxpos2))
+						{
+							precond = true;
+						}
+					}
+					if (precond)
+					{
+						std::cout << "box interaction detected" << std::endl;
+						gjk_algorithm gjk = gjk_algorithm();
+						if (gjk.collisiondetection(objects[i], objects[j]))
+						{
 #ifdef DEBUG
-						std::cout << "collision detected" << std::endl;
-						std::cout << objects[i]->getpos() << std::endl;
-						std::cout << objects[j]->getpos() << std::endl;
+							std::cout << "collision detected" << std::endl;
+							std::cout << objects[i]->getpos() << std::endl;
+							std::cout << objects[j]->getpos() << std::endl;
 #endif
-						if (gjk.computecontactpoint(objects[i], objects[j], contactpoint, n, pen_depth))
-						{
-							if (n.dot(objects[j]->getvel())>0||n.dot(objects[i]->getvel())<0)//need to check for both objects since one could be static (vel=0)
+							if (gjk.computecontactpoint(objects[i], objects[j], contactpoint, n, pen_depth))
 							{
-								contact = true;
+								if (n.dot(objects[j]->getvel()) > 0 || n.dot(objects[i]->getvel()) < 0)//need to check for both objects since one could be static (vel=0)
+								{
+									contact = true;
+								}
 							}
-						}
-						else
-						{
-							std::cout << "unexpected error in GJK algorithm. Step terminates" << std::endl;
-						}
+							else
+							{
+								std::cout << "unexpected error in GJK algorithm. Step terminates" << std::endl;
+							}
 #ifdef DEBUG
 
-						std::cout << contactpoint << std::endl;
+							std::cout << contactpoint << std::endl;
 
 #endif // DEBUG
+						}
 					}
 				}
 				if (contact)

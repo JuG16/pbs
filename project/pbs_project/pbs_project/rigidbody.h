@@ -21,6 +21,7 @@ public:
 	virtual real_t getlength()const = 0; //only call for objects that use this (verify with issphere)
 	virtual real_t getheight()const = 0; //only call for objects that use this (verify with issphere)
 	virtual real_t getwidth()const = 0; //only call for objects that use this (verify with issphere)
+	virtual void computeAABB(vec3d &minpos, vec3d &maxpos)const = 0; //dont call for spheres (does not support this)
 
 	inline void setstatic()
 	{
