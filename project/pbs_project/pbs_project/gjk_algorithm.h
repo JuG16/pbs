@@ -29,7 +29,7 @@ struct Triangle {
 		points[1] = b;
 		points[2] = c;
 		n_ = ((b.v_ - a.v_).cross(c.v_ - a.v_)).normalized();
-		assert(n_.dot(-a.v_) < 0);
+		//assert(n_.dot(-a.v_) < 0);
 	}
 };
 

@@ -155,7 +155,7 @@ int main(int argc, char** argv)
 		if (std::chrono::duration_cast<std::chrono::milliseconds>(t_end - t_start).count() < 10000*dt)
 		{
 			std::cout << "sleeping" << std::endl;
-			const unsigned sleep_t = 10000 * dt - std::chrono::duration_cast<std::chrono::milliseconds>(t_end - t_start).count();
+			const unsigned sleep_t = 10000* dt - std::chrono::duration_cast<std::chrono::milliseconds>(t_end - t_start).count();
 			std::this_thread::sleep_for(std::chrono::milliseconds(sleep_t));
 		}
 	}
