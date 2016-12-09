@@ -111,3 +111,20 @@ protected:
 	real_t mass_inv_;
 	//assume it to be a box (for collision handling)
 };
+
+class renderdata
+{
+public:
+	renderdata(rigidbody* const object, vec3d const &pos, quaternion_t const &quat) :object_(object), pos_(pos), quat_(quat) {};
+
+	inline void draw(ISceneManager* smgr, IVideoDriver* driver)const
+	{
+		object_->setpos(pos_);
+		object_->setquat(quat_);
+		object_->addtoscene(smgr, driver);
+	}
+private:
+	rigidbody* object_;
+	vec3d pos_;
+	quaternion_t quat_;
+};
