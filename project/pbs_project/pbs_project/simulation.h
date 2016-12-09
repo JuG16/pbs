@@ -203,7 +203,6 @@ public:
 					}
 					if (precond)
 					{
-						std::cout << "box interaction detected" << std::endl;
 						gjk_algorithm gjk = gjk_algorithm();
 						if (gjk.collisiondetection(objects[i], objects[j]))
 						{
