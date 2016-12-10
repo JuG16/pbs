@@ -167,7 +167,7 @@ int main(int argc, char** argv)
 				renderdat.draw(smgr, driver);
 			}
 
-			driver->setTextureCreationFlag(video::ETCF_CREATE_MIP_MAPS, false);
+			/*driver->setTextureCreationFlag(video::ETCF_CREATE_MIP_MAPS, false);
 
 			smgr->addSkyBoxSceneNode(
 				driver->getTexture("../media/irrlicht2_up.jpg"),
@@ -180,13 +180,15 @@ int main(int argc, char** argv)
 			driver->setTextureCreationFlag(video::ETCF_CREATE_MIP_MAPS, true);
 
 			// add a camera and disable the mouse cursor
-			scene::ICameraSceneNode* cam = smgr->addCameraSceneNode();
-			cam->setPosition(core::vector3df(-100, 50, 100));
-			cam->setTarget(core::vector3df(0, 0, 0));
-			device->getCursorControl()->setVisible(false);
+			scene::ICameraSceneNode* cam = smgr->addCameraSceneNodeFPS();
+			cam->setPosition(core::vector3df(0, 30, -40));
+			cam->setTarget(core::vector3df(0, 5, 0));
+			device->getCursorControl()->setVisible(false);*/
 
-			//smgr->addCameraSceneNode(0, vector3df(0, 30, -40), vector3df(0, 5, 0));
-			driver->beginScene(true, true, SColor(255, 0, 0, 0));
+			smgr->addSkyDomeSceneNode(driver->getTexture("../media/skydome.jpg"), 240, 240, 1.0f, 2.0f);
+
+			smgr->addCameraSceneNode(0, vector3df(0, 3, -4), vector3df(0, 5, 0));
+			driver->beginScene(true, true, SColor(255, 255, 255, 255));
 
 			smgr->drawAll();
 			guienv->drawAll();
