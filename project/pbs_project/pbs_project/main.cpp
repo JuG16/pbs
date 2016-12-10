@@ -154,30 +154,59 @@ int main(int argc, char** argv)
 	std::chrono::high_resolution_clock clock;
 	std::chrono::time_point<std::chrono::high_resolution_clock> t_start;
 	std::chrono::time_point<std::chrono::high_resolution_clock> t_end;
-	for (int_t i = 0; i < data.size(); ++i)
+	while (true)
 	{
-
-		//plot and sleep
-		t_start = clock.now();
-		smgr->clear();
-		for (auto renderdat : data[i])
+		for (int_t i = 0; i < data.size(); ++i)
 		{
-			renderdat.draw(smgr, driver);
+
+			//plot and sleep
+			t_start = clock.now();
+			smgr->clear();
+			for (auto renderdat : data[i])
+			{
+				renderdat.draw(smgr, driver);
+			}
+			smgr->addCameraSceneNode(0, vector3df(0, 30, -40), vector3df(0, 5, 0));
+			driver->beginScene(true, true, SColor(255, 100, 101, 140));
+
+			smgr->drawAll();
+			guienv->drawAll();
+
+			driver->endScene();
+			t_end = clock.now();
+			if (std::chrono::duration_cast<std::chrono::milliseconds>(t_end - t_start).count() < 1000. / fps)
+			{
+				std::cout << "sleeping" << std::endl;
+				const unsigned sleep_t = 1000. / fps - std::chrono::duration_cast<std::chrono::milliseconds>(t_end - t_start).count();
+				std::this_thread::sleep_for(std::chrono::milliseconds(sleep_t));
+			}
 		}
-		smgr->addCameraSceneNode(0, vector3df(0, 30, -40), vector3df(0, 5, 0));
-		driver->beginScene(true, true, SColor(255, 100, 101, 140));
-
-		smgr->drawAll();
-		guienv->drawAll();
-
-		driver->endScene();
-		t_end = clock.now();
-		if (std::chrono::duration_cast<std::chrono::milliseconds>(t_end - t_start).count() < 1000. / fps)
+		bool exitsim = false;
+		while (true)
 		{
-			std::cout << "sleeping" << std::endl;
-			const unsigned sleep_t = 1000. / fps - std::chrono::duration_cast<std::chrono::milliseconds>(t_end - t_start).count();
-			std::this_thread::sleep_for(std::chrono::milliseconds(sleep_t));
+			std::cout << "type 0 to exit" << std::endl;
+			std::cout << "type 1 to repeat" << std::endl;
+			int_t temp;
+			std::cin >> temp;
+			if (temp == 0)
+			{
+				exitsim = true;
+				break;
+			}
+			else if (temp == 1)
+			{
+				break;
+			}
+			else
+			{
+				std::cout << "unrecognised input." << std::endl;
+			}
 		}
+		if (exitsim)
+		{
+			break;
+		}
+
 	}
 	device->drop();
 #endif
