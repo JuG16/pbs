@@ -84,11 +84,11 @@ int main(int argc, char** argv)
 	std::vector<rigidbody*> objects;
 
 	//objects.push_back(new vehicle(vec3d(20, 20, 20)));
-	objects.push_back(new vehicle(vec3d(10, 0, 0), 1000*Eigen::MatrixXd::Identity(3, 3), 100, 5, 5, 5));
+	objects.push_back(new vehicle(vec3d(10, 5, 0), 1000*Eigen::MatrixXd::Identity(3, 3), 100, 5, 5, 5));
 	//objects.push_back(new sphere(vec3d(0, 0, 0)));
-	const int x_grid = 2;
-	const int y_grid = 2;
-	const int z_grid = 3;
+	const int x_grid = 4;
+	const int y_grid = 5;
+	const int z_grid = 5;
 	const real_t diameter = 2 * radius_sphere;
 	for (int i = 0; i < x_grid; i++){
 		for (int j = 0; j < y_grid; j++) {
@@ -166,8 +166,27 @@ int main(int argc, char** argv)
 			{
 				renderdat.draw(smgr, driver);
 			}
-			smgr->addCameraSceneNode(0, vector3df(0, 30, -40), vector3df(0, 5, 0));
-			driver->beginScene(true, true, SColor(255, 100, 101, 140));
+
+			driver->setTextureCreationFlag(video::ETCF_CREATE_MIP_MAPS, false);
+
+			smgr->addSkyBoxSceneNode(
+				driver->getTexture("../media/irrlicht2_up.jpg"),
+				driver->getTexture("../media/irrlicht2_dn.jpg"),
+				driver->getTexture("../media/irrlicht2_lf.jpg"),
+				driver->getTexture("../media/irrlicht2_rt.jpg"),
+				driver->getTexture("../media/irrlicht2_ft.jpg"),
+				driver->getTexture("../media/irrlicht2_bk.jpg"));
+
+			driver->setTextureCreationFlag(video::ETCF_CREATE_MIP_MAPS, true);
+
+			// add a camera and disable the mouse cursor
+			scene::ICameraSceneNode* cam = smgr->addCameraSceneNode();
+			cam->setPosition(core::vector3df(-100, 50, 100));
+			cam->setTarget(core::vector3df(0, 0, 0));
+			device->getCursorControl()->setVisible(false);
+
+			//smgr->addCameraSceneNode(0, vector3df(0, 30, -40), vector3df(0, 5, 0));
+			driver->beginScene(true, true, SColor(255, 0, 0, 0));
 
 			smgr->drawAll();
 			guienv->drawAll();
