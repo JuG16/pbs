@@ -86,9 +86,9 @@ int main(int argc, char** argv)
 	//objects.push_back(new vehicle(vec3d(20, 20, 20)));
 	objects.push_back(new vehicle(vec3d(10, 0, 0), 1000*Eigen::MatrixXd::Identity(3, 3), 100, 5, 5, 5));
 	//objects.push_back(new sphere(vec3d(0, 0, 0)));
-	const int x_grid = 2;
-	const int y_grid = 2;
-	const int z_grid = 3;
+	const int x_grid = 5;
+	const int y_grid = 5;
+	const int z_grid = 10;
 	const real_t diameter = 2 * radius_sphere;
 	for (int i = 0; i < x_grid; i++){
 		for (int j = 0; j < y_grid; j++) {
