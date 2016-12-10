@@ -84,7 +84,7 @@ int main(int argc, char** argv)
 	std::vector<rigidbody*> objects;
 
 	//objects.push_back(new vehicle(vec3d(20, 20, 20)));
-	objects.push_back(new vehicle(vec3d(10, 0, 10), 1000*Eigen::MatrixXd::Identity(3, 3), 100, 5, 5, 5));
+	objects.push_back(new vehicle(vec3d(15,5, 10), 1000*Eigen::MatrixXd::Identity(3, 3), 100, 5, 5, 5));
 	//objects.push_back(new sphere(vec3d(0, 0, 0)));
 	const int x_grid = 4;
 	const int y_grid = 5;
@@ -164,8 +164,18 @@ int main(int argc, char** argv)
 		{
 			renderdat.draw(smgr, driver);
 		}
+
+		
+
 		smgr->addCameraSceneNode(0, vector3df(0, 30, -40), vector3df(0, 5, 0));
-		driver->beginScene(true, true, SColor(255, 100, 101, 140));
+		/*scene::ICameraSceneNode* cam = smgr->addCameraSceneNodeFPS();
+		cam->setPosition(core::vector3df(-100, 50, 100));
+		cam->setTarget(core::vector3df(0, 0, 0));
+		device->getCursorControl()->setVisible(false);
+		*/
+		driver->beginScene(true, true, SColor(255, 0, 0, 0));
+		
+
 
 		smgr->drawAll();
 		guienv->drawAll();
