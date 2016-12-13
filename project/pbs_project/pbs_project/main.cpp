@@ -106,6 +106,7 @@ int main(int argc, char** argv)
 	//slide
 	objects.push_back(new vehicle(vec3d(-20,30, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, 1, 50, 20, vec3d(0, 0, 0), vec3d(0, 0, 45)));
 	objects[1]->setstatic();
+	objects.push_back(new vehicle(vec3d(-20, 31, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 100, 10, 10, 10, vec3d(1, -1, 0), vec3d(0, 0, 45)));
 	objects.push_back(new sphere(vec3d(0,30, 0)));
 
 	//objects.push_back(new sphere(vec3d(-10, 0, 0), Eigen::MatrixXd::Identity(3, 3), 5, 1, vec3d(100,0,0)));

@@ -110,7 +110,7 @@ public:
 			const supportpoint new_support = support(box1, box2, min_tria_it->n_);
 			const real_t new_dist = min_tria_it->n_.dot(new_support.v_);
 			const real_t growth = new_dist - min_dist;
-			assert(growth > 0);
+			//assert(growth > 0);
 			if (growth < growth_threshold)
 			{
 				//generate contact information (depth and point)
