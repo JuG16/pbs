@@ -24,7 +24,7 @@ public:
 		NodeBox->setScale(TScale);
 		NodeBox->setMaterialFlag(video::EMF_LIGHTING, 1);
 		NodeBox->setMaterialFlag(video::EMF_NORMALIZE_NORMALS, true);
-		NodeBox->setMaterialTexture(0, driver->getTexture("../media/terrain-texture.jpg"));
+		NodeBox->setMaterialTexture(0, driver->getTexture("../media/rockwall.jpg"));
 		NodeBox->setPosition(vector3df(pos_.x(), pos_.y(), pos_.z()));
 		NodeBox->setRotation(vector3df(rot_.x(), rot_.y(), rot_.z()));
 		//NodeBox->setRotation(quattoirr(quaternion_));

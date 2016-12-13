@@ -104,10 +104,10 @@ int main(int argc, char** argv)
 	objects.push_back(new box(vec3d(0, 0, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, 150,1, 50, vec3d(0, 0, 0)));
 	objects[0]->setstatic();
 	//slide
-	objects.push_back(new vehicle(vec3d(-20,30, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, 1, 50, 20, vec3d(0, 0, 0), vec3d(0, 0, 45)));
+	objects.push_back(new box(vec3d(-20,30, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, 1, 50, 20, vec3d(0, 0, 0), vec3d(0, 0, 45)));
 	objects[1]->setstatic();
-	objects.push_back(new vehicle(vec3d(-20, 31, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 100, 10, 10, 10, vec3d(1, -1, 0), vec3d(0, 0, 45)));
-	objects.push_back(new sphere(vec3d(0,30, 0)));
+	objects.push_back(new vehicle(vec3d(-20, 100, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 100, 10, 10, 10, vec3d(1, -1, 0), vec3d(0, 0, 45)));
+	objects.push_back(new sphere(vec3d(0,100, 0)));
 
 	//objects.push_back(new sphere(vec3d(-10, 0, 0), Eigen::MatrixXd::Identity(3, 3), 5, 1, vec3d(100,0,0)));
 	//objects.push_back(new sphere(vec3d(10, 0, 0), Eigen::MatrixXd::Identity(3, 3), 5, 1, vec3d(-100,0,0)));
@@ -200,7 +200,7 @@ int main(int argc, char** argv)
 	
 			//smgr->addSkyDomeSceneNode(driver->getTexture("../media/skydome.jpg"), 240, 240, 1.0f, 2.0f);
 
-			smgr->addCameraSceneNode(0, vector3df(0, 60, -80), vector3df(0, 5, 0));
+			smgr->addCameraSceneNode(0, vector3df(0, 100, -160), vector3df(0, 5, 0));
 			driver->beginScene(true, true, SColor(255, 0, 153, 255));
 
 			smgr->drawAll();
