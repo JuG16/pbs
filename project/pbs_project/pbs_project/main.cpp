@@ -84,9 +84,9 @@ int main(int argc, char** argv)
 	std::vector<rigidbody*> objects;
 
 	//objects.push_back(new vehicle(vec3d(20, 20, 20)));
-	objects.push_back(new vehicle(vec3d(10, 5, 0), 1000*Eigen::MatrixXd::Identity(3, 3), 100, 5, 5, 5));
+	//objects.push_back(new vehicle(vec3d(10, 5, 0), 1000*Eigen::MatrixXd::Identity(3, 3), 100, 5, 5, 5));
 	//objects.push_back(new sphere(vec3d(0, 0, 0)));
-	const int x_grid = 4;
+	/*const int x_grid = 4;
 	const int y_grid = 5;
 	const int z_grid = 5;
 	const real_t diameter = 2 * radius_sphere;
@@ -96,7 +96,11 @@ int main(int argc, char** argv)
 				objects.push_back(new sphere(vec3d(i*diameter, j*diameter,k*diameter)));
 			}
 		}
-	}
+	}*/
+
+	/*objects.push_back(new vehicle(vec3d(10, 5, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 100, 10, 10, 2, vec3d(0, 0, 0)));
+	objects[0]->setstatic();*/
+	objects.push_back(new sphere(vec3d(0, 5, 0)));
 
 	//objects.push_back(new sphere(vec3d(-10, 0, 0), Eigen::MatrixXd::Identity(3, 3), 5, 1, vec3d(100,0,0)));
 	//objects.push_back(new sphere(vec3d(10, 0, 0), Eigen::MatrixXd::Identity(3, 3), 5, 1, vec3d(-100,0,0)));

@@ -33,7 +33,7 @@ public:
 		{
 		
 			//set external forces
-			fext_(6 * i + 2) = -9.81*objects[i]->getmass();
+			fext_(6 * i + 1) = -9.81*objects[i]->getmass();
 
 			//set initial velocities
 			velocities_.segment<3>(6 * i) = objects[i]->getvel();
