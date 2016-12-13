@@ -1,5 +1,6 @@
 #pragma once
 #include <irrlicht.h>
+#include <cmath>
 
 #include "../include/eigen3/Eigen/Dense"
 #include "../include/eigen3/Eigen/Sparse"
@@ -40,4 +41,17 @@ inline irr::core::vector3df quattoirr(quaternion_t const &quat)
 	vec.Z *= 57.2957795f;
 
 	return vec;
+}
+
+
+inline quaternion_t eultoquat(vec3d const &eul)
+{
+	real_t c1 = std::cos(eul.y() / 2.);
+	real_t s1 = std::sin(eul.y() / 2.);
+	real_t c2 = std::cos(eul.z() / 2.);
+	real_t s2 = std::sin(eul.z() / 2.);
+	real_t c3 = std::cos(eul.x() / 2.);
+	real_t s3 = std::sin(eul.x() / 2.);
+	return quaternion_t(c1*c2*c3 - s1*s2*s3, c1*c2*s3 + s1*s2*c3, s1*c2*c3 - c1*s2*s3, c1*s2*c3 - s1*c2*s3);
+
 }

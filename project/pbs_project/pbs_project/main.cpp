@@ -12,7 +12,6 @@
 #include <cstdlib>
 #include <chrono>
 #include <thread>
-#include <cmath>
 
 #include "gjk_algorithm.h"
 
@@ -102,9 +101,9 @@ int main(int argc, char** argv)
 	}*/
 
 	//objects.push_back(new vehicle(vec3d(10, 5, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 100, 10, 10, 2, vec3d(0, 0, 0)));
-	real_t turn_grad = 45.;
-	real_t turn_rad = turn_grad*pi/180;
-	quaternion_t quat = quaternion_t(std::cos(turn_rad/2), 0, 0, std::sin(turn_rad / 2));
+	vec3d turn_grad = vec3d(0, 0, 45.);
+	vec3d turn_rad = turn_grad*pi/180;
+	quaternion_t quat = eultoquat(turn_rad);
 	//floor
 	objects.push_back(new box(vec3d(0, 0, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, 150,1, 50, vec3d(0, 0, 0)));
 	objects[0]->setstatic();
