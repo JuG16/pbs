@@ -4,6 +4,7 @@
 #include "sphere.h"
 #include "vehicle.h"
 #include "plane.h"
+#include "box.h"
 #include <iostream>
 #include <iomanip>
 #include <vector>
@@ -98,9 +99,10 @@ int main(int argc, char** argv)
 		}
 	}*/
 
-	/*objects.push_back(new vehicle(vec3d(10, 5, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 100, 10, 10, 2, vec3d(0, 0, 0)));
-	objects[0]->setstatic();*/
-	objects.push_back(new sphere(vec3d(0, 5, 0)));
+	//objects.push_back(new vehicle(vec3d(10, 5, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 100, 10, 10, 2, vec3d(0, 0, 0)));
+	objects.push_back(new vehicle(vec3d(0, 0, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, 50,10, 50, vec3d(0, 0, 0)));
+	objects[0]->setstatic();
+	objects.push_back(new sphere(vec3d(0,30, 0)));
 
 	//objects.push_back(new sphere(vec3d(-10, 0, 0), Eigen::MatrixXd::Identity(3, 3), 5, 1, vec3d(100,0,0)));
 	//objects.push_back(new sphere(vec3d(10, 0, 0), Eigen::MatrixXd::Identity(3, 3), 5, 1, vec3d(-100,0,0)));
@@ -189,9 +191,11 @@ int main(int argc, char** argv)
 			cam->setTarget(core::vector3df(0, 5, 0));
 			device->getCursorControl()->setVisible(false);*/
 
-			smgr->addSkyDomeSceneNode(driver->getTexture("../media/skydome.jpg"), 240, 240, 1.0f, 2.0f);
+			
+	
+			//smgr->addSkyDomeSceneNode(driver->getTexture("../media/skydome.jpg"), 240, 240, 1.0f, 2.0f);
 
-			smgr->addCameraSceneNode(0, vector3df(0, 3, -4), vector3df(0, 5, 0));
+			smgr->addCameraSceneNode(0, vector3df(0, 30, -40), vector3df(0, 5, 0));
 			driver->beginScene(true, true, SColor(255, 255, 255, 255));
 
 			smgr->drawAll();
