@@ -100,13 +100,15 @@ int main(int argc, char** argv)
 	}*/
 
 	//objects.push_back(new vehicle(vec3d(10, 5, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 100, 10, 10, 2, vec3d(0, 0, 0)));
+	float turn = 45.0;
+	quaternion_t quat = quaternion_t(cos(turn/2), 0, 0, sin(turn/2));
 	//floor
 	objects.push_back(new box(vec3d(0, 0, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, 150,1, 50, vec3d(0, 0, 0)));
 	objects[0]->setstatic();
 	//slide
-	objects.push_back(new box(vec3d(-20,30, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, 1, 50, 20, vec3d(0, 0, 0), vec3d(0, 0, 45)));
+	objects.push_back(new box(vec3d(-20,30, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, 1, 50, 20, vec3d(0, 0, 0), vec3d(0, 0, 0),quat));
 	objects[1]->setstatic();
-	objects.push_back(new vehicle(vec3d(-20, 100, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 100, 10, 10, 10, vec3d(1, -1, 0), vec3d(0, 0, 45)));
+	objects.push_back(new vehicle(vec3d(-35, 50, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 100, 10, 10, 10, vec3d(30, -30, 0), vec3d(0, 0, 0), quat));
 	objects.push_back(new sphere(vec3d(0,100, 0)));
 
 	//objects.push_back(new sphere(vec3d(-10, 0, 0), Eigen::MatrixXd::Identity(3, 3), 5, 1, vec3d(100,0,0)));

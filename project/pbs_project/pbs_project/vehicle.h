@@ -9,7 +9,7 @@
 class vehicle: public rigidbody
 {
 public:
-	vehicle(vec3d pos, mat3d inertia = 10000*Eigen::MatrixXd::Identity(3, 3), real_t mass = 100, real_t length = 5, real_t width = 5, real_t height = 5, vec3d vel = vec3d(-10, -5,0), vec3d rot=vec3d(0,0,0), vec3d angvel = vec3d(0, 0, 0), quaternion_t quat = quaternion_t(1, 0, 0, 0)) : rigidbody(pos, inertia, mass, vel, rot, angvel, quat)
+	vehicle(vec3d pos, mat3d inertia = 10000*Eigen::MatrixXd::Identity(3, 3), real_t mass = 100, real_t length = 5, real_t width = 5, real_t height = 5, vec3d vel = vec3d(-10, -5,0), vec3d angvel = vec3d(0, 0, 0), quaternion_t quat = quaternion_t(1, 0, 0, 0)) : rigidbody(pos, inertia, mass, vel, angvel, quat)
 	{
 		inertia_inv_ = inertia_.inverse();
 		inertia_inv_glob_ = quaternion_.toRotationMatrix()*inertia_inv_*quaternion_.toRotationMatrix().transpose();
@@ -29,8 +29,7 @@ public:
 		NodeBox->setMaterialTexture(0, driver->getTexture("../media/176.jpg"));
 		//NodeBox->setMaterialTexture(0, driver->getTexture("../media/rockwall.jpg"));
 		NodeBox->setPosition(vector3df(pos_.x(), pos_.y(), pos_.z()));
-		NodeBox->setRotation(vector3df(rot_.x(), rot_.y(), rot_.z()));
-		//NodeBox->setRotation(quattoirr(quaternion_));
+		NodeBox->setRotation(quattoirr(quaternion_));
 	}
 
 
