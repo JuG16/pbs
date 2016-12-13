@@ -73,7 +73,7 @@ public:
 		res.push_back(currcorner);
 		currcorner = pos_ + rotmat*vec3d(0.5*-length_, 0.5*-width_, 0.5*height_);
 		res.push_back(currcorner);
-		currcorner = pos_ + rotmat*vec3d(0.5*length_, 0.5*-width_, 0.5*-height_);
+		currcorner = pos_ + rotmat*vec3d(0.5*-length_, 0.5*-width_, 0.5*-height_);
 		res.push_back(currcorner);
 		return res;
 	}
