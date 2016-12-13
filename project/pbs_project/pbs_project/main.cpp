@@ -101,11 +101,11 @@ int main(int argc, char** argv)
 
 	//objects.push_back(new vehicle(vec3d(10, 5, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 100, 10, 10, 2, vec3d(0, 0, 0)));
 	//floor
-	objects.push_back(new vehicle(vec3d(0, 0, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, 150,1, 50, vec3d(0, 0, 0)));
+	objects.push_back(new box(vec3d(0, 0, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, 150,1, 50, vec3d(0, 0, 0)));
 	objects[0]->setstatic();
 	//slide
-	//objects.push_back(new vehicle(vec3d(-10,30, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, 10, 20, 20, vec3d(0, 0, 0)));
-	//objects[1]->setstatic();
+	objects.push_back(new vehicle(vec3d(-20,30, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, 1, 50, 20, vec3d(0, 0, 0), vec3d(0, 0, 45)));
+	objects[1]->setstatic();
 	objects.push_back(new sphere(vec3d(0,30, 0)));
 
 	//objects.push_back(new sphere(vec3d(-10, 0, 0), Eigen::MatrixXd::Identity(3, 3), 5, 1, vec3d(100,0,0)));

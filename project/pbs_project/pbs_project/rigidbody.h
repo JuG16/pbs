@@ -6,7 +6,7 @@
 class rigidbody
 {
 public:
-	rigidbody(vec3d pos, mat3d inertia = Eigen::MatrixXd::Identity(3, 3), real_t mass = 1, vec3d vel = vec3d(0, 0, 0), vec3d angvel=vec3d(0,0,0), quaternion_t quat = quaternion_t(1, 0, 0, 0)) :pos_(pos), inertia_(inertia),  mass_(mass), vel_(vel), angvel_(angvel), quaternion_(quat)
+	rigidbody(vec3d pos, mat3d inertia = Eigen::MatrixXd::Identity(3, 3), real_t mass = 1, vec3d vel = vec3d(0, 0, 0), vec3d rot=vec3d(0,0,0), vec3d angvel=vec3d(0,0,0), quaternion_t quat = quaternion_t(1, 0, 0, 0)) :pos_(pos), inertia_(inertia),  mass_(mass), vel_(vel), rot_(rot), angvel_(angvel), quaternion_(quat)
 	{}
 	virtual void addtoscene(ISceneManager* smgr, IVideoDriver* driver)const = 0;
 
@@ -105,6 +105,7 @@ protected:
 	mat3d inertia_inv_;
 	mat3d inertia_inv_glob_;//Trägheitsmoment in bodyframe
 	vec3d vel_;
+	vec3d rot_; //static rotation of object;
 	vec3d angvel_;
 	quaternion_t quaternion_; //used for rotation denoted as q in paper "Iterative Dynamics" (probably irrelevant for sphere)	
 	real_t mass_;

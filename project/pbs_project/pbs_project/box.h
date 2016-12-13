@@ -7,7 +7,7 @@
 class box :public rigidbody
 {
 public:
-	box(vec3d pos, mat3d inertia = Eigen::MatrixXd::Identity(3, 3), real_t mass = 10000000, real_t length = 1, real_t width = 1, real_t height = 1, vec3d vel = vec3d(0, 0, 0), vec3d angvel = vec3d(0, 0, 0), quaternion_t quat = quaternion_t(1, 0, 0, 0)) : rigidbody(pos, inertia, mass, vel, angvel, quat)
+	box(vec3d pos, mat3d inertia = Eigen::MatrixXd::Identity(3, 3), real_t mass = 10000000, real_t length = 1, real_t width = 1, real_t height = 1, vec3d vel = vec3d(0, 0, 0), vec3d rot=vec3d(0,0,0), vec3d angvel = vec3d(0, 0, 0), quaternion_t quat = quaternion_t(1, 0, 0, 0)) : rigidbody(pos, inertia, mass, vel, rot, angvel, quat)
 	{
 		inertia_inv_ = inertia_.inverse();
 		inertia_inv_glob_ = quaternion_.toRotationMatrix()*inertia_inv_*quaternion_.toRotationMatrix().transpose();
@@ -24,9 +24,10 @@ public:
 		NodeBox->setScale(TScale);
 		NodeBox->setMaterialFlag(video::EMF_LIGHTING, 1);
 		NodeBox->setMaterialFlag(video::EMF_NORMALIZE_NORMALS, true);
-		NodeBox->setMaterialTexture(0, driver->getTexture("../media/stones.jpg"));
+		NodeBox->setMaterialTexture(0, driver->getTexture("../media/terrain-texture.jpg"));
 		NodeBox->setPosition(vector3df(pos_.x(), pos_.y(), pos_.z()));
-		NodeBox->setRotation(quattoirr(quaternion_));
+		NodeBox->setRotation(vector3df(rot_.x(), rot_.y(), rot_.z()));
+		//NodeBox->setRotation(quattoirr(quaternion_));
 	}
 
 	vec3d getfarthestpoint(vec3d const &dir)const override
