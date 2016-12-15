@@ -407,13 +407,13 @@ public:
 		//solver.factorize(jacobian_*massmatrixinv_*jacobian_.transpose());
 		solver.compute(jacobian_*massmatrixinv_*jacobian_.transpose()); //problem: if all zero can get any result
 		vector_t lambda = solver.solve(eta_);
-		for (int i = 0; i < lambda.size(); ++i)
+		for (int ij = 0; ij < lambda.size(); ++ij)
 		{
-			if (i % 3 == 0)
+			if (ij % 3 == 0)
 			{
 				//lambda corresponds to collision
 				//lambda seems to be negative for collision (where as it is positive in paper, doesnt really matter though)
-				lambda(i) = std::min(lambda(i), 0.);
+				//lambda(ij) = std::min(lambda(ij), 0.);
 			}
 			else
 			{
