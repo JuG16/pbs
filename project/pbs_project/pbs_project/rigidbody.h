@@ -31,7 +31,12 @@ public:
 		vel_ = Eigen::VectorXd::Zero(3);
 		angvel_ = Eigen::VectorXd::Zero(3);
 	}
-
+	inline void setdynamic()
+	{
+		mass_inv_ = 1. / mass_;
+		inertia_inv_ = inertia_.inverse();
+		inertia_inv_glob_ = quaternion_.toRotationMatrix()*inertia_inv_*quaternion_.toRotationMatrix().transpose();
+	}
 	inline void setpos(const vec3d pos)
 	{
 		pos_ = pos;
