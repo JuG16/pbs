@@ -105,13 +105,13 @@ int main(int argc, char** argv)
 	vec3d turn_rad = turn_grad*pi/180;
 	quaternion_t quat = eultoquat(turn_rad);
 	//floor
-	objects.push_back(new box(vec3d(0, 0, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, 150,1, 50, vec3d(0, 0, 0)));
+	objects.push_back(new box(vec3d(0, 0, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, 300,1, 150, vec3d(0, 0, 0)));
 	objects[0]->setstatic();
 	//slide
-	objects.push_back(new box(vec3d(-20,30, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, 1, 50, 50, vec3d(0, 0, 0), vec3d(0, 0, 0),quat));
+	objects.push_back(new box(vec3d(-40,100, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, 1, 200, 50, vec3d(0, 0, 0), vec3d(0, 0, 0),quat));
 	objects[1]->setstatic();
-	objects.push_back(new vehicle(vec3d(-35, 50, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 100, 10, 10, 10, vec3d(30, -30, 0), vec3d(0, 0, 0), quat));
-	objects.push_back(new sphere(vec3d(0,100, 0)));
+	objects.push_back(new vehicle(vec3d(-35, 110, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 100, 10, 10, 10, vec3d(30, -30, 0), vec3d(0, 0, 0), quat));
+	objects.push_back(new sphere(vec3d(-20,30, 0)));
 
 	//objects.push_back(new sphere(vec3d(-10, 0, 0), Eigen::MatrixXd::Identity(3, 3), 5, 1, vec3d(100,0,0)));
 	//objects.push_back(new sphere(vec3d(10, 0, 0), Eigen::MatrixXd::Identity(3, 3), 5, 1, vec3d(-100,0,0)));
@@ -154,7 +154,7 @@ int main(int argc, char** argv)
 	//rendering part
 
 	IrrlichtDevice *device =
-		createDevice(video::EDT_SOFTWARE, dimension2d<u32>(640, 480), 16,
+		createDevice(video::EDT_SOFTWARE, dimension2d<u32>(1400, 800), 16,
 			false, false, false, 0);
 
 	if (!device)
@@ -204,7 +204,7 @@ int main(int argc, char** argv)
 	
 			//smgr->addSkyDomeSceneNode(driver->getTexture("../media/skydome.jpg"), 240, 240, 1.0f, 2.0f);
 
-			smgr->addCameraSceneNode(0, vector3df(0, 120, -160), vector3df(0, 5, 0));
+			smgr->addCameraSceneNode(0, vector3df(0, 0, 300), vector3df(0, 0, -1));
 			driver->beginScene(true, true, SColor(255, 0, 153, 255));
 
 			smgr->drawAll();
