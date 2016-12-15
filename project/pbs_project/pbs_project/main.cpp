@@ -140,7 +140,7 @@ int main(int argc, char** argv)
 	const int x_grid = 3;
 	const int y_grid = 3;
 	const int z_grid = 3;
-	const real_t diameter = 2 * radius_sphere;
+	const real_t diameter = 2 * radius_sphere+0.001;
 	for (int i = 0; i < x_grid; i++){
 		for (int j = 0; j < y_grid; j++) {
 			for (int k = 0; k < z_grid; k++) {

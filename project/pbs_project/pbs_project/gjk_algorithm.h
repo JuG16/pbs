@@ -94,7 +94,7 @@ public:
 
 		for (int_t curr_iter = 0; curr_iter < max_iter; ++curr_iter)
 		{
-			std::vector<Triangle>::iterator min_tria_it;
+			std::vector<Triangle>::iterator min_tria_it=triangles_.begin();
 			real_t min_dist = std::numeric_limits<real_t>::max();
 			for (auto it = triangles_.begin(); it != triangles_.end(); ++it)
 			{
