@@ -204,7 +204,7 @@ int main(int argc, char** argv)
 	
 			//smgr->addSkyDomeSceneNode(driver->getTexture("../media/skydome.jpg"), 240, 240, 1.0f, 2.0f);
 
-			smgr->addCameraSceneNode(0, vector3df(0, 0, 150), vector3df(0, 0, 1));
+			smgr->addCameraSceneNode(0, vector3df(0, 120, -160), vector3df(0, 5, 0));
 			driver->beginScene(true, true, SColor(255, 0, 153, 255));
 
 			smgr->drawAll();
