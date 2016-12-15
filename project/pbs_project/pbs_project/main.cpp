@@ -103,7 +103,7 @@ int main(int argc, char** argv)
 	//objects.push_back(new sphere(vec3d(-10, 0, 0), Eigen::MatrixXd::Identity(3, 3), 5, 1, vec3d(100, 0, 0)));
 	
 	//box
-	float box_offset_x = 49;
+	/*float box_offset_x = 49;
 	float box_offset_z = 0;
 	float box_size_inside_z = 50;
 	float box_size_inside_x = 50;
@@ -122,21 +122,21 @@ int main(int argc, char** argv)
 	i++;
 	objects.push_back(new box(vec3d(box_offset_x + ((box_thickness + box_size_inside_x) / 2), box_offset_y, box_offset_z + ((box_size_inside_z + box_thickness) / 2)), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, box_length_outside_x, box_height, box_thickness, vec3d(0, 0, 0)));
 	objects[i]->setstatic();
-	i++;
+	i++;*/
 
 	//slide
-	objects.push_back(new box(vec3d(20, 90, box_offset_z), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, 1, 100, 50, vec3d(0, 0, 0), vec3d(0, 0, 0), quat));
-	objects[i]->setstatic();
-	i++;
+	//objects.push_back(new box(vec3d(20, 90, box_offset_z), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, 1, 100, 50, vec3d(0, 0, 0), vec3d(0, 0, 0), quat));
+	//objects[i]->setstatic();
+	//i++;
 
 	//objects.push_back(new sphere(vec3d(box_offset_x, box_offset_y, box_offset_z), Eigen::MatrixXd::Identity(3, 3), 5, 1, vec3d(0, 0, 0)));
-	objects.push_back(new vehicle(vec3d(7, 120, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 100, 10, 10, 10, vec3d(40, -40, 0), vec3d(0, 0, 0), quat));
+	//objects.push_back(new vehicle(vec3d(7, 120, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 100, 10, 10, 10, vec3d(40, -40, 0), vec3d(0, 0, 0), quat));
 
 
 	float start_x = 55; //55
 	float start_y = 6;//6
 	float start_z = -20; //-20
-	/*const int x_grid = 3;
+	const int x_grid = 3;
 	const int y_grid = 1;
 	const int z_grid = 3;
 	const real_t diameter = 2 * radius_sphere;
@@ -147,7 +147,7 @@ int main(int argc, char** argv)
 			}	
 		}
 	}
-	*/
+	
 	
 
 	//objects.push_back(new sphere(vec3d(-10, 0, 0), Eigen::MatrixXd::Identity(3, 3), 5, 1, vec3d(100,0,0)));
