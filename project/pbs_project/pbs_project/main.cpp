@@ -93,31 +93,47 @@ int main(int argc, char** argv)
 	vec3d turn_grad = vec3d(0, 0, 90.);
 	vec3d turn_rad = turn_grad*pi/180;
 	quaternion_t quat = eultoquat(turn_rad);
+	int i = 0;
 	//floor
-	objects.push_back(new box(vec3d(0, 0, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, 300,2, 150, vec3d(0, 0, 0)));
-	objects[0]->setstatic();
+	float plane_thickness = 2;
+	objects.push_back(new box(vec3d(0, 0, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, 300,plane_thickness, 150, vec3d(0, 0, 0)));
+	objects[i]->setstatic();
+	i++;
 	//slide
 	//objects.push_back(new box(vec3d(-40,100, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, 1, 200, 50, vec3d(0, 0, 0), vec3d(0, 0, 0),quat));
 	//objects[1]->setstatic();
 	//objects.push_back(new sphere(vec3d(-10, 0, 0), Eigen::MatrixXd::Identity(3, 3), 5, 1, vec3d(100, 0, 0)));
 	//box
-	/*objects.push_back(new box(vec3d(101, 31, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, 2, 60, 50, vec3d(0, 0, 0)));
-	objects[1]->setstatic();
-	objects.push_back(new box(vec3d(49, 31, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, 2, 60, 50, vec3d(0, 0, 0)));
-	objects[2]->setstatic();
-	objects.push_back(new box(vec3d(75, 31, -26), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, 54, 60, 2, vec3d(0, 0, 0)));
-	objects[3]->setstatic();
-	objects.push_back(new box(vec3d(75, 31, 24), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, 54, 60, 2, vec3d(0, 0, 0)));
-	objects[4]->setstatic();*/
-	
+	float box_offset_x = 49;
+	float box_offset_z = 10;
+	float box_size_inside_z = 50;
+	float box_size_inside_x = 50;
+	float box_height=60;
+	float box_thickness = 2;
+	float box_offset_y = (plane_thickness / 2) + (box_height / 2);
+	float box_length_outside_x = box_size_inside_x+(2 * box_thickness);
+	objects.push_back(new box(vec3d(box_offset_x, box_offset_y, box_offset_z), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, box_thickness, box_height, box_size_inside_z, vec3d(0, 0, 0)));
+	objects[i]->setstatic();
+	i++;
+	objects.push_back(new box(vec3d(box_offset_x+box_thickness+box_size_inside_x, box_offset_y, box_offset_z), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, box_thickness, box_height, box_size_inside_z, vec3d(0, 0, 0)));
+	objects[i]->setstatic();
+	i++;
+	objects.push_back(new box(vec3d(box_offset_x+((box_thickness+box_size_inside_x)/2), box_offset_y, box_offset_z-((box_size_inside_z+box_thickness)/2) ), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, box_length_outside_x, box_height, box_thickness, vec3d(0, 0, 0)));
+	objects[i]->setstatic();
+	i++;
+	objects.push_back(new box(vec3d(box_offset_x + ((box_thickness + box_size_inside_x) / 2), box_offset_y, box_offset_z + ((box_size_inside_z + box_thickness) / 2)), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, box_length_outside_x, box_height, box_thickness, vec3d(0, 0, 0)));
+	objects[i]->setstatic();
+	i++;
+
+	//objects.push_back(new sphere(vec3d(box_offset_x, box_offset_y, box_offset_z), Eigen::MatrixXd::Identity(3, 3), 5, 1, vec3d(0, 0, 0)));
 	//objects.push_back(new vehicle(vec3d(-35, 110, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 100, 10, 10, 10, vec3d(40, -40, 0), vec3d(0, 0, 0), quat));
 
 
 	float start_x = 55; //55
 	float start_y = 6;//6
 	float start_z = -20; //-20
-	const int x_grid = 3;
-	const int y_grid = 3;
+	/*const int x_grid = 3;
+	const int y_grid = 1;
 	const int z_grid = 3;
 	const real_t diameter = 2 * radius_sphere;
 	for (int i = 0; i < x_grid; i++){
@@ -127,6 +143,7 @@ int main(int argc, char** argv)
 			}	
 		}
 	}
+	*/
 	
 
 	//objects.push_back(new sphere(vec3d(-10, 0, 0), Eigen::MatrixXd::Identity(3, 3), 5, 1, vec3d(100,0,0)));
@@ -220,9 +237,10 @@ int main(int argc, char** argv)
 	
 			//smgr->addSkyDomeSceneNode(driver->getTexture("../media/skydome.jpg"), 240, 240, 1.0f, 2.0f);
 
+			//smgr->addCameraSceneNode(0, vector3df(250, 0, 0), vector3df(1, 0, 0));
 			//smgr->addCameraSceneNode(0, vector3df(0, 250, 0), vector3df(0, 1, 0));
 			//smgr->addCameraSceneNode(0, vector3df(0, 0, 300), vector3df(0, 0, -1));
-			smgr->addCameraSceneNode(0, vector3df(0, 120, -160), vector3df(0, 5, 0));
+			smgr->addCameraSceneNode(0, vector3df(0, 120, 160), vector3df(0, 5, 0));
 			//smgr->addCameraSceneNodeMaya();
 			driver->beginScene(true, true, SColor(255, 0, 153, 255));
 
