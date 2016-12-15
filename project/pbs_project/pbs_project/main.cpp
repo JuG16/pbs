@@ -112,8 +112,8 @@ int main(int argc, char** argv)
 	//objects.push_back(new vehicle(vec3d(-35, 110, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 100, 10, 10, 10, vec3d(40, -40, 0), vec3d(0, 0, 0), quat));
 
 
-	float start_x = 70;
-	float start_y = 70;
+	float start_x = 60;
+	float start_y = 30;
 	float start_z = -5;
 	objects.push_back(new sphere(vec3d(start_x,start_y , start_z)));
 	const int x_grid = 2;
@@ -220,7 +220,9 @@ int main(int argc, char** argv)
 	
 			//smgr->addSkyDomeSceneNode(driver->getTexture("../media/skydome.jpg"), 240, 240, 1.0f, 2.0f);
 
-			smgr->addCameraSceneNode(0, vector3df(0, 210, 0), vector3df(0, -1, 0));
+			smgr->addCameraSceneNode(0, vector3df(0, 250, 0), vector3df(0, -1, 0));
+			//smgr->addCameraSceneNode(0, vector3df(0, 0, 300), vector3df(0, 0, -1));
+			//smgr->addCameraSceneNode(0, vector3df(0, 120, -160), vector3df(0, 5, 0));
 			//smgr->addCameraSceneNodeMaya();
 			driver->beginScene(true, true, SColor(255, 0, 153, 255));
 
