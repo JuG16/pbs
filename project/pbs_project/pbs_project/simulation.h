@@ -119,6 +119,8 @@ public:
 		int_t row = 0;
 		const real_t pen_coeff = 0.1 / dt;
 		const real_t alpha = -0.5; //"amount" of bouncing
+		const real_t maxfriction=100;
+		const real_t maxcol = 100;
 		coll_resolve_.setZero();
 		for (int i = 0; i < n_objects_; ++i) //compute all interactions twice like this?
 		{
@@ -405,10 +407,20 @@ public:
 		//solver.factorize(jacobian_*massmatrixinv_*jacobian_.transpose());
 		solver.compute(jacobian_*massmatrixinv_*jacobian_.transpose()); //problem: if all zero can get any result
 		vector_t lambda = solver.solve(eta_);
-		/*for (int i = 0; i < lambda.size(); ++i)
+		for (int ij = 0; ij < lambda.size(); ++ij)
 		{
-			lambda(i) = std::max(lambda(i), 0.);
-		}*/
+			if (ij % 3 == 0)
+			{
+				//lambda corresponds to collision
+				//lambda seems to be negative for collision (where as it is positive in paper, doesnt really matter though)
+				//lambda(ij) = std::min(lambda(ij), 0.);
+			}
+			else
+			{
+				//lambda corresponds to fricition
+				//lambda(i) = std::max(-maxfriction,std::min(lambda(i), maxfriction));
+			}
+		}
 #ifdef DEBUG
 
 		std::cout << "#iterations:" << solver.iterations() << std::endl;
