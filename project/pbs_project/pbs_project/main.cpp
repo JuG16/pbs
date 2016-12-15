@@ -148,6 +148,11 @@ int main(int argc, char** argv)
 			}	
 		}
 	}
+	//objects.push_back(new sphere(vec3d(0, 0, 0), Eigen::MatrixXd::Identity(3, 3), 5, 1, vec3d(20, 0, 0)));
+	//objects.push_back(new sphere(vec3d(20, 0, 0), Eigen::MatrixXd::Identity(3, 3), 5, 1, vec3d(-20, 0, 0)));
+	//objects.push_back(new vehicle(vec3d(20, 0, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 100, 10, 10, 10, vec3d(-20, 0, 0)));
+
+
 	
 
 #ifndef REALTIME

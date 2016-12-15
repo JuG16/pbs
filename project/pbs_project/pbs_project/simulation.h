@@ -215,7 +215,7 @@ public:
 #endif
 							if (gjk.computecontactpoint(objects[i], objects[j], contactpoint, n, pen_depth))
 							{
-								if (n.dot(objects[j]->getvel()) > 0 || n.dot(objects[i]->getvel()) < 0)//need to check for both objects since one could be static (vel=0)
+								if (n.dot(objects[j]->getvel()) < 0 || n.dot(objects[i]->getvel()) > 0)//need to check for both objects since one could be static (vel=0)
 								{
 									contact = true;
 								}
@@ -412,8 +412,8 @@ public:
 			if (ij % 3 == 0)
 			{
 				//lambda corresponds to collision
-				//lambda seems to be negative for collision (where as it is positive in paper, doesnt really matter though)
-				//lambda(ij) = std::min(lambda(ij), 0.);
+				//lambda seems to be negative for collision with box (where as it is positive in paper, doesnt really matter though)
+				lambda(ij) = std::max(lambda(ij), 0.);
 			}
 			else
 			{

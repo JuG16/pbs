@@ -117,7 +117,7 @@ public:
 				vec3d bary_coords;
 				barycentric_coords(min_tria_it->n_*min_dist, min_tria_it->points[0].v_, min_tria_it->points[1].v_, min_tria_it->points[2].v_, bary_coords);
 				contactpt = ((bary_coords(0)*(min_tria_it->points[0].sup_a_)) + (bary_coords(1)*(min_tria_it->points[1].sup_a_)) + (bary_coords(2)*(min_tria_it->points[2].sup_a_)));
-				colnormal = -min_tria_it->n_;
+				colnormal = min_tria_it->n_;
 				pen_depth = min_dist;
 				return true;
 			}
