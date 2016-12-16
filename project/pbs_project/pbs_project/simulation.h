@@ -23,6 +23,10 @@ public:
 		velocities_.resize(6 * n_objects_);
 		const int_t s = 3 * n_objects_*n_objects_; //how large is s (correct)?
 		eta_.resize(s);
+		lambda_cache_.resize(s);
+		lambda_cache_.setZero();
+		lambda_bool_.resize(s);
+		lambda_bool_.setZero();
 		coll_resolve_.resize(s);
 		jacobian_.resize(s,6 * n_objects_);
 
@@ -121,8 +125,10 @@ public:
 		const real_t alpha = -0.5; //"amount" of bouncing
 		const real_t maxfriction=100;
 		const real_t maxcol = 100;
+		const vec3d eps = vec3d(0.01, 0.01, 0.01);
 		coll_resolve_.setZero();
-		for (int i = 0; i < n_objects_; ++i) //compute all interactions twice like this?
+		lambda_bool_.setZero();
+		for (int i = 0; i < n_objects_; ++i)
 		{
 #ifdef DEBUG
 
@@ -483,6 +489,9 @@ private:
 	smatrix_t jacobian_; //denoted J in paper "Iterative Dynamics" (sx6n) declared as member to prevent memory alloc every step (not sure that this works)
 	vector_t eta_; //denoted as "eta" in paper "Iterative Dynamics" (sx1) declared as member to prevent memory alloc every step 
 	//s =??? something with number of constraints
+	vector_t lambda_cache_;//for contact caching (restingcontacts)
+	Eigen::Matrix<bool, Eigen::Dynamic, 1> lambda_bool_;
+	std::vector<vec3d> contact_cache_;//caching of contactpoints for comparison (how to know correspondance to collision)
 	vector_t coll_resolve_;
 	vector_t fext_; //denoted as F_ext in paper "Iterative Dynamics" (6nx1) declared as member to prevent memory alloc every step (not sure that this works)
 	//only consists of gravity in -z axis, ->do as constant somehow (performance)

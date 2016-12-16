@@ -138,7 +138,7 @@ int main(int argc, char** argv)
 	float start_y = 6;//6
 	float start_z = -10; //-20
 	const int x_grid = 3;
-	const int y_grid = 3;
+	const int y_grid = 8;
 	const int z_grid = 3;
 	const real_t diameter = 2 * radius_sphere+0.001;
 	for (int i = 0; i < x_grid; i++){
@@ -240,8 +240,8 @@ int main(int argc, char** argv)
 			//smgr->addSkyDomeSceneNode(driver->getTexture("../media/skydome.jpg"), 240, 240, 1.0f, 2.0f);
 
 			//smgr->addCameraSceneNode(0, vector3df(250, 0, 0), vector3df(1, 0, 0));
-			smgr->addCameraSceneNode(0, vector3df(0, 250, 0), vector3df(0, 1, 0));
-			//smgr->addCameraSceneNode(0, vector3df(0, 0, 300), vector3df(0, 0, -1));
+			//smgr->addCameraSceneNode(0, vector3df(0, 250, 0), vector3df(0, 1, 0));
+			smgr->addCameraSceneNode(0, vector3df(0, 0, 300), vector3df(0, 0, -1));
 			//smgr->addCameraSceneNode(0, vector3df(0, 240, 320), vector3df(0, 5, 0));
 			//smgr->addCameraSceneNodeMaya();
 			driver->beginScene(true, true, SColor(255, 0, 153, 255));
