@@ -105,15 +105,15 @@ int main(int argc, char** argv)
 	//objects.push_back(new sphere(vec3d(-10, 0, 0), Eigen::MatrixXd::Identity(3, 3), 5, 1, vec3d(100, 0, 0)));
 	
 	//box
-	float box_offset_x = 49;
-	float box_offset_z = 0;
-	float box_size_inside_z = 50;
-	float box_size_inside_x = 50;
-	float box_height=60;
+	float box_offset_x = -1;
+	float box_offset_z = -1;
+	float box_size_inside_z = 40;
+	float box_size_inside_x = 100;
+	float box_height=30;
 	float box_thickness = 2;
 	float box_offset_y = (plane_thickness / 2) + (box_height / 2);
 	float box_length_outside_x = box_size_inside_x+(2 * box_thickness);
-	objects.push_back(new box(vec3d(box_offset_x, box_offset_y, box_offset_z), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, box_thickness, box_height, box_size_inside_z, vec3d(0, 0, 0)));
+	/*objects.push_back(new box(vec3d(box_offset_x, box_offset_y, box_offset_z), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, box_thickness, box_height, box_size_inside_z, vec3d(0, 0, 0)));
 	objects[i]->setstatic();
 	i++;
 	objects.push_back(new box(vec3d(box_offset_x+box_thickness+box_size_inside_x, box_offset_y, box_offset_z), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, box_thickness, box_height, box_size_inside_z, vec3d(0, 0, 0)));
@@ -124,27 +124,28 @@ int main(int argc, char** argv)
 	i++;
 	objects.push_back(new box(vec3d(box_offset_x + ((box_thickness + box_size_inside_x) / 2), box_offset_y, box_offset_z + ((box_size_inside_z + box_thickness) / 2)), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, box_length_outside_x, box_height, box_thickness, vec3d(0, 0, 0)));
 	objects[i]->setstatic();
-	i++;
+	i++;*/
 
 	//slide
-	objects.push_back(new box(vec3d(20, 90, box_offset_z), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, 1, 100, 50, vec3d(0, 0, 0), vec3d(0, 0, 0), quat));
+	/*objects.push_back(new box(vec3d(-30, 90, box_offset_z), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, 1, 100, 20, vec3d(0, 0, 0), vec3d(0, 0, 0), quat));
 	objects[i]->setstatic();
 	i++;
 
-	objects.push_back(new vehicle(vec3d(7, 120, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 100, 10, 10, 10, vec3d(40, -40, 0), vec3d(0, 0, 0), quat));
+	objects.push_back(new vehicle(vec3d(-43, 120, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 100, 10, 10, 10, vec3d(40, -40, 0), vec3d(0, 0, 0), quat));
+	*/
 
-
-	float start_x = 60; //55
+	float start_x = 15; //55
 	float start_y = 6;//6
-	float start_z = -10; //-20
+	float start_z = -15; //-20
 	const int x_grid = 3;
-	const int y_grid = 8;
+	const int y_grid = 2;
 	const int z_grid = 3;
-	const real_t diameter = 2 * radius_sphere+0.001;
+	const real_t diameter = 2 * radius_sphere;
+	const float offset = 0.001;
 	for (int i = 0; i < x_grid; i++){
 		for (int j = 0; j < y_grid; j++) {
 			for (int k = 0; k < z_grid; k++) {
-				objects.push_back(new sphere(vec3d((i*diameter)+start_x, (j*diameter) + start_y,(k*diameter)+start_z)));
+				objects.push_back(new sphere(vec3d((i*diameter)+start_x+offset, (j*diameter) + start_y + offset,(k*diameter)+start_z + offset)));
 			}	
 		}
 	}
