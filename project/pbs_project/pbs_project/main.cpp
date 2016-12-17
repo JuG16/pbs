@@ -241,8 +241,8 @@ int main(int argc, char** argv)
 
 			//smgr->addCameraSceneNode(0, vector3df(250, 0, 0), vector3df(1, 0, 0));
 			//smgr->addCameraSceneNode(0, vector3df(0, 250, 0), vector3df(0, 1, 0));
-			smgr->addCameraSceneNode(0, vector3df(0, 0, 300), vector3df(0, 0, -1));
-			//smgr->addCameraSceneNode(0, vector3df(0, 240, 320), vector3df(0, 5, 0));
+			//smgr->addCameraSceneNode(0, vector3df(0, 0, 300), vector3df(0, 0, -1));
+			smgr->addCameraSceneNode(0, vector3df(0, 240, 320), vector3df(0, 5, 0));
 			//smgr->addCameraSceneNodeMaya();
 			driver->beginScene(true, true, SColor(255, 0, 153, 255));
 

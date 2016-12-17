@@ -27,6 +27,7 @@ public:
 		lambda_cache_.setZero();
 		lambda_bool_.resize(s);
 		lambda_bool_.setZero();
+		contact_cache_.resize(s / 3);
 		coll_resolve_.resize(s);
 		jacobian_.resize(s,6 * n_objects_);
 
@@ -125,9 +126,10 @@ public:
 		const real_t alpha = -0.5; //"amount" of bouncing
 		const real_t maxfriction=100;
 		const real_t maxcol = 100;
-		const vec3d eps = vec3d(0.01, 0.01, 0.01);
+		const vec3d eps = vec3d(0.0005, 0.0005, 0.0005);
 		coll_resolve_.setZero();
 		lambda_bool_.setZero();
+		lambda_cache_.setZero();
 		for (int i = 0; i < n_objects_; ++i)
 		{
 #ifdef DEBUG
@@ -225,6 +227,12 @@ public:
 								{
 									contact = true;
 								}
+								else if ((objects[j]->getvel()-objects[i]->getvel()).norm() <= eps.norm())
+								{
+									//std::cout << "resting contact" << std::endl;
+									lambda_bool_(row / 3) = true;
+									contact_cache_[row / 3] = contactpoint;
+								}
 							}
 							else
 							{
@@ -240,14 +248,27 @@ public:
 				}
 				if (contact)
 				{
-					
+					//contact caching
+					if (
+						(contact_cache_.at(row / 3) + eps).x() > contactpoint.x() && (contact_cache_.at(row / 3) - eps).x() < contactpoint.x() &&
+						(contact_cache_.at(row / 3) + eps).y() > contactpoint.y() && (contact_cache_.at(row / 3) - eps).y() < contactpoint.y() &&
+						(contact_cache_.at(row / 3) + eps).z() > contactpoint.z() && (contact_cache_.at(row / 3) - eps).z() < contactpoint.z()
+						)
+					{
+						//std::cout << "caching" << std::endl;
+						lambda_bool_(row / 3) = true;
+					}
+
+					contact_cache_[row / 3] = contactpoint;
+
+
 					//using notion of paper for variables assuming sphere[i] is object 1 and sphere[j] object 2
 
 					vec3d r1 = contactpoint - objects[i]->getpos();
 					vec3d r2 = contactpoint - objects[j]->getpos();
 
 					//use coll_resolve vector ->put -beta*C
-					coll_resolve_(row) = -pen_coeff/dt*(objects[j]->getpos() + r2 - objects[i]->getpos() - r1).dot(n)+alpha*(objects[j]->getvel()+objects[j]->getangvel().cross(r2)-objects[i]->getvel()-objects[i]->getangvel().cross(r1)).dot(n);
+					coll_resolve_(row) = -pen_coeff / dt*(objects[j]->getpos() + r2 - objects[i]->getpos() - r1).dot(n) + alpha*(objects[j]->getvel() + objects[j]->getangvel().cross(r2) - objects[i]->getvel() - objects[i]->getangvel().cross(r1)).dot(n);
 
 					//normal constraints
 					//need to add contactcaching
@@ -255,11 +276,11 @@ public:
 					n.normalize();
 					const vec3d r1xn = -r1.cross(n); //- since only - crossprod gets used
 					const vec3d r2xn = r2.cross(n);
-					
+
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i, -n(0)));
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 1, -n(1)));
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 2, -n(2)));
-					
+
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 3, r1xn(0)));
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 4, r1xn(1)));
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * i + 5, r1xn(2)));
@@ -271,7 +292,7 @@ public:
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 3, r2xn(0)));
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 4, r2xn(1)));
 					triplets.push_back(Eigen::Triplet<real_t>(row, 6 * j + 5, r2xn(2)));
-				
+
 					++row;
 					//friciton constraints
 					vec3d tempvec; //some vector != n
@@ -339,6 +360,11 @@ public:
 
 					row++;
 
+					
+				}
+				else
+				{
+					row += 3;
 				}
 			}
 			
@@ -415,16 +441,24 @@ public:
 		vector_t lambda = solver.solve(eta_);
 		for (int ij = 0; ij < lambda.size(); ++ij)
 		{
-			if (ij % 3 == 0)
+			if (lambda_bool_(ij/3))
 			{
-				//lambda corresponds to collision
-				//lambda seems to be negative for collision with box (where as it is positive in paper, doesnt really matter though)
-				lambda(ij) = std::max(lambda(ij), 0.);
+				lambda(ij) = lambda_cache_(ij);
 			}
 			else
 			{
-				//lambda corresponds to fricition
-				//lambda(i) = std::max(-maxfriction,std::min(lambda(i), maxfriction));
+				if (ij % 3 == 0)
+				{
+					//lambda corresponds to collision
+					//lambda seems to be negative for collision with box (where as it is positive in paper, doesnt really matter though)
+					lambda(ij) = std::max(lambda(ij), 0.);
+				}
+				else
+				{
+					//lambda corresponds to fricition
+					//lambda(i) = std::max(-maxfriction,std::min(lambda(i), maxfriction));
+				}
+				lambda_cache_(ij) = lambda(ij);
 			}
 		}
 #ifdef DEBUG
@@ -491,7 +525,7 @@ private:
 	//s =??? something with number of constraints
 	vector_t lambda_cache_;//for contact caching (restingcontacts)
 	Eigen::Matrix<bool, Eigen::Dynamic, 1> lambda_bool_;
-	std::vector<vec3d> contact_cache_;//caching of contactpoints for comparison (how to know correspondance to collision)
+	std::vector<vec3d> contact_cache_;//caching of contactpoints for comparison (fixed pos in vector)
 	vector_t coll_resolve_;
 	vector_t fext_; //denoted as F_ext in paper "Iterative Dynamics" (6nx1) declared as member to prevent memory alloc every step (not sure that this works)
 	//only consists of gravity in -z axis, ->do as constant somehow (performance)
