@@ -140,6 +140,7 @@ public:
 			for (int j = i+1; j < n_objects_; ++j)
 			{
 				bool contact = false;
+				bool penetration = false;
 				vec3d contactpoint;
 				vec3d n;
 				real_t pen_depth;
@@ -155,6 +156,7 @@ public:
 					//sphere-sphere collision (need to add friction)
 					if ((objects[i]->getpos() - objects[j]->getpos()).norm() < (objects[i]->getrad() + objects[j]->getrad()))
 					{
+						penetration = true;
 						contactpoint = objects[j]->getpos()+(objects[i]->getpos() - objects[j]->getpos()) / 2.;
 						n = (contactpoint - objects[i]->getpos()).normalized();
 						if (n.dot(objects[i]->getvel()) > 0 || n.dot(objects[j]->getvel())<0) //need to check for both objects since 1 could be static (vel=0)
@@ -162,6 +164,13 @@ public:
 							pen_depth = ((objects[i]->getrad() + objects[j]->getrad()) - (objects[i]->getpos() - objects[j]->getpos()).norm()) / 2.;
 							contact = true;
 						}
+
+						else if ((objects[j]->getvel() - objects[i]->getvel()).norm() <= eps.norm())
+						{
+							//std::cout << "resting contact" << std::endl;
+							lambda_bool_(row / 3) = true;
+							contact_cache_[row / 3] = contactpoint;
+					}
 #ifdef DEBUG
 
 						std::cout << contactpoint << std::endl;
@@ -221,6 +230,7 @@ public:
 							std::cout << objects[i]->getpos() << std::endl;
 							std::cout << objects[j]->getpos() << std::endl;
 #endif
+							penetration = true;
 							if (gjk.computecontactpoint(objects[i], objects[j], contactpoint, n, pen_depth))
 							{
 								if (n.dot(objects[j]->getvel()) < 0 || n.dot(objects[i]->getvel()) > 0)//need to check for both objects since one could be static (vel=0)
@@ -252,7 +262,8 @@ public:
 					if (
 						(contact_cache_.at(row / 3) + eps).x() > contactpoint.x() && (contact_cache_.at(row / 3) - eps).x() < contactpoint.x() &&
 						(contact_cache_.at(row / 3) + eps).y() > contactpoint.y() && (contact_cache_.at(row / 3) - eps).y() < contactpoint.y() &&
-						(contact_cache_.at(row / 3) + eps).z() > contactpoint.z() && (contact_cache_.at(row / 3) - eps).z() < contactpoint.z()
+						(contact_cache_.at(row / 3) + eps).z() > contactpoint.z() && (contact_cache_.at(row / 3) - eps).z() < contactpoint.z() &&
+						(objects[j]->getvel() - objects[i]->getvel()).norm() <= eps.norm()
 						)
 					{
 						//std::cout << "caching" << std::endl;
@@ -273,6 +284,7 @@ public:
 					//normal constraints
 					//need to add contactcaching
 					//object 1
+
 					n.normalize();
 					const vec3d r1xn = -r1.cross(n); //- since only - crossprod gets used
 					const vec3d r2xn = r2.cross(n);
@@ -360,7 +372,6 @@ public:
 
 					row++;
 
-					
 				}
 				else
 				{
