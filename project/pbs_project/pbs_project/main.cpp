@@ -127,12 +127,12 @@ int main(int argc, char** argv)
 	i++;*/
 
 	//slide
-	/*objects.push_back(new box(vec3d(-30, 90, box_offset_z), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, 1, 100, 20, vec3d(0, 0, 0), vec3d(0, 0, 0), quat));
+	objects.push_back(new box(vec3d(-30, 90, box_offset_z), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, 1, 100, 20, vec3d(0, 0, 0), vec3d(0, 0, 0), quat));
 	objects[i]->setstatic();
 	i++;
 
 	objects.push_back(new vehicle(vec3d(-43, 120, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 100, 10, 10, 10, vec3d(40, -40, 0), vec3d(0, 0, 0), quat));
-	*/
+	
 
 	float start_x = 15; //55
 	float start_y = 6;//6
