@@ -138,14 +138,13 @@ int main(int argc, char** argv)
 	float start_y = 6;//6
 	float start_z = -15; //-20
 	const int x_grid = 3;
-	const int y_grid = 2;
+	const int y_grid = 8;
 	const int z_grid = 3;
-	const real_t diameter = 2 * radius_sphere;
-	const float offset = 0.001;
+	const real_t diameter = 2 * radius_sphere+0.001;
 	for (int i = 0; i < x_grid; i++){
 		for (int j = 0; j < y_grid; j++) {
 			for (int k = 0; k < z_grid; k++) {
-				objects.push_back(new sphere(vec3d((i*diameter)+start_x+offset, (j*diameter) + start_y + offset,(k*diameter)+start_z + offset)));
+				objects.push_back(new sphere(vec3d((i*diameter)+start_x, (j*diameter) + start_y,(k*diameter)+start_z)));
 			}	
 		}
 	}
