@@ -131,14 +131,14 @@ int main(int argc, char** argv)
 	objects[i]->setstatic();
 	i++;
 
-	//objects.push_back(new vehicle(vec3d(-43, 120, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 100, 10, 10, 10, vec3d(40, -40, 0), vec3d(0, 0, 0), quat));
+	objects.push_back(new vehicle(vec3d(-43, 120, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 100, 10, 10, 10, vec3d(40, -40, 0), vec3d(0, 0, 0), quat));
 	
 
 	float start_x = 15; //55
 	float start_y = 6;//6
 	float start_z = -15; //-20
-	const int x_grid = 3;
-	const int y_grid = 7;
+	const int x_grid = 7;
+	const int y_grid = 5;
 	const int z_grid = 3;
 	const real_t diameter = 2 * radius_sphere+0.001;
 	for (int i = 0; i < x_grid; i++){
