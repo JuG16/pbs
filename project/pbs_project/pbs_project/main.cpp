@@ -107,8 +107,8 @@ int main(int argc, char** argv)
 	//box
 	float box_offset_x = 4;
 	float box_offset_z = -1;
-	float box_size_inside_z = 40;
-	float box_size_inside_x = 90;
+	float box_size_inside_z = 45;
+	float box_size_inside_x = 95;
 	float box_height=25;
 	float box_thickness = 2;
 	float box_offset_y = (plane_thickness / 2) + (box_height / 2);
@@ -131,17 +131,18 @@ int main(int argc, char** argv)
 	objects[o]->setstatic();
 	o++;
 
-	//objects.push_back(new vehicle(vec3d(-46, 117, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 100, 10, 10, 10, vec3d(40, -40, 0), vec3d(0, 0, 0), quat));
+	//objects.push_back(new vehicle(vec3d(-46, 117, 0), 1000 * Eigen::MatrixXd::Identity(3, 3), 100, 10, 10, 10, vec3d(60, -60, 0), vec3d(0, 0, 0), quat));
 	//objects[o]->setstatic();
 	//o++;
 
 	float start_x = 10; //55
-	float start_y = 10;//6
+	float start_y = 6;//6
 	float start_z = -15; //-20
 	const int x_grid = 9;
 	const int y_grid = 3;
 	const int z_grid = 4;
-	const real_t diameter = 2 * radius_sphere;
+	const float offset = 0.001;
+	const real_t diameter = 2 * radius_sphere+offset;
 	for (int i = 0; i < x_grid; i++){
 		for (int j = 0; j < y_grid; j++) {
 			for (int k = 0; k < z_grid; k++) {
