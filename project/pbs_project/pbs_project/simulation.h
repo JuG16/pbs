@@ -8,7 +8,6 @@
 #include "gjk_algorithm.h"
 #include <iostream>
 #include <iomanip>
-#include <cassert>
 
 
 //#define DEBUG
@@ -430,52 +429,27 @@ public:
 		//probably have to use some iterative solvers instead ?
 		//compute eta
 		eta_ = 1./dt*coll_resolve_-jacobian_*(1. / dt*velocities_ + massmatrixinv_*fext_);
+		//can we assume J*M^-1*J^T is sparse?
 		//compute lambda
-		/*matrix_t A = jacobian_*massmatrixinv_*jacobian_.transpose();
-		const int maxiter = 1000;
-		const real_t relaxation = 1.;
-		const real_t tolerance = 0.00000000001;
-		real_t delta;
-		vector_t lambda = lambda_cache_;
-		for (int iter = 0; iter < maxiter; ++iter)
-		{
-			real_t error = 0.;
-			for (int i = 0; i < eta_.rows(); ++i)
-			{
-				delta = 0.;
-				for (int j = 0; j < i; ++j)
-				{
-					delta += A(i, j)*lambda(j);
-				}
-				for (int j = i + 1; j < eta_.rows(); ++j)
-				{
-					delta += A(i, j)*lambda(j);
-				}
-
-				delta = (eta_(i) - delta) / A(i, i);
-				error = std::max(error, std::abs(delta - lambda(i)));
-				lambda(i) += relaxation*(delta - lambda(i));
-			}
-			if (error < tolerance)
-			{
-				break;
-			}
-			
-		}*/
-
-
+		//do 3 steps to utilize sparsity (doesnt work since parts are not squared)
 		ssolver solver;
-	
+		//solve for M^-1 J^T lambda
+		/*solver.analyzePattern(jacobian_);
+		solver.factorize(jacobian_);
+		auto MJlambda = solver.solve(eta_);
+		//solve for J^T lambda
+		solver.analyzePattern(massmatrixinv_);
+		solver.factorize(massmatrixinv_);
+		auto Jlambda = solver.solve(MJlambda);
+		//solve for lambda
+		solver.analyzePattern(jacobian_.transpose());
+		solver.factorize(jacobian_.transpose());
+		auto lambda = solver.solve(Jlambda);*/
 
+		//solver.analyzePattern(jacobian_*massmatrixinv_*jacobian_.transpose());
+		//solver.factorize(jacobian_*massmatrixinv_*jacobian_.transpose());
 		solver.compute(jacobian_*massmatrixinv_*jacobian_.transpose()); //problem: if all zero can get any result
-		vector_t lambda = solver.solveWithGuess(eta_, lambda_cache_);
-		if (solver.error() > 1)
-		{
-			std::cout << solver.error() << std::endl;
-		}
-
-		//matrix_t A = jacobian_*massmatrixinv_*jacobian_.transpose();
-		//vector_t lambda = A.colPivHouseholderQr().solve(eta_);
+		vector_t lambda = solver.solve(eta_);
 		for (int ij = 0; ij < lambda.size(); ++ij)
 		{
 			if (lambda_bool_(ij/3))
@@ -505,7 +479,11 @@ public:
 
 #endif // DEBUG
 		
-			
+		//update velocities schwachsinn??
+		//solver.analyzePattern(massmatrix_);
+		//solver.factorize(massmatrix_);
+		//velocities_=solver.solve(dt*(jacobian_.transpose()*lambda+fext_)+massmatrix_*velocities_)
+		
 		//correct?
 #ifdef DEBUG
 
@@ -526,6 +504,7 @@ public:
 		std::cout << "check4" << std::endl;
 
 #endif // DEBUG
+		//set velocity of car
 		for (int i = 0; i < n_objects_; ++i)
 		{
 			//position update

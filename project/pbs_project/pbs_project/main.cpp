@@ -148,7 +148,7 @@ int main(int argc, char** argv)
 			for (int k = 0; k < z_grid; k++) {
 				objects.push_back(new sphere(vec3d((i*diameter)+start_x, (j*diameter) + start_y,(k*diameter)+start_z)));
 				//objects[o]->setstatic();
-				o++;
+				//o++;
 			}	
 		}
 	}
