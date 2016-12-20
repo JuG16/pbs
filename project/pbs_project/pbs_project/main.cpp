@@ -113,7 +113,7 @@ int main(int argc, char** argv)
 	float box_thickness = 2;
 	float box_offset_y = (plane_thickness / 2) + (box_height / 2);
 	float box_length_outside_x = box_size_inside_x+(2 * box_thickness);
-	objects.push_back(new box(vec3d(box_offset_x, box_offset_y, box_offset_z), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, box_thickness, box_height, box_size_inside_z, vec3d(0, 0, 0)));
+	/*objects.push_back(new box(vec3d(box_offset_x, box_offset_y, box_offset_z), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, box_thickness, box_height, box_size_inside_z, vec3d(0, 0, 0)));
 	objects[o]->setstatic();
 	o++;
 	objects.push_back(new box(vec3d(box_offset_x+box_thickness+box_size_inside_x, box_offset_y, box_offset_z), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, box_thickness, box_height, box_size_inside_z, vec3d(0, 0, 0)));
@@ -124,7 +124,7 @@ int main(int argc, char** argv)
 	o++;
 	objects.push_back(new box(vec3d(box_offset_x + ((box_thickness + box_size_inside_x) / 2), box_offset_y, box_offset_z + ((box_size_inside_z + box_thickness) / 2)), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, box_length_outside_x, box_height, box_thickness, vec3d(0, 0, 0)));
 	objects[o]->setstatic();
-	o++;
+	o++;*/
 
 	//slide
 	objects.push_back(new box(vec3d(-30, 90, box_offset_z), 1000 * Eigen::MatrixXd::Identity(3, 3), 9000, 1, 100, 20, vec3d(0, 0, 0), vec3d(0, 0, 0), quat));
@@ -136,18 +136,18 @@ int main(int argc, char** argv)
 	//o++;
 
 	float start_x = 10; //55
-	float start_y = 10;//6
+	float start_y = 6;//6
 	float start_z = -15; //-20
-	const int x_grid = 9;
-	const int y_grid = 3;
-	const int z_grid = 4;
-	const real_t diameter = 2 * radius_sphere;
+	const int x_grid = 5;
+	const int y_grid = 4;
+	const int z_grid = 5;
+	const real_t diameter = 2 * radius_sphere+0.001;
 	for (int i = 0; i < x_grid; i++){
 		for (int j = 0; j < y_grid; j++) {
 			for (int k = 0; k < z_grid; k++) {
 				objects.push_back(new sphere(vec3d((i*diameter)+start_x, (j*diameter) + start_y,(k*diameter)+start_z)));
 				//objects[o]->setstatic();
-				//o++;
+				o++;
 			}	
 		}
 	}
