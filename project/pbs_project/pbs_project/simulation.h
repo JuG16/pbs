@@ -279,7 +279,7 @@ public:
 					vec3d r2 = contactpoint - objects[j]->getpos();
 
 					//use coll_resolve vector ->put -beta*C
-					coll_resolve_(row) = -pen_coeff / dt*(objects[j]->getpos() + r2 - objects[i]->getpos() - r1).dot(n) + alpha*(objects[j]->getvel() + objects[j]->getangvel().cross(r2) - objects[i]->getvel() - objects[i]->getangvel().cross(r1)).dot(n);
+					coll_resolve_(row) = alpha*(objects[j]->getvel() + objects[j]->getangvel().cross(r2) - objects[i]->getvel() - objects[i]->getangvel().cross(r1)).dot(n);
 
 					//normal constraints
 					//need to add contactcaching
